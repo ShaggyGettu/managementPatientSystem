@@ -7,7 +7,10 @@ public class userData implements Runnable{
     public void run() {
         Calendar calendar = Calendar.getInstance();
         System.out.println(calendar.get(Calendar.SECOND));
-        while (calendar.get(Calendar.SECOND)!=0);
+        while (calendar.get(Calendar.SECOND)!=0) {
+            calendar = Calendar.getInstance();
+            System.out.println(calendar.get(Calendar.SECOND));
+        }
         System.out.println(calendar.get(Calendar.SECOND));
         String id = Thread.currentThread().getName();
 
