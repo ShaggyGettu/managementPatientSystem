@@ -1,0 +1,1 @@
+C:\BDFSoftwares\kafka_2.12-2.1.1\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic HelloWorld --from-beginning
