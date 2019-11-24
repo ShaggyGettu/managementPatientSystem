@@ -40,12 +40,12 @@ public class PatientMenuPageModel {
     public void temperature(String temperature, String id) throws SQLException {
         String sql = "SELECT temperatureMin FROM patients WHERE id = ?";
         float temper = Float.valueOf(temperature);
-        System.out.println("temper: " + temper);
+        //System.out.println("temper: " + temper);
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
-            System.out.println("temperatureMin before inserting: " + resultSet.getString(1));
+            //System.out.println("temperatureMin before inserting: " + resultSet.getString(1));
             if (resultSet.getString(1) == null || temper < Float.valueOf(resultSet.getString(1)))
                 changeTemperature(1, temperature, id);
         }
@@ -54,7 +54,7 @@ public class PatientMenuPageModel {
         preparedStatement.setString(1, id);
         resultSet = preparedStatement.executeQuery();
         if(resultSet.next()) {
-            System.out.println("temperatureMax before inserting: " + resultSet.getString(1));
+            //System.out.println("temperatureMax before inserting: " + resultSet.getString(1));
             if (resultSet.getString(1) == null || temper > Float.valueOf(resultSet.getString(1)))
                 changeTemperature(2, temperature, id);
         }
@@ -63,11 +63,11 @@ public class PatientMenuPageModel {
         preparedStatement.setString(1, id);
         resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
-            System.out.println("temperatureAmount before inserting: " + resultSet.getString(1));
-            System.out.println("temepreatureAvg before inserting: " + resultSet.getString(2));
+            //System.out.println("temperatureAmount before inserting: " + resultSet.getString(1));
+            //System.out.println("temepreatureAvg before inserting: " + resultSet.getString(2));
             int amount = Integer.valueOf(resultSet.getString(1));
             float avg = Float.valueOf(resultSet.getString(2));
-            System.out.println("avg: " + avg);
+            //System.out.println("avg: " + avg);
             avg *= amount;
             avg = avg + temper;
             temperature = String.valueOf(avg / (amount + 1));
@@ -99,8 +99,8 @@ public class PatientMenuPageModel {
 
     public void bloodPressure(String bloodPressure, String id) throws SQLException {
         String sql = "SELECT bloodPressureMin From patients WHERE id = ?";
-        int sBP = Integer.valueOf(bloodPressure.split(",")[0]);
-        int lBP = Integer.valueOf(bloodPressure.split(",")[1]);
+        int sBP = Integer.valueOf(bloodPressure.split(",")[0].substring(0,2));
+        int lBP = Integer.valueOf(bloodPressure.split(",")[1].substring(0,2));
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -151,7 +151,7 @@ public class PatientMenuPageModel {
     }
 
     private void changeAvgBloodPressure(String id, int amount, String avg) throws SQLException {
-        System.out.println(avg);
+        //System.out.println(avg);
         String sql = "UPDATE patients SET bloodPressureAmount = ?, bloodPressureAvg = ? WHERE id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, String.valueOf(amount + 1));
