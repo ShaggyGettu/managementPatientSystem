@@ -5,6 +5,8 @@ import Client.Login.LoginModel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class PatientMenuPageModel {
     private LoginModel loginModel;
@@ -46,7 +48,7 @@ public class PatientMenuPageModel {
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
             //System.out.println("temperatureMin before inserting: " + resultSet.getString(1));
-            if (resultSet.getString(1) == null || temper < Float.valueOf(resultSet.getString(1)))
+            if (resultSet.getString(1) == null || temper < Float.valueOf(resultSet.getString(1).split(" ")[0]))
                 changeTemperature(1, temperature, id);
         }
         sql = "SELECT temperatureMax FROM patients WHERE id = ?";
@@ -55,7 +57,8 @@ public class PatientMenuPageModel {
         resultSet = preparedStatement.executeQuery();
         if(resultSet.next()) {
             //System.out.println("temperatureMax before inserting: " + resultSet.getString(1));
-            if (resultSet.getString(1) == null || temper > Float.valueOf(resultSet.getString(1)))
+
+            if (resultSet.getString(1) == null || temper > Float.valueOf(resultSet.getString(1).split(" ")[0]))
                 changeTemperature(2, temperature, id);
         }
         sql = "SELECT temperatureAmount, temperatureAvg FROM patients WHERE id = ?";
@@ -87,6 +90,10 @@ public class PatientMenuPageModel {
 
     private void changeTemperature(int status, String temperature, String id) throws SQLException {
         String sql = null;
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        temperature += (" " + formatter.format(calendar.getTime()));
+        System.out.println(id + ": " + temperature);
         if(status == 1)
             sql = "UPDATE patients SET temperatureMin = ? WHERE id = ?";
         else if (status == 2)
@@ -98,48 +105,41 @@ public class PatientMenuPageModel {
     }
 
     public void bloodPressure(String bloodPressure, String id) throws SQLException {
-        String sql = "SELECT bloodPressureMin From patients WHERE id = ?";
+        String sql = "SELECT bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg From patients WHERE id = ?";
+        String bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg;
         int sBP = Integer.valueOf(bloodPressure.split(",")[0].substring(0,2));
         int lBP = Integer.valueOf(bloodPressure.split(",")[1].substring(0,2));
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()){
-            if (resultSet.getString(1) == null)
+            bloodPressureMin = resultSet.getString(1);
+            bloodPressureMax = resultSet.getString(2);
+            bloodPressureAmount = resultSet.getString(3);
+            bloodPressureAvg = resultSet.getString(4);
+            if (bloodPressureMin == null)
                 changeBloodPressure(1, bloodPressure, id);
             else {
-                int sBPN = Integer.valueOf(resultSet.getString(1).split(",")[0]);
-                int lBPN = Integer.valueOf(resultSet.getString(1).split(",")[1]);
+                int sBPN = Integer.valueOf(bloodPressureMin.split(",")[0]);
+                int lBPN = Integer.valueOf(bloodPressureMin.split(",")[1].split(" ")[0]);
                 if (sBP < sBPN && lBP < lBPN)
                     changeBloodPressure(1, bloodPressure, id);
                 if ((sBP + lBP) / 2 < (sBPN + lBPN) / 2)
                     changeBloodPressure(1, bloodPressure, id);
             }
-        }
-        sql = "SELECT bloodPressureMax FROM patients WHERE id = ?";
-        preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
-            if (resultSet.getString(1) == null)
+            if (bloodPressureMax == null)
                 changeBloodPressure(2, bloodPressure, id);
             else {
-                int sBPN = Integer.valueOf(resultSet.getString(1).split(",")[0]);
-                int lBPN = Integer.valueOf(resultSet.getString(1).split(",")[1]);
+                int sBPN = Integer.valueOf(bloodPressureMax.split(",")[0]);
+                int lBPN = Integer.valueOf(bloodPressureMax.split(",")[1].split(" ")[0]);
                 if (sBP > sBPN && lBP > lBPN)
                     changeBloodPressure(2, bloodPressure, id);
                 if ((sBP + lBP) / 2 > (sBPN + lBPN) / 2)
                     changeBloodPressure(2, bloodPressure, id);
             }
-        }
-        sql = "SELECT bloodPressureAmount, bloodPressureAvg FROM patients WHERE id = ?";
-        preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
-            int amount = Integer.valueOf(resultSet.getString(1));
-            int sAvg = Integer.valueOf(resultSet.getString(2).split(",")[0]);
-            int lAvg = Integer.valueOf(resultSet.getString(2).split(",")[1]);
+            int amount = Integer.valueOf(bloodPressureAmount);
+            int sAvg = Integer.valueOf(bloodPressureAvg.split(",")[0]);
+            int lAvg = Integer.valueOf(bloodPressureAvg.split(",")[1].split(" ")[0]);
             lAvg *= amount;
             lAvg += lBP;
             lAvg /= (amount + 1);
@@ -162,6 +162,10 @@ public class PatientMenuPageModel {
 
     private void changeBloodPressure(int status, String bloodPressure, String id) throws SQLException {
         String sql = null;
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        bloodPressure += (" " + formatter.format(calendar.getTime()));
+        System.out.println(id + ": " + bloodPressure);
         if (status == 1)
         sql = "UPDATE patients SET bloodPressureMin = ? WHERE id = ?";
         else if (status == 2)
@@ -173,30 +177,23 @@ public class PatientMenuPageModel {
     }
 
     public void glucose(String glucose, String id) throws SQLException {
-        String sql = "SELECT glucoseMin FROM patients WHERE id = ?";
+        String sql = "SELECT glucoseMin, glucoseMax, glucoseAmount, glucoseAvg FROM patients WHERE id = ?";
+        String glucoseMin, glucoseMax, glucoseAmount, glucoseAvg;
         int glucos = Integer.valueOf(glucose);
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()){
-            if (resultSet.getString(1) == null || glucos<Integer.valueOf(resultSet.getString(1)))
+            glucoseMin = resultSet.getString(1);
+            glucoseMax = resultSet.getString(2);
+            glucoseAmount = resultSet.getString(3);
+            glucoseAvg = resultSet.getString(4);
+            if (glucoseMin == null || glucos<Integer.valueOf(glucoseMin.split(" ")[0]))
                 changeGlucose(1, glucose, id);
-        }
-        sql = "SELECT glucoseMax FROM patients WHERE id = ?";
-        preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
-            if (resultSet.getString(1) == null || glucos>Integer.valueOf(resultSet.getString(1)))
+            if (glucoseMax == null || glucos>Integer.valueOf(glucoseMax.split(" ")[0]))
                 changeGlucose(2, glucose, id);
-        }
-        sql = "SELECT glucoseAmount, glucoseAvg FROM patients WHERE id = ?";
-        preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
-            int amount = Integer.valueOf(resultSet.getString(1));
-            float avg = Float.valueOf(resultSet.getString(2));
+            int amount = Integer.valueOf(glucoseAmount);
+            float avg = Float.valueOf(glucoseAvg);
             avg *= amount;
             avg += glucos;
             avg /= (amount + 1);
@@ -215,10 +212,14 @@ public class PatientMenuPageModel {
 
     private void changeGlucose(int status, String glucose, String id) throws SQLException {
         String sql = null;
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        glucose += (" " + formatter.format(calendar.getTime()));
+        System.out.println(id + ": " + glucose);
         if (status == 1)
             sql = "UPDATE patients SET glucoseMin = ? WHERE id = ?";
         if (status == 2)
-            sql = "UPDATE  patients SET glucoseMax = ? where id = ?";
+            sql = "UPDATE patients SET glucoseMax = ? where id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, glucose);
         preparedStatement.setString(2, id);

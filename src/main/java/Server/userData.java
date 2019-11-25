@@ -7,30 +7,36 @@ import Client.PatientsView.PatientMenu.PatientMenuPageModel;
 
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class userData implements Runnable{
+    private static final int PeriodTimeRepeat = 10;
+
     @Override
     public void run() {
-        PatientMenuPageModel patientMenuPageModel = null;
-        Calendar calendar = Calendar.getInstance();
-        while (calendar.get(Calendar.SECOND)!=0)
-            calendar = Calendar.getInstance();
-        String id = Thread.currentThread().getName();
-        Temperature temperature = new Temperature();
-        System.out.println("Temperature: " + temperature.getCelsius());
-        Glucose glucose = new Glucose();
-        System.out.println("Glucose: " + glucose.getGlucose());
-        BloodPressure bloodPressure = new BloodPressure();
-        System.out.println("Blood Pressure: " + bloodPressure.toString());
-        try {
-            patientMenuPageModel = PatientMenuPageModel.getInstance();
-            patientMenuPageModel.temperature(String.valueOf(temperature.getCelsius()),id);
-            patientMenuPageModel.glucose(String.valueOf(glucose.getGlucose()),id);
-            patientMenuPageModel.bloodPressure(bloodPressure.toString(), id);
-        } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
+        while (true) {
+            PatientMenuPageModel patientMenuPageModel = null;
+            Calendar calendar = Calendar.getInstance();
+            if(calendar.get(Calendar.SECOND) % PeriodTimeRepeat == 0) {
+                String id = Thread.currentThread().getName();
+                Temperature temperature = new Temperature();
+                Glucose glucose = new Glucose();
+                BloodPressure bloodPressure = new BloodPressure();
+                try {
+                    patientMenuPageModel = PatientMenuPageModel.getInstance();
+                    patientMenuPageModel.temperature(String.valueOf(temperature.getCelsius()), id);
+                    patientMenuPageModel.glucose(String.valueOf(glucose.getGlucose()), id);
+                    patientMenuPageModel.bloodPressure(bloodPressure.toString(), id);
+                } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
-
 
     }
 }
