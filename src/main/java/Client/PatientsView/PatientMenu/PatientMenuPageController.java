@@ -1,5 +1,6 @@
 package Client.PatientsView.PatientMenu;
 
+import Client.DoctorsView.DoctorsMenu.DoctorMenuPageController;
 import Client.Login.LoginPage;
 import Client.PatientsView.PatientMenuPage;
 import javafx.fxml.FXML;
@@ -48,13 +49,16 @@ public class PatientMenuPageController implements Initializable {
     }
 
     private void Actions() {
-        backButton.setOnMouseClicked(mouseEvent ->{
-            LoginPage loginPage = new LoginPage();
-            try {
-                loginPage.start(LoginPage.getWindow());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        DoctorMenuPageController doctorMenuPageController = new DoctorMenuPageController();
+        doctorMenuPageController.BackAction(backButton);
+        temperatureButton.setOnMouseClicked(mouseEvent ->{
+
+        });
+        glucoseButton.setOnMouseClicked(mouseEvent ->{
+
+        });
+        bloodPressureButton.setOnMouseClicked(mouseEvent ->{
+
         });
 
     }

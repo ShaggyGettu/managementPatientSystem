@@ -14,7 +14,6 @@ public class createData implements Runnable{
             loginModel = LoginModel.getLoginModel();
             ResultSet resultSet = loginModel.Users();
             //Thread for every user in our system
-            resultSet.next();
             while (resultSet.next()){
                 Thread t1 = new Thread(new userData(), resultSet.getString(1));
                 t1.start();
