@@ -5,10 +5,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.PatientsView.PatientMenu.PatientMenuPageController">
    <children>
-      <AnchorPane prefHeight="80.0" prefWidth="600.0">
+      <AnchorPane layoutX="10.0" prefHeight="80.0" prefWidth="590.0">
          <children>
             <Label fx:id="nameLabel" alignment="CENTER" layoutY="20.0" prefHeight="40.0" prefWidth="120.0" text="Shay Gettu" textAlignment="JUSTIFY">
                <font>
@@ -22,59 +21,105 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="10.0" layoutY="90.0" prefHeight="270.0" prefWidth="150.0">
+      <AnchorPane layoutX="10.0" layoutY="90.0" prefHeight="80.0" prefWidth="150.0">
          <children>
             <Label fx:id="nameLabel2" alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="150.0" text="Email" textAlignment="JUSTIFY">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="nameLabel23" alignment="CENTER" contentDisplay="CENTER" layoutY="50.0" prefHeight="40.0" prefWidth="150.0" text="Phone number" textAlignment="JUSTIFY">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label fx:id="nameLabel21" alignment="CENTER" contentDisplay="CENTER" layoutY="225.0" prefHeight="40.0" prefWidth="150.0" text="Tests" textAlignment="JUSTIFY">
+            <Label fx:id="nameLabel23" alignment="CENTER" contentDisplay="CENTER" layoutY="40.0" prefHeight="40.0" prefWidth="150.0" text="Phone number" textAlignment="JUSTIFY">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="160.0" layoutY="90.0" prefHeight="210.0" prefWidth="200.0">
+      <AnchorPane layoutX="160.0" layoutY="90.0" prefHeight="80.0" prefWidth="200.0">
          <children>
             <Label fx:id="emailLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="200.0" text="email" textAlignment="JUSTIFY">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="phoneLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="50.0" prefHeight="40.0" prefWidth="200.0" text="phone number" textAlignment="JUSTIFY">
+            <Label fx:id="phoneLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="40.0" prefHeight="40.0" prefWidth="200.0" text="phone number" textAlignment="JUSTIFY">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane disable="true" layoutX="360.0" layoutY="90.0" prefHeight="210.0" prefWidth="250.0">
+      <AnchorPane disable="true" layoutX="360.0" layoutY="90.0" prefHeight="80.0" prefWidth="240.0">
          <children>
             <Button fx:id="temperatureButton1" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Change" />
             <Button fx:id="bloodPressureButton1" layoutY="50.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Change" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="140.0" layoutY="310.0" prefHeight="50.0" prefWidth="350.0">
-         <children>
-            <Button fx:id="temperatureButton" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Temperature" visible="false" />
-            <Button fx:id="bloodPressureButton" layoutX="120.0" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Blood pressure" visible="false" />
-            <Button fx:id="glucoseButton" layoutX="240.0" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Glucose" visible="false" />
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="10.0" layoutY="350.0" prefHeight="60.0" prefWidth="600.0">
+      <AnchorPane layoutX="10.0" layoutY="350.0" prefHeight="50.0" prefWidth="590.0">
          <children>
             <Button fx:id="backButton" layoutX="20.0" layoutY="15.0" mnemonicParsing="false" prefWidth="80.0" text="Back">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="170.0" prefHeight="180.0" prefWidth="600.0">
+         <children>
+            <Label fx:id="nameLabel212" alignment="CENTER" prefHeight="27.0" prefWidth="50.0" text="Tests:">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutY="50.0" text="Temperature:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutY="100.0" text="Blood Pressure:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutY="150.0" text="Glucose:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="110.0" text="Max">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="280.0" text="Min">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="500.0" text="Average">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="180.0" text="Time">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="370.0" text="Time">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="110.0" layoutY="51.0" text="38.241135" />
+            <Label layoutX="180.0" layoutY="51.0" text="26-11-2019" />
+            <Label layoutX="180.0" layoutY="70.0" text=" 20:08:10" />
+            <Label layoutX="110.0" layoutY="101.0" text="38.241135" />
+            <Label layoutX="180.0" layoutY="101.0" text="26-11-2019" />
+            <Label layoutX="180.0" layoutY="120.0" text=" 20:08:10" />
+            <Label layoutX="110.0" layoutY="145.0" text="38.241135" />
+            <Label layoutX="180.0" layoutY="145.0" text="26-11-2019" />
+            <Label layoutX="180.0" layoutY="164.0" text=" 20:08:10" />
          </children>
       </AnchorPane>
    </children>
