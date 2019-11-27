@@ -93,7 +93,7 @@ public class PatientMenuPageModel {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         temperature += (" " + formatter.format(calendar.getTime()));
-        System.out.println(id + ": " + temperature);
+//        System.out.println(id + ": " + temperature);
         if(status == 1)
             sql = "UPDATE patients SET temperatureMin = ? WHERE id = ?";
         else if (status == 2)
@@ -165,7 +165,7 @@ public class PatientMenuPageModel {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         bloodPressure += (" " + formatter.format(calendar.getTime()));
-        System.out.println(id + ": " + bloodPressure);
+//        System.out.println(id + ": " + bloodPressure);
         if (status == 1)
         sql = "UPDATE patients SET bloodPressureMin = ? WHERE id = ?";
         else if (status == 2)
@@ -215,7 +215,7 @@ public class PatientMenuPageModel {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         glucose += (" " + formatter.format(calendar.getTime()));
-        System.out.println(id + ": " + glucose);
+//        System.out.println(id + ": " + glucose);
         if (status == 1)
             sql = "UPDATE patients SET glucoseMin = ? WHERE id = ?";
         if (status == 2)

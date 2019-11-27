@@ -114,14 +114,7 @@ public class DoctorMenuPageController implements Initializable {
     }
 
     private void Actions(){
-        backButton.setOnMouseClicked(mouseEvent -> {
-            LoginPage loginPage = new LoginPage();
-            try {
-                loginPage.start(LoginPage.getWindow());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        BackAction(backButton);
         patientsButton.setOnMouseClicked(mouseEvent -> {
             try {
                 loadPatients();
@@ -134,6 +127,17 @@ public class DoctorMenuPageController implements Initializable {
                 registerPage1.emptyFields();
                 registerPage1.createScreen();
                 LoginPage.getWindow().setScene(registerPage1.getScene());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void BackAction(Button backButton1) {
+        backButton1.setOnMouseClicked(mouseEvent -> {
+            LoginPage loginPage = new LoginPage();
+            try {
+                loginPage.start(LoginPage.getWindow());
             } catch (IOException e) {
                 e.printStackTrace();
             }

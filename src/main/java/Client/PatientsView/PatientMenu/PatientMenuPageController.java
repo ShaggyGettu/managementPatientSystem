@@ -1,5 +1,6 @@
 package Client.PatientsView.PatientMenu;
 
+import Client.DoctorsView.DoctorsMenu.DoctorMenuPageController;
 import Client.Login.LoginPage;
 import Client.PatientsView.PatientMenuPage;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ public class PatientMenuPageController implements Initializable {
     @FXML
     Label nameLabel, idLabel, emailLabel, phoneLabel;
     @FXML
-    Button temperatureButton, bloodPressureButton, glucoseButton, backButton;
+    Button backButton;
 
     PatientMenuPage patientMenuPage;
     PatientMenuPageModel patientMenuPageModel;
@@ -39,23 +40,16 @@ public class PatientMenuPageController implements Initializable {
         emailLabel.setText(details[0]);
         phoneLabel.setText(details[1]);
         String tests[] = details[2].split(" ");
-        if (Arrays.asList(tests).contains("Temperature"))
+        /*if (Arrays.asList(tests).contains("Temperature"))
             temperatureButton.setVisible(true);
         if (Arrays.asList(tests).contains("BloodPressure"))
             bloodPressureButton.setVisible(true);
         if (Arrays.asList(tests).contains("Glucose"))
-            glucoseButton.setVisible(true);
+            glucoseButton.setVisible(true);*/
     }
 
     private void Actions() {
-        backButton.setOnMouseClicked(mouseEvent ->{
-            LoginPage loginPage = new LoginPage();
-            try {
-                loginPage.start(LoginPage.getWindow());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
+        DoctorMenuPageController doctorMenuPageController = new DoctorMenuPageController();
+        doctorMenuPageController.BackAction(backButton);
     }
 }
