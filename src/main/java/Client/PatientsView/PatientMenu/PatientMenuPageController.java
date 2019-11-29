@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,10 +20,26 @@ public class PatientMenuPageController implements Initializable {
     @FXML
     Label nameLabel, idLabel, emailLabel, phoneLabel;
     @FXML
+    Label temperatureLabel, bloodPressureLabel, glucoseLabel;
+    @FXML
+    Label maxTemperatureValueLabel, maxBloodPressureValueLabel, maxGlucoseValueLabel;
+    @FXML
+    Label maxTemperatureDateLabel,maxTemperatureTimeLabel;
+    @FXML
+    Label maxBloodPressureDateLabel, maxBloodPressureTimeLabel;
+    @FXML
+    Label maxGlucoseDateLabel, maxGlucoseTimeLabel;
+    @FXML
+    Label averageTemperatureLabel, averageBloodPressureLabel, averageGlucoseLabel;
+    @FXML
+    AnchorPane testsPane, temperaturePane, bloodPressurePane, glucosePane;
+    @FXML
+    ImageView refreshView;
+    @FXML
     Button backButton;
 
-    PatientMenuPage patientMenuPage;
-    PatientMenuPageModel patientMenuPageModel;
+    private PatientMenuPage patientMenuPage;
+    private PatientMenuPageModel patientMenuPageModel;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Actions();
@@ -40,12 +58,12 @@ public class PatientMenuPageController implements Initializable {
         emailLabel.setText(details[0]);
         phoneLabel.setText(details[1]);
         String tests[] = details[2].split(" ");
-        /*if (Arrays.asList(tests).contains("Temperature"))
-            temperatureButton.setVisible(true);
-        if (Arrays.asList(tests).contains("BloodPressure"))
-            bloodPressureButton.setVisible(true);
-        if (Arrays.asList(tests).contains("Glucose"))
-            glucoseButton.setVisible(true);*/
+        if (!Arrays.asList(tests).contains("Temperature"))
+            temperaturePane.setVisible(false);
+        if (!Arrays.asList(tests).contains("BloodPressure"))
+            bloodPressurePane.setVisible(false);
+        if (!Arrays.asList(tests).contains("Glucose"))
+            glucosePane.setVisible(false);
     }
 
     private void Actions() {
