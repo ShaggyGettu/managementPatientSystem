@@ -17,6 +17,7 @@ public class createData implements Runnable{
             resultSet.next();
             while (resultSet.next()){
                 Thread t1 = new Thread(new userData(), resultSet.getString(1));
+                t1.setPriority(2);
                 t1.start();
             }
         } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {

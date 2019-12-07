@@ -52,7 +52,7 @@ public class BloodPressure {
 
     @Override
     public String toString() {
-        return String .valueOf(largeBloodPressure) + ',' + smallBloodPressure + " status: " + status;
+        return String .valueOf(largeBloodPressure) + ',' + smallBloodPressure;
     }
 
     public static void main(String args[]){

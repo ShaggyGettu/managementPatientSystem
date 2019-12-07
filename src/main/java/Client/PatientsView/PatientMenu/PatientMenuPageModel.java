@@ -106,52 +106,53 @@ public class PatientMenuPageModel {
 
     public void bloodPressure(String bloodPressure, String id) throws SQLException {
         String sql = "SELECT bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg From patients WHERE id = ?";
-        String bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg;
-        int sBP = Integer.valueOf(bloodPressure.split(",")[0].substring(0,2));
-        int lBP = Integer.valueOf(bloodPressure.split(",")[1].substring(0,2));
+        String bloodPressureMin;
+        String bloodPressureMax;
+        String bloodPressureAmount;
+        String bloodPressureAvg;
+        int lBP = Integer.valueOf(bloodPressure.split(",")[0]);
+        int sBP = Integer.valueOf(bloodPressure.split(",")[1]);
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
+        if (resultSet.next()) {
             bloodPressureMin = resultSet.getString(1);
             bloodPressureMax = resultSet.getString(2);
             bloodPressureAmount = resultSet.getString(3);
             bloodPressureAvg = resultSet.getString(4);
-            if (bloodPressureMin == null)
+            if (bloodPressureMin == null){
                 changeBloodPressure(1, bloodPressure, id);
-            else {
-                int sBPN = Integer.valueOf(bloodPressureMin.split(",")[0]);
-                int lBPN = Integer.valueOf(bloodPressureMin.split(",")[1].split(" ")[0]);
-                if (sBP < sBPN && lBP < lBPN)
-                    changeBloodPressure(1, bloodPressure, id);
-                if ((sBP + lBP) / 2 < (sBPN + lBPN) / 2)
-                    changeBloodPressure(1, bloodPressure, id);
-            }
-            if (bloodPressureMax == null)
                 changeBloodPressure(2, bloodPressure, id);
-            else {
-                int sBPN = Integer.valueOf(bloodPressureMax.split(",")[0]);
-                int lBPN = Integer.valueOf(bloodPressureMax.split(",")[1].split(" ")[0]);
-                if (sBP > sBPN && lBP > lBPN)
-                    changeBloodPressure(2, bloodPressure, id);
-                if ((sBP + lBP) / 2 > (sBPN + lBPN) / 2)
-                    changeBloodPressure(2, bloodPressure, id);
+                changeAvgBloodPressure(id, Integer.parseInt(bloodPressureAmount), bloodPressure);
             }
-            int amount = Integer.valueOf(bloodPressureAmount);
-            int sAvg = Integer.valueOf(bloodPressureAvg.split(",")[0]);
-            int lAvg = Integer.valueOf(bloodPressureAvg.split(",")[1].split(" ")[0]);
-            lAvg *= amount;
-            lAvg += lBP;
-            lAvg /= (amount + 1);
-            sAvg *= amount;
-            sAvg += sBP;
-            sAvg /= (amount + 1);
-            changeAvgBloodPressure(id, amount, sAvg + "," + lAvg);
+            else {
+                int lBPN = Integer.valueOf(bloodPressureMin.split(",")[0]);
+                int sBPN = Integer.valueOf(bloodPressureMin.split(",")[1].split(" ")[0]);
+                if (lBP < lBPN && sBP < sBPN)
+                    changeBloodPressure(1, bloodPressure, id);
+                else if ((lBP + sBP) / 2 < (lBPN + sBPN) / 2)
+                    changeBloodPressure(1, bloodPressure, id);
+                lBPN = Integer.valueOf(bloodPressureMax.split(",")[0]);
+                sBPN = Integer.valueOf(bloodPressureMax.split(",")[1].split(" ")[0]);
+                if (lBP > lBPN && sBP > sBPN)
+                    changeBloodPressure(2, bloodPressure, id);
+                else if ((lBP + sBP) / 2 > (lBPN + sBPN) / 2)
+                    changeBloodPressure(2, bloodPressure, id);
+                int amount = Integer.valueOf(bloodPressureAmount);
+                int lAvg = Integer.valueOf(bloodPressureAvg.split(",")[0]);
+                int sAvg = Integer.valueOf(bloodPressureAvg.split(",")[1].split(" ")[0]);
+                sAvg *= amount;
+                sAvg += sBP;
+                sAvg /= (amount + 1);
+                lAvg *= amount;
+                lAvg += lBP;
+                lAvg /= (amount + 1);
+                changeAvgBloodPressure(id, amount, lAvg + "," + sAvg);
+            }
         }
     }
 
     private void changeAvgBloodPressure(String id, int amount, String avg) throws SQLException {
-        //System.out.println(avg);
         String sql = "UPDATE patients SET bloodPressureAmount = ?, bloodPressureAvg = ? WHERE id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, String.valueOf(amount + 1));
@@ -228,5 +229,16 @@ public class PatientMenuPageModel {
 
     public static void main(String args[]) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         PatientMenuPageModel pageModel = new PatientMenuPageModel();
+    }
+
+    public ResultSet getData(String id) throws SQLException {
+        String sql = "SELECT temperatureAvg, temperatureMin, temperatureMax, temperatureAmount, " +
+                "bloodPressureAvg, bloodPressureMin, bloodPressureMax, bloodPressureAmount, " +
+                "glucoseAvg, glucoseMin, glucoseMax, glucoseAmount FROM patients WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        return resultSet;
     }
 }

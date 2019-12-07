@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -200,6 +201,9 @@ public class LoginController implements Initializable {
             } catch (SQLException | IOException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+        });
+        LoginPage.getWindow().setOnCloseRequest(windowEvent -> {
+            System.exit(0);
         });
     }
 

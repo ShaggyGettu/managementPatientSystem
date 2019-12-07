@@ -71,27 +71,32 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="120.0" prefWidth="55.0" text="Max">
+                  <Label layoutX="110.0" prefWidth="55.0" text="Max">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="200.0" prefWidth="80.0" text="Time">
+                  <Label layoutX="180.0" prefWidth="80.0" text="Time">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="320.0" prefWidth="55.0" text="Min">
+                  <Label layoutX="280.0" prefWidth="55.0" text="Min">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="400.0" prefWidth="80.0" text="Time">
+                  <Label layoutX="350.0" prefWidth="80.0" text="Time">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="500.0" prefWidth="100.0" text="Average">
+                  <Label layoutX="440.0" prefWidth="70.0" text="Average">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="530.0" prefWidth="70.0" text="Amount">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -105,13 +110,14 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="maxTemperatureValueLabel" layoutX="120.0" text="38.241135" />
-                  <Label fx:id="maxTemperatureDateLabel" layoutX="200.0" text="26-11-2019" />
-                  <Label fx:id="maxTemperatureTimeLabel" layoutX="205.0" layoutY="20.0" text=" 20:08:10" />
-                  <Label fx:id="minTemperatureValueLabel" layoutX="320.0" text="38.241135" />
-                  <Label fx:id="minTemperatureDateLabel" layoutX="400.0" text="26-11-2019" />
-                  <Label fx:id="minTemperatureTimeLabel" layoutX="405.0" layoutY="20.0" text=" 20:08:10" />
-                  <Label fx:id="averageTemperatureLabel" layoutX="500.0" text="38.241135" />
+                  <Label fx:id="maxTemperatureValueLabel" layoutX="110.0" />
+                  <Label fx:id="maxTemperatureDateLabel" layoutX="180.0" />
+                  <Label fx:id="maxTemperatureTimeLabel" layoutX="185.0" layoutY="20.0" />
+                  <Label fx:id="minTemperatureValueLabel" layoutX="280.0" />
+                  <Label fx:id="minTemperatureDateLabel" layoutX="350.0" />
+                  <Label fx:id="minTemperatureTimeLabel" layoutX="355.0" layoutY="20.0" />
+                  <Label fx:id="averageTemperatureLabel" layoutX="440.0" prefWidth="70.0" />
+                  <Label fx:id="amountTemperatureLabel" layoutX="530.0" prefWidth="70.0" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="bloodPressurePane" layoutY="95.0" prefHeight="40.0" prefWidth="600.0">
@@ -121,13 +127,14 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="maxBloodPressureValueLabel" layoutX="120.0" prefHeight="20.0" text="38.241135" />
-                  <Label fx:id="maxBloodPressureDateLabel" layoutX="200.0" text="26-11-2019" />
-                  <Label fx:id="maxBloodPressureTimeLabel" layoutX="205.0" layoutY="20.0" text=" 20:08:10" />
-                  <Label fx:id="minBloodPressureValueLabel" layoutX="320.0" prefHeight="20.0" text="38.241135" />
-                  <Label fx:id="minBloodPressureDateLabel" layoutX="400.0" text="26-11-2019" />
-                  <Label fx:id="minBloodPressureTimeLabel" layoutX="405.0" layoutY="20.0" text=" 20:08:10" />
-                  <Label fx:id="averageBloodPressureLabel" layoutX="500.0" prefHeight="20.0" text="38.241135" />
+                  <Label fx:id="maxBloodPressureValueLabel" layoutX="110.0" prefHeight="20.0" />
+                  <Label fx:id="maxBloodPressureDateLabel" layoutX="180.0" />
+                  <Label fx:id="maxBloodPressureTimeLabel" layoutX="185.0" layoutY="20.0" />
+                  <Label fx:id="minBloodPressureValueLabel" layoutX="280.0" prefHeight="20.0" />
+                  <Label fx:id="minBloodPressureDateLabel" layoutX="350.0" />
+                  <Label fx:id="minBloodPressureTimeLabel" layoutX="355.0" layoutY="20.0" />
+                  <Label fx:id="averageBloodPressureLabel" layoutX="440.0" prefHeight="20.0" prefWidth="70.0" />
+                  <Label fx:id="amountBloodPressureLabel" layoutX="530.0" prefHeight="20.0" prefWidth="70.0" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="glucosePane" layoutY="140.0" prefHeight="40.0" prefWidth="600.0">
@@ -137,13 +144,14 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="maxGlucoseValueLabel" layoutX="120.0" text="38.241135" />
-                  <Label fx:id="maxGlucoseDateLabel" layoutX="200.0" text="26-11-2019" />
-                  <Label fx:id="maxGlucoseTimeLabel" layoutX="205.0" layoutY="20.0" text=" 20:08:10" />
-                  <Label fx:id="minGlucoseValueLabel" layoutX="320.0" text="38.241135" />
-                  <Label fx:id="minGlucoseDateLabel" layoutX="400.0" text="26-11-2019" />
-                  <Label fx:id="minGlucoseTimeLabel" layoutX="405.0" layoutY="20.0" text=" 20:08:10" />
-                  <Label fx:id="averageGlucoseLabel" layoutX="500.0" text="38.241135" />
+                  <Label fx:id="maxGlucoseValueLabel" layoutX="110.0" />
+                  <Label fx:id="maxGlucoseDateLabel" layoutX="180.0" />
+                  <Label fx:id="maxGlucoseTimeLabel" layoutX="185.0" layoutY="20.0" />
+                  <Label fx:id="minGlucoseValueLabel" layoutX="280.0" />
+                  <Label fx:id="minGlucoseDateLabel" layoutX="350.0" />
+                  <Label fx:id="minGlucoseTimeLabel" layoutX="355.0" layoutY="20.0" />
+                  <Label fx:id="averageGlucoseLabel" layoutX="440.0" prefWidth="70.0" />
+                  <Label fx:id="amountGlucoseLabel" layoutX="530.0" prefWidth="70.0" />
                </children>
             </AnchorPane>
          </children>

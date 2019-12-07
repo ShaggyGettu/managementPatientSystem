@@ -1,5 +1,6 @@
 package Client.Login;
 
+import Client.DataTypes.BloodPressure;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +21,7 @@ public class LoginPage extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        Thread.currentThread().setPriority(10);
         window = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("LoginPageView.fxml"));
         Scene scene = new Scene(root);

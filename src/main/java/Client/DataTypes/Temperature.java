@@ -53,4 +53,9 @@ public class Temperature {
         }
         System.out.println(temperature.celsius);
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(celsius);
+    }
 }
