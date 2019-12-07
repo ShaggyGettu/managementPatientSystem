@@ -40,44 +40,76 @@ public class PatientMenuPageModel {
     }
 
     public void temperature(String temperature, String id) throws SQLException {
-        String sql = "SELECT temperatureMin FROM patients WHERE id = ?";
+        String sql = "SELECT temperatureMin,temperatureMax, temperatureAvg, temperatureAmount, doctor, criticalMinTemperature, criticalMaxTemperature FROM patients WHERE id = ?";
         float temper = Float.valueOf(temperature);
         //System.out.println("temper: " + temper);
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
-            //System.out.println("temperatureMin before inserting: " + resultSet.getString(1));
-            if (resultSet.getString(1) == null || temper < Float.valueOf(resultSet.getString(1).split(" ")[0]))
+            String temperatureMin = resultSet.getString(1);
+            String temperatureMax = resultSet.getString(2);
+            String temperatureAvg = resultSet.getString(3);
+            String temperatureAmount = resultSet.getString(4);
+            String doctor = resultSet.getString(5);
+            String criticalMinTemperature = resultSet.getString(6);
+            String criticalMaxTemperature = resultSet.getString(7);
+            if (temperatureMin == null) {
                 changeTemperature(1, temperature, id);
-        }
-        sql = "SELECT temperatureMax FROM patients WHERE id = ?";
-        preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        resultSet = preparedStatement.executeQuery();
-        if(resultSet.next()) {
-            //System.out.println("temperatureMax before inserting: " + resultSet.getString(1));
-
-            if (resultSet.getString(1) == null || temper > Float.valueOf(resultSet.getString(1).split(" ")[0]))
                 changeTemperature(2, temperature, id);
-        }
-        sql = "SELECT temperatureAmount, temperatureAvg FROM patients WHERE id = ?";
-        preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            //System.out.println("temperatureAmount before inserting: " + resultSet.getString(1));
-            //System.out.println("temepreatureAvg before inserting: " + resultSet.getString(2));
-            int amount = Integer.valueOf(resultSet.getString(1));
-            float avg = Float.valueOf(resultSet.getString(2));
-            //System.out.println("avg: " + avg);
-            avg *= amount;
-            avg = avg + temper;
-            temperature = String.valueOf(avg / (amount + 1));
-            changeAvgTemperature(temperature, id, amount);
+                changeAvgTemperature(temperature, id, Integer.parseInt(temperatureAmount));
+            }
+            else {
+                if (temper < Float.valueOf(temperatureMin.split(" ")[0]))
+                    changeTemperature(1, temperature, id);
+                if (temper > Float.valueOf(temperatureMax.split(" ")[0]))
+                    changeTemperature(2, temperature, id);
+                int amount = Integer.valueOf(temperatureAmount);
+                float avg = Float.valueOf(temperatureAvg);
+                //System.out.println("avg: " + avg);
+                avg *= amount;
+                avg = avg + temper;
+                temperature = String.valueOf(avg / (amount + 1));
+                changeAvgTemperature(temperature, id, amount);
+            }
+            if (temper<Integer.parseInt(criticalMinTemperature))
+                addWarning(1,temperature, id, doctor);
+            else if (temper>Integer.parseInt(criticalMaxTemperature))
+                addWarning(2, temperature, id, doctor);
         }
     }
 
+    private void addWarning(int state, String temperature, String id, String doctor) throws SQLException {
+        String sql = "update doctors set warnings = CONCAT(IFNULL(warnings, ''), ?') WHERE id = '?'";
+        String warning = id + "";
+        switch (state)
+        {
+            case 1:
+                warning += "Min Temperature ";
+                break;
+            case 2:
+                warning += "Max Temperature ";
+                break;
+            case 3:
+                warning += "BloodPressure ";
+                break;
+            case 4:
+                warning += "Min Glucose ";
+                break;
+            case 5:
+                warning += "Max Glucose ";
+                break;
+        }
+        warning += temperature;
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        warning += (" " + formatter.format(calendar.getTime()));;
+        warning += "\n";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1,warning);
+        preparedStatement.setString(2,doctor);
+        preparedStatement.execute();
+    }
     private void changeAvgTemperature(String temperature, String id, int amount) throws SQLException {
         String sql = "UPDATE patients SET temperatureAmount = ?, temperatureAvg = ? WHERE id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
@@ -105,7 +137,7 @@ public class PatientMenuPageModel {
     }
 
     public void bloodPressure(String bloodPressure, String id) throws SQLException {
-        String sql = "SELECT bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg From patients WHERE id = ?";
+        String sql = "SELECT bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg, doctor, criticalBloodPressure From patients WHERE id = ?";
         String bloodPressureMin;
         String bloodPressureMax;
         String bloodPressureAmount;
@@ -120,6 +152,8 @@ public class PatientMenuPageModel {
             bloodPressureMax = resultSet.getString(2);
             bloodPressureAmount = resultSet.getString(3);
             bloodPressureAvg = resultSet.getString(4);
+            String doctor = resultSet.getString(5);
+            String criticalBloodPressure = resultSet.getString(6);
             if (bloodPressureMin == null){
                 changeBloodPressure(1, bloodPressure, id);
                 changeBloodPressure(2, bloodPressure, id);
@@ -149,6 +183,8 @@ public class PatientMenuPageModel {
                 lAvg /= (amount + 1);
                 changeAvgBloodPressure(id, amount, lAvg + "," + sAvg);
             }
+            if (Integer.parseInt(criticalBloodPressure.split(",")[0])<=lBP || Integer.parseInt(criticalBloodPressure.split(",")[1])<=sBP)
+                addWarning(3, bloodPressure, id, doctor);
         }
     }
 
@@ -178,7 +214,7 @@ public class PatientMenuPageModel {
     }
 
     public void glucose(String glucose, String id) throws SQLException {
-        String sql = "SELECT glucoseMin, glucoseMax, glucoseAmount, glucoseAvg FROM patients WHERE id = ?";
+        String sql = "SELECT glucoseMin, glucoseMax, glucoseAmount, glucoseAvg, doctor, criticalMinGlucose, criticalMaxGlucose FROM patients WHERE id = ?";
         String glucoseMin, glucoseMax, glucoseAmount, glucoseAvg;
         int glucos = Integer.valueOf(glucose);
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
@@ -189,6 +225,9 @@ public class PatientMenuPageModel {
             glucoseMax = resultSet.getString(2);
             glucoseAmount = resultSet.getString(3);
             glucoseAvg = resultSet.getString(4);
+            String doctor = resultSet.getString(5);
+            String criticalMinGlucose = resultSet.getString(6);
+            String criticalMaxGlucose = resultSet.getString(7);
             if (glucoseMin == null || glucos<Integer.valueOf(glucoseMin.split(" ")[0]))
                 changeGlucose(1, glucose, id);
             if (glucoseMax == null || glucos>Integer.valueOf(glucoseMax.split(" ")[0]))
@@ -199,6 +238,10 @@ public class PatientMenuPageModel {
             avg += glucos;
             avg /= (amount + 1);
             changeAvgGlucose(amount, avg, id);
+            if (glucos<Integer.valueOf(criticalMinGlucose))
+                addWarning(4, glucose, id, doctor);
+            else if (glucos>Integer.valueOf(criticalMaxGlucose))
+                addWarning(5, glucose, id, doctor);
         }
     }
 
