@@ -15,3 +15,8 @@ CREATE TABLE `hospital`.`patients` ( `id` INT(9) NOT NULL , `email` VARCHAR(45) 
 
 
 
+SQL script for creating doctors table:
+
+CREATE TABLE `hospital`.`doctors` ( `email` VARCHAR(100) NOT NULL , `name` VARCHAR(100) NOT NULL , `password` VARCHAR(20) NOT NULL , `warnings` VARCHAR(500) NOT NULL ) ENGINE = InnoDB;
+
+
