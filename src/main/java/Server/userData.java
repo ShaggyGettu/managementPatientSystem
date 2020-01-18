@@ -14,7 +14,7 @@ public class userData implements Runnable{
 
     @Override
     synchronized public void run() {
-        while (true) {
+        /*while (true) {
             PatientMenuPageModel patientMenuPageModel;
             Calendar calendar = Calendar.getInstance();
             if(calendar.get(Calendar.SECOND) % PeriodTimeRepeat == 0) {
@@ -36,7 +36,7 @@ public class userData implements Runnable{
                     Thread.currentThread().interrupt();
                 }
             }
-        }
+        }*/
 
     }
 }

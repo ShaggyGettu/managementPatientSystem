@@ -2,6 +2,7 @@ package Client.Login;
 
 import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
 import Client.PatientsView.PatientMenuPage;
+import Server.CreateUserData;
 import Server.createData;
 import animatefx.animation.FadeIn;
 import javafx.collections.FXCollections;
@@ -9,15 +10,14 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Formatter;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,8 +38,6 @@ public class LoginController implements Initializable {
     @FXML
     public PasswordField passwordTextField;
     @FXML
-    public Button registerButton;
-    @FXML
     public Button loginButton;
     @FXML
     public Label errorEmailLabel;
@@ -53,6 +51,9 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
+        Formatter formatter = new Formatter();
+        formatter.format("%tB", Calendar.getInstance());
+        System.out.println(formatter);
         try {
             loginModel = LoginModel.getLoginModel();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
@@ -68,7 +69,7 @@ public class LoginController implements Initializable {
         object.start();
     }
 
-    public void loginButtonOnClick() throws SQLException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    private void loginButtonOnClick() throws SQLException, IOException {
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
         String role = roleComboBox.getSelectionModel().getSelectedItem();
@@ -112,9 +113,9 @@ public class LoginController implements Initializable {
         }
         errorRoleLabel.setVisible(false);
         errorEmailLabel.setVisible(false);
-        id = loginModel.login(email, password, role);
-        if (id != null) {
-            System.out.println("login success");
+        ResultSet resultSet = loginModel.login(email, password, role);
+        if (resultSet != null) {
+            id = resultSet.getString("id");
             if(role.equals("Doctor")) {
                 DoctorsMenuPage doctorsMenuPage = DoctorsMenuPage.getInstance();
                 doctorsMenuPage.setId(id);
@@ -126,6 +127,10 @@ public class LoginController implements Initializable {
                 patientMenuPage.setId(id);
                 patientMenuPage.createScene();
                 LoginPage.getWindow().setScene(patientMenuPage.getScene());
+                String periodTimeRepeat = resultSet.getString("periodTimeRepeat");
+                String lastTest = resultSet.getString("lastTest");
+                Thread thread = new Thread(new CreateUserData(periodTimeRepeat, lastTest), id);
+                thread.start();
             }
         }
         else {
@@ -135,7 +140,7 @@ public class LoginController implements Initializable {
 
     }
 
-    public boolean checkEmail(String email){
+    private boolean checkEmail(String email){
         //https://www.geeksforgeeks.org/check-email-address-valid-not-java/
         errorDetailsLabel.setVisible(false);
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
@@ -158,13 +163,10 @@ public class LoginController implements Initializable {
             return false;
         Pattern pswNamePtrn = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,15})");
         Matcher mtch = pswNamePtrn.matcher(password);
-        if(mtch.matches()){
-            return true;
-        }
-        return false;
+        return mtch.matches();
     }
 
-    public void deleteError(){
+    private void deleteError(){
         errorEmailLabel.setVisible(false);
         errorDetailsLabel.setVisible(false);
     }
@@ -180,31 +182,19 @@ public class LoginController implements Initializable {
             if(keyEvent.getCode().toString().equals("TAB"))
                 deleteError();
         });
-        emailTextField.setOnKeyTyped(keyEvent -> {
-            deleteError();
-        });
-        emailTextField.setOnMouseClicked(mouseEvent -> {
-            deleteError();
-        });
-        emailTextField.setOnMousePressed(mouseEvent -> {
-            deleteError();
-        });
-        passwordTextField.setOnMouseClicked(mouseEvent -> {
-            checkEmail(emailTextField.getText());
-        });
-        mainPane.setOnMouseClicked(mouseEvent -> {
-            checkEmail(emailTextField.getText());
-        });
+        emailTextField.setOnKeyTyped(keyEvent -> deleteError());
+        emailTextField.setOnMouseClicked(mouseEvent -> deleteError());
+        emailTextField.setOnMousePressed(mouseEvent -> deleteError());
+        passwordTextField.setOnMouseClicked(mouseEvent -> checkEmail(emailTextField.getText()));
+        mainPane.setOnMouseClicked(mouseEvent -> checkEmail(emailTextField.getText()));
         loginButton.setOnAction(actionEvent -> {
             try {
                 loginButtonOnClick();
-            } catch (SQLException | IOException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
         });
-        LoginPage.getWindow().setOnCloseRequest(windowEvent -> {
-            System.exit(0);
-        });
+        LoginPage.getWindow().setOnCloseRequest(windowEvent -> System.exit(0));
     }
 
 }

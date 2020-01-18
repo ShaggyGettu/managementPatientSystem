@@ -11,7 +11,7 @@ public class Temperature {
         int number = random.nextInt(1000000);
         // Probability of getting heat higher than 39.5 is 1/1000000
         if(number==0){
-            celsius = (float) (random.nextFloat()*4.5 + 39.5);
+            celsius = (float) (random.nextFloat()*2.5 + 39.5);
         }
 
         // Probability of getting heat between 36-37 is 300000/1000000
@@ -56,6 +56,6 @@ public class Temperature {
 
     @Override
     public String toString() {
-        return String.valueOf(celsius);
+        return String.format("%.2f",celsius);
     }
 }

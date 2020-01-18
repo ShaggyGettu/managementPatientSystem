@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class PatientMenuPageModel {
     private LoginModel loginModel;
@@ -39,10 +40,10 @@ public class PatientMenuPageModel {
         return null;
     }
 
-    public void temperature(String temperature, String id) throws SQLException {
+    public void temperature(Date nowT, String temperature, String id) throws SQLException {
+        addTemperature(nowT, temperature, id);
         String sql = "SELECT temperatureMin,temperatureMax, temperatureAvg, temperatureAmount, doctor, criticalMinTemperature, criticalMaxTemperature FROM patients WHERE id = ?";
         float temper = Float.valueOf(temperature);
-        //System.out.println("temper: " + temper);
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -77,6 +78,12 @@ public class PatientMenuPageModel {
             else if (temper>Integer.parseInt(criticalMaxTemperature))
                 addWarning(2, temperature, id, doctor);
         }
+    }
+
+    private void addTemperature(Date now, String temperature, String id) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        String sql = "update " + id + "set " + calendar.get(Calendar.MONTH);
     }
 
     private void addWarning(int state, String temperature, String id, String doctor) throws SQLException {
@@ -136,7 +143,7 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    public void bloodPressure(String bloodPressure, String id) throws SQLException {
+    public void bloodPressure(Date now, String bloodPressure, String id) throws SQLException {
         String sql = "SELECT bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg, doctor, criticalBloodPressure From patients WHERE id = ?";
         String bloodPressureMin;
         String bloodPressureMax;
@@ -213,7 +220,7 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    public void glucose(String glucose, String id) throws SQLException {
+    public void glucose(Date now, String glucose, String id) throws SQLException {
         String sql = "SELECT glucoseMin, glucoseMax, glucoseAmount, glucoseAvg, doctor, criticalMinGlucose, criticalMaxGlucose FROM patients WHERE id = ?";
         String glucoseMin, glucoseMax, glucoseAmount, glucoseAvg;
         int glucos = Integer.valueOf(glucose);

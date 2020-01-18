@@ -35,6 +35,19 @@ public class RegisterPage2Model {
         preparedStatement.setString(7 ,background);
         preparedStatement.setString(8, tests);
         preparedStatement.execute();
-
+        sql = "CREATE TABLE hospital." + id + " (Janauary varchar(250) DEFAULT NULL ," +
+                " Febraury varchar(250) DEFAULT NULL ," +
+                " March varchar(250) DEFAULT NULL ," +
+                " April varchar(250) DEFAULT NULL ," +
+                " May varchar(250) DEFAULT NULL ," +
+                " June varchar(250) DEFAULT NULL ," +
+                " July varchar(250) DEFAULT NULL ," +
+                " August varchar(250) DEFAULT NULL ," +
+                " September varchar(250) DEFAULT NULL ," +
+                " October varchar(250) DEFAULT NULL ," +
+                " November varchar(250) DEFAULT NULL ," +
+                " December varchar(250) DEFAULT NULL ) ENGINE = InnoDB;";
+        preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.execute();
     }
 }
