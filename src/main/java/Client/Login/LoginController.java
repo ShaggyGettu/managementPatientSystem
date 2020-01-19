@@ -48,12 +48,11 @@ public class LoginController implements Initializable {
 
     private ObservableList<String> list = FXCollections.observableArrayList("Patient", "Doctor");
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        Formatter formatter = new Formatter();
+        /*Formatter formatter = new Formatter();
         formatter.format("%tB", Calendar.getInstance());
-        System.out.println(formatter);
+        System.out.println(formatter);*/
         try {
             loginModel = LoginModel.getLoginModel();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
@@ -129,15 +128,13 @@ public class LoginController implements Initializable {
                 LoginPage.getWindow().setScene(patientMenuPage.getScene());
                 String periodTimeRepeat = resultSet.getString("periodTimeRepeat");
                 String lastTest = resultSet.getString("lastTest");
-                Thread thread = new Thread(new CreateUserData(periodTimeRepeat, lastTest), id);
-                thread.start();
+                new Thread(CreateUserData.getInstance(periodTimeRepeat, lastTest), id).start();
             }
         }
         else {
             errorDetailsLabel.setVisible(true);
             emailTextField.requestFocus();
         }
-
     }
 
     private boolean checkEmail(String email){

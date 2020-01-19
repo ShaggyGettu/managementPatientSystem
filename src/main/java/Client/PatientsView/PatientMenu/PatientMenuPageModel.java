@@ -6,8 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
 
 public class PatientMenuPageModel {
     private LoginModel loginModel;
@@ -40,8 +42,8 @@ public class PatientMenuPageModel {
         return null;
     }
 
-    public void temperature(Date nowT, String temperature, String id) throws SQLException {
-        addTemperature(nowT, temperature, id);
+    public void temperature(Date nowT, String temperature, String id, int periodTimeRepeat) throws SQLException {
+        addValue(nowT, temperature, id, "T", periodTimeRepeat);
         String sql = "SELECT temperatureMin,temperatureMax, temperatureAvg, temperatureAmount, doctor, criticalMinTemperature, criticalMaxTemperature FROM patients WHERE id = ?";
         float temper = Float.valueOf(temperature);
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
@@ -73,22 +75,42 @@ public class PatientMenuPageModel {
                 temperature = String.valueOf(avg / (amount + 1));
                 changeAvgTemperature(temperature, id, amount);
             }
-            if (temper<Integer.parseInt(criticalMinTemperature))
-                addWarning(1,temperature, id, doctor);
-            else if (temper>Integer.parseInt(criticalMaxTemperature))
-                addWarning(2, temperature, id, doctor);
+            if (temper<Float.valueOf(criticalMinTemperature))
+                addWarning(1,temperature, id, doctor, nowT);
+            else if (temper>Float.valueOf(criticalMaxTemperature))
+                addWarning(2, temperature, id, doctor, nowT);
         }
     }
 
-    private void addTemperature(Date now, String temperature, String id) {
+    private void addValue(Date now, String temperature, String id, String test, int periodTimeRepeat) throws SQLException {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        String sql = "update " + id + "set " + calendar.get(Calendar.MONTH);
+        Formatter formatter = new Formatter();
+        int hoursFromBeginningMonth = calendar.get(Calendar.HOUR_OF_DAY) + (calendar.get(Calendar.DAY_OF_MONTH)*24);
+        temperature = "T " + calendar.get(Calendar.YEAR) + Integer.valueOf(hoursFromBeginningMonth) + temperature;
+        formatter.format("%tB", Calendar.getInstance());
+        String sql = "update s" + id + " set " + formatter + " = CONCAT(IFNULL(" + formatter + ", ''), ?) WHERE year = ? AND test = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, temperature);
+        preparedStatement.setString(2, String.valueOf(calendar.get(Calendar.YEAR)));
+        preparedStatement.setString(3, test);
+        preparedStatement.execute();
+        sql = "update patients set lastTest = ? WHERE id = ?";
+        preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        calendar.setTime(now);
+        calendar.add(Calendar.HOUR_OF_DAY, periodTimeRepeat);
+        if (calendar.after(Calendar.getInstance()))
+            calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        now = calendar.getTime();
+        preparedStatement.setString(1, simpleDateFormat.format(now));
+        preparedStatement.setString(2, id);
     }
 
-    private void addWarning(int state, String temperature, String id, String doctor) throws SQLException {
-        String sql = "update doctors set warnings = CONCAT(IFNULL(warnings, ''), ?') WHERE id = '?'";
-        String warning = id + "";
+    private void addWarning(int state, String temperature, String id, String doctor, Date nowT) throws SQLException {
+        String sql = "update doctors set warnings = CONCAT(IFNULL(warnings, ''), ?) WHERE id = ?";
+        String warning = id + " ";
         switch (state)
         {
             case 1:
@@ -109,14 +131,16 @@ public class PatientMenuPageModel {
         }
         warning += temperature;
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowT);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        warning += (" " + formatter.format(calendar.getTime()));;
+        warning += (" " + formatter.format(calendar.getTime()));
         warning += "\n";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1,warning);
         preparedStatement.setString(2,doctor);
         preparedStatement.execute();
     }
+
     private void changeAvgTemperature(String temperature, String id, int amount) throws SQLException {
         String sql = "UPDATE patients SET temperatureAmount = ?, temperatureAvg = ? WHERE id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
@@ -143,7 +167,8 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    public void bloodPressure(Date now, String bloodPressure, String id) throws SQLException {
+    public void bloodPressure(Date nowT, String bloodPressure, String id, int periodTimeRepeat) throws SQLException {
+        addValue(nowT, bloodPressure, id, "B", periodTimeRepeat);
         String sql = "SELECT bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg, doctor, criticalBloodPressure From patients WHERE id = ?";
         String bloodPressureMin;
         String bloodPressureMax;
@@ -191,7 +216,7 @@ public class PatientMenuPageModel {
                 changeAvgBloodPressure(id, amount, lAvg + "," + sAvg);
             }
             if (Integer.parseInt(criticalBloodPressure.split(",")[0])<=lBP || Integer.parseInt(criticalBloodPressure.split(",")[1])<=sBP)
-                addWarning(3, bloodPressure, id, doctor);
+                addWarning(3, bloodPressure, id, doctor, nowT);
         }
     }
 
@@ -220,7 +245,8 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    public void glucose(Date now, String glucose, String id) throws SQLException {
+    public void glucose(Date nowT, String glucose, String id, int periodTimeRepeat) throws SQLException {
+        addValue(nowT, glucose, id, "G", periodTimeRepeat);
         String sql = "SELECT glucoseMin, glucoseMax, glucoseAmount, glucoseAvg, doctor, criticalMinGlucose, criticalMaxGlucose FROM patients WHERE id = ?";
         String glucoseMin, glucoseMax, glucoseAmount, glucoseAvg;
         int glucos = Integer.valueOf(glucose);
@@ -246,9 +272,9 @@ public class PatientMenuPageModel {
             avg /= (amount + 1);
             changeAvgGlucose(amount, avg, id);
             if (glucos<Integer.valueOf(criticalMinGlucose))
-                addWarning(4, glucose, id, doctor);
+                addWarning(4, glucose, id, doctor, nowT);
             else if (glucos>Integer.valueOf(criticalMaxGlucose))
-                addWarning(5, glucose, id, doctor);
+                addWarning(5, glucose, id, doctor, nowT);
         }
     }
 
@@ -277,11 +303,11 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    public static void main(String args[]) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        PatientMenuPageModel pageModel = new PatientMenuPageModel();
+    public static void main(String args[]) {
+        System.out.println(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
     }
 
-    public ResultSet getData(String id) throws SQLException {
+    ResultSet getData(String id) throws SQLException {
         String sql = "SELECT temperatureAvg, temperatureMin, temperatureMax, temperatureAmount, " +
                 "bloodPressureAvg, bloodPressureMin, bloodPressureMax, bloodPressureAmount, " +
                 "glucoseAvg, glucoseMin, glucoseMax, glucoseAmount FROM patients WHERE id = ?";

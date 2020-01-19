@@ -2,6 +2,7 @@ package Client.DoctorsView.PatientScreen;
 
 import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
 import Client.Login.LoginPage;
+import Server.CreateUserData;
 import com.mysql.cj.log.Log;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +13,11 @@ import javafx.scene.text.TextAlignment;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
+import java.util.Set;
+
+import static java.lang.Thread.getAllStackTraces;
 
 public class PatientScreenController implements Initializable {
     @FXML

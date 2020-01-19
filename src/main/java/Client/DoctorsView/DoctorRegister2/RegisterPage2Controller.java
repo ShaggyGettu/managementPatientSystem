@@ -5,6 +5,7 @@ import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
 import Client.Login.LoginPage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
@@ -22,7 +23,6 @@ public class RegisterPage2Controller implements Initializable {
     @FXML
     Button exitButton, backButton, finishButton;
 
-    private RegisterPage2 registerPage2;
     private RegisterPage2Model registerPage2Model;
     private DoctorsMenuPage doctorMenuPage;
     private RegisterPage1 registerPage1;
@@ -32,7 +32,6 @@ public class RegisterPage2Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Actions();
         doctorMenuPage = DoctorsMenuPage.getInstance();
-        registerPage2 = RegisterPage2.getInstance();
         registerPage1 = RegisterPage1.getInstance();
         try {
             registerPage2Model = RegisterPage2Model.getRegisterPage2Model();
@@ -56,14 +55,14 @@ public class RegisterPage2Controller implements Initializable {
     private void addPatient() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IOException {
         String background = backgroundTextArea.getText();
         String tests = "";
-        if(temperatureCheckBox.isSelected())
+        if (temperatureCheckBox.isSelected())
             tests = "Temperature ";
         if (bloodPressureCheckBox.isSelected())
             tests += "BloodPressure ";
         if (glucoseCheckBox.isSelected())
             tests += "Glucose";
         registerPage2Model.addPatient(registerPage1.getFields()[0], registerPage1.getFields()[1], registerPage1.getFields()[2], registerPage1.getFields()[4], doctorMenuPage.getId(), registerPage1.getFields()[3], background, tests);
-        doctorMenuPage.createScreen();
+            doctorMenuPage.createScreen();
         LoginPage.getWindow().setScene(doctorMenuPage.getScene());
     }
 }

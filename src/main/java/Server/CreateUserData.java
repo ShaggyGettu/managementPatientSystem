@@ -3,6 +3,8 @@ package Server;
 import Client.DataTypes.BloodPressure;
 import Client.DataTypes.Glucose;
 import Client.DataTypes.Temperature;
+import Client.DoctorsView.DoctorRegister2.RegisterPage2Model;
+import Client.Login.LoginModel;
 import Client.PatientsView.PatientMenu.PatientMenuPageModel;
 
 import java.sql.SQLException;
@@ -10,20 +12,35 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 public class CreateUserData implements Runnable{
     private int periodTimeRepeat;
     private String lastTest;
+    private boolean exit;
+    private static CreateUserData createUserData;
 
-    public CreateUserData(String periodTimeRepeat, String lastTest) {
+    private CreateUserData(String periodTimeRepeat, String lastTest) {
         this.periodTimeRepeat = Integer.parseInt(periodTimeRepeat);
         this.lastTest = lastTest;
+        exit = true;
+    }
+
+    public static CreateUserData getInstance(String periodTimeRepeat, String lastTest) {
+        if (createUserData == null){
+            createUserData = new CreateUserData(periodTimeRepeat, lastTest);
+        }
+        return createUserData;
+    }
+
+    public static CreateUserData getInstance() {
+        return createUserData;
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (exit) {
             PatientMenuPageModel patientMenuPageModel;
             LocalDateTime localDate = LocalDateTime.now();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -31,37 +48,41 @@ public class CreateUserData implements Runnable{
             String now = dtf.format(localDate);
             Date lastT = null;
             Date nowT = null;
-            long diff = 0;
+            long diff;
             try {
                 nowT = simpleDateFormat.parse(now);
+                lastT = simpleDateFormat.parse(lastTest);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (lastTest != null) {
-                try {
-                    lastT = simpleDateFormat.parse(lastTest);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                assert nowT != null;
-                assert lastT != null;
-                diff = nowT.getTime() - lastT.getTime();
-                diff = diff / (60 * 60 * 1000);
-            }
+            assert nowT != null;
+            assert lastT != null;
+            diff = nowT.getTime() - lastT.getTime();
+            diff = diff / (60 * 1000);
             if(diff>periodTimeRepeat) {
                 String id = Thread.currentThread().getName();
                 try {
+                    Calendar last = Calendar.getInstance();
+                    Calendar nowD = Calendar.getInstance();
+                    last.setTime(lastT);
+                    if (nowD.get(Calendar.YEAR) != last.get(Calendar.YEAR))
+                        RegisterPage2Model.AddCurrentYear(id, LoginModel.getLoginModel());
                     Temperature temperature = new Temperature();
                     Glucose glucose = new Glucose();
                     BloodPressure bloodPressure = new BloodPressure();
                     patientMenuPageModel = PatientMenuPageModel.getInstance();
-                    patientMenuPageModel.temperature(nowT, temperature.toString(), id);
-                    patientMenuPageModel.glucose(nowT, String.valueOf(glucose.getGlucose()), id);
-                    patientMenuPageModel.bloodPressure(nowT, bloodPressure.toString(), id);
+                    patientMenuPageModel.temperature(nowT, temperature.toString(), id, periodTimeRepeat);
+                    patientMenuPageModel.glucose(nowT, String.valueOf(glucose.getGlucose()), id, periodTimeRepeat);
+                    patientMenuPageModel.bloodPressure(nowT, bloodPressure.toString(), id, periodTimeRepeat);
                 } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e){
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    public void stop(){
+        exit = false;
+        createUserData = null;
     }
 }

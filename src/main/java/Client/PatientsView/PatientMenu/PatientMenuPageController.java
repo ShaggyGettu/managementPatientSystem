@@ -3,6 +3,7 @@ package Client.PatientsView.PatientMenu;
 import Client.DoctorsView.DoctorsMenu.DoctorMenuPageController;
 import Client.Login.LoginPage;
 import Client.PatientsView.PatientMenuPage;
+import Server.CreateUserData;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -128,6 +129,15 @@ public class PatientMenuPageController implements Initializable {
             try {
                 loadPatient();
             } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        backButton.setOnMouseClicked(mouseEvent -> {
+            CreateUserData.getInstance().stop();
+            LoginPage loginPage = new LoginPage();
+            try {
+                loginPage.start(LoginPage.getWindow());
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
