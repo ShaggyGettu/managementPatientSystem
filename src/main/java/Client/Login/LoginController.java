@@ -68,7 +68,7 @@ public class LoginController implements Initializable {
         object.start();
     }
 
-    private void loginButtonOnClick() throws SQLException, IOException {
+    private void loginButtonOnClick() throws SQLException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
         String role = roleComboBox.getSelectionModel().getSelectedItem();
@@ -128,7 +128,9 @@ public class LoginController implements Initializable {
                 LoginPage.getWindow().setScene(patientMenuPage.getScene());
                 String periodTimeRepeat = resultSet.getString("periodTimeRepeat");
                 String lastTest = resultSet.getString("lastTest");
-                new Thread(CreateUserData.getInstance(periodTimeRepeat, lastTest), id).start();
+                System.out.println(id);
+                Thread thread = new Thread(CreateUserData.getInstance(periodTimeRepeat, lastTest, id), id);
+                thread.start();
             }
         }
         else {
@@ -187,7 +189,7 @@ public class LoginController implements Initializable {
         loginButton.setOnAction(actionEvent -> {
             try {
                 loginButtonOnClick();
-            } catch (SQLException | IOException e) {
+            } catch (SQLException | IOException | IllegalAccessException | ClassNotFoundException | InstantiationException e) {
                 e.printStackTrace();
             }
         });

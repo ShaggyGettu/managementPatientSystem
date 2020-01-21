@@ -10,26 +10,31 @@ import Client.PatientsView.PatientMenu.PatientMenuPageModel;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
 public class CreateUserData implements Runnable{
+    private String id;
     private int periodTimeRepeat;
     private String lastTest;
     private boolean exit;
     private static CreateUserData createUserData;
 
-    private CreateUserData(String periodTimeRepeat, String lastTest) {
+    private CreateUserData(String periodTimeRepeat, String lastTest, String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         this.periodTimeRepeat = Integer.parseInt(periodTimeRepeat);
         this.lastTest = lastTest;
         exit = true;
+        this.id = id;
+        String year = lastTest.split("/")[2].split(" ")[0];
+        if (!RegisterPage2Model.isYearExist(id, LoginModel.getLoginModel(), year))
+            RegisterPage2Model.AddCurrentYear(id, LoginModel.getLoginModel(), year);
+            //RegisterPage2Model.AddCurrentYear(id, LoginModel.getLoginModel(), year);
+
     }
 
-    public static CreateUserData getInstance(String periodTimeRepeat, String lastTest) {
+    public static CreateUserData getInstance(String periodTimeRepeat, String lastTest, String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         if (createUserData == null){
-            createUserData = new CreateUserData(periodTimeRepeat, lastTest);
+            createUserData = new CreateUserData(periodTimeRepeat, lastTest, id);
         }
         return createUserData;
     }
@@ -42,41 +47,41 @@ public class CreateUserData implements Runnable{
     public void run() {
         while (exit) {
             PatientMenuPageModel patientMenuPageModel;
-            LocalDateTime localDate = LocalDateTime.now();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            String now = dtf.format(localDate);
             Date lastT = null;
-            Date nowT = null;
-            long diff;
             try {
-                nowT = simpleDateFormat.parse(now);
                 lastT = simpleDateFormat.parse(lastTest);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            assert nowT != null;
             assert lastT != null;
-            diff = nowT.getTime() - lastT.getTime();
-            diff = diff / (60 * 1000);
-            if(diff>periodTimeRepeat) {
-                String id = Thread.currentThread().getName();
+            Calendar lastPlusPeriod = Calendar.getInstance();
+            lastPlusPeriod.setTime(lastT);
+            Calendar last = Calendar.getInstance();
+            last.setTime(lastT);
+            lastPlusPeriod.add(Calendar.MINUTE, periodTimeRepeat);
+            if(lastPlusPeriod.before(Calendar.getInstance())) {
                 try {
-                    Calendar last = Calendar.getInstance();
-                    Calendar nowD = Calendar.getInstance();
-                    last.setTime(lastT);
-                    if (nowD.get(Calendar.YEAR) != last.get(Calendar.YEAR))
-                        RegisterPage2Model.AddCurrentYear(id, LoginModel.getLoginModel());
+                    if (last.get(Calendar.YEAR) != lastPlusPeriod.get(Calendar.YEAR))
+                        RegisterPage2Model.AddCurrentYear(id, LoginModel.getLoginModel(), String.valueOf(lastPlusPeriod.get(Calendar.YEAR)));
                     Temperature temperature = new Temperature();
                     Glucose glucose = new Glucose();
                     BloodPressure bloodPressure = new BloodPressure();
                     patientMenuPageModel = PatientMenuPageModel.getInstance();
-                    patientMenuPageModel.temperature(nowT, temperature.toString(), id, periodTimeRepeat);
-                    patientMenuPageModel.glucose(nowT, String.valueOf(glucose.getGlucose()), id, periodTimeRepeat);
-                    patientMenuPageModel.bloodPressure(nowT, bloodPressure.toString(), id, periodTimeRepeat);
+                    if (patientMenuPageModel.isTemperature())
+                        patientMenuPageModel.temperature(lastPlusPeriod.getTime(), temperature.toString(), id, periodTimeRepeat);
+                    if (patientMenuPageModel.isGlucose())
+                        patientMenuPageModel.glucose(lastPlusPeriod.getTime(), String.valueOf(glucose.getGlucose()), id, periodTimeRepeat);
+                    if (patientMenuPageModel.isBloodPressure())
+                        patientMenuPageModel.bloodPressure(lastPlusPeriod.getTime(), bloodPressure.toString(), id, periodTimeRepeat);
                 } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e){
                     e.printStackTrace();
                 }
+            }
+            try {
+                lastTest = PatientMenuPageModel.getInstance().getLastTest(id);
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
             }
         }
     }

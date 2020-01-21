@@ -5,10 +5,7 @@ import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
 import Client.Login.LoginPage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +15,8 @@ import java.util.ResourceBundle;
 public class RegisterPage2Controller implements Initializable {
     @FXML
     TextArea backgroundTextArea;
+    @FXML
+    TextField periodTime;
     @FXML
     CheckBox temperatureCheckBox, bloodPressureCheckBox, glucoseCheckBox;
     @FXML
@@ -31,6 +30,7 @@ public class RegisterPage2Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Actions();
+        periodTime.setPromptText("Default period time repeat is 180 minutes");
         doctorMenuPage = DoctorsMenuPage.getInstance();
         registerPage1 = RegisterPage1.getInstance();
         try {
@@ -55,13 +55,18 @@ public class RegisterPage2Controller implements Initializable {
     private void addPatient() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IOException {
         String background = backgroundTextArea.getText();
         String tests = "";
+        int intPeriodTime;
+        if (periodTime.getText().equals("")|| periodTime.getText().contains("."))
+            intPeriodTime = 180;
+        else
+            intPeriodTime = Integer.parseInt(periodTime.getText());
         if (temperatureCheckBox.isSelected())
             tests = "Temperature ";
         if (bloodPressureCheckBox.isSelected())
             tests += "BloodPressure ";
         if (glucoseCheckBox.isSelected())
             tests += "Glucose";
-        registerPage2Model.addPatient(registerPage1.getFields()[0], registerPage1.getFields()[1], registerPage1.getFields()[2], registerPage1.getFields()[4], doctorMenuPage.getId(), registerPage1.getFields()[3], background, tests);
+        registerPage2Model.addPatient(registerPage1.getFields()[0], registerPage1.getFields()[1], registerPage1.getFields()[2], registerPage1.getFields()[4], doctorMenuPage.getId(), registerPage1.getFields()[3], background, tests, intPeriodTime);
             doctorMenuPage.createScreen();
         LoginPage.getWindow().setScene(doctorMenuPage.getScene());
     }

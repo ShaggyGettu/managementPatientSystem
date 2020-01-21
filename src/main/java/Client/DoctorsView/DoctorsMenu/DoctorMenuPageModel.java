@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DoctorMenuPageModel {
+class DoctorMenuPageModel {
     private LoginModel loginModel;
     private static DoctorMenuPageModel doctorMenuPageModel;
 
@@ -14,13 +14,13 @@ public class DoctorMenuPageModel {
         loginModel = LoginModel.getLoginModel();
     }
 
-    public static DoctorMenuPageModel getDoctorMenuPageModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    static DoctorMenuPageModel getDoctorMenuPageModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         if(doctorMenuPageModel == null)
             doctorMenuPageModel = new DoctorMenuPageModel();
         return doctorMenuPageModel;
     }
 
-    public ResultSet getPatients(String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    ResultSet getPatients(String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         loginModel.connect();
         ResultSet resultSet;
         PreparedStatement preparedStatement;
@@ -33,4 +33,19 @@ public class DoctorMenuPageModel {
     }
 
 
+    ResultSet getWarning(String id) throws SQLException {
+        String sql = "SELECT warnings FROM doctors WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        return resultSet;
+    }
+
+    void endWarnings(String id) throws SQLException {
+        String sql = "UPDATE doctors SET warnings = CONCAT(warnings, 'end\n') WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        preparedStatement.execute();
+    }
 }

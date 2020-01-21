@@ -7,18 +7,18 @@ public class Glucose {
 
     public Glucose(){
         Random random = new Random();
-        int number = random.nextInt(1000);
-        if (number>=0&&number<150){
+        float number = random.nextFloat() * 100;
+        if (number>=0&&number<=0.5){
             glucose = random.nextInt(20) + 60;
         }
-        else if (number>=150&&number<300){
+        else if (number>0.5&&number<=50){
             glucose = random.nextInt(21) + 80;
         }
-        else if (number>=300&&number<700){
-            glucose = random.nextInt(25) + 101;
+        else if (number>50&&number<99.5){
+            glucose = random.nextInt(15) + 101;
         }
-        else if (number>=700&&number<1000){
-            glucose = random.nextInt(75) + 126;
+        else if (number>=99.5&&number<=100){
+            glucose = random.nextInt(85) + 116;
         }
     }
 

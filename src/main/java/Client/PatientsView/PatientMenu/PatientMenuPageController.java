@@ -28,13 +28,13 @@ public class PatientMenuPageController implements Initializable {
     @FXML
     Label minTemperatureValueLabel, minBloodPressureValueLabel, minGlucoseValueLabel;
     @FXML
-    Label maxTemperatureDateLabel,maxTemperatureTimeLabel;
+    Label maxTemperatureDateLabel, maxTemperatureTimeLabel;
     @FXML
     Label maxBloodPressureDateLabel, maxBloodPressureTimeLabel;
     @FXML
     Label maxGlucoseDateLabel, maxGlucoseTimeLabel;
     @FXML
-    Label minTemperatureDateLabel,minTemperatureTimeLabel;
+    Label minTemperatureDateLabel, minTemperatureTimeLabel;
     @FXML
     Label minBloodPressureDateLabel, minBloodPressureTimeLabel;
     @FXML
@@ -52,9 +52,13 @@ public class PatientMenuPageController implements Initializable {
 
     private PatientMenuPage patientMenuPage;
     private PatientMenuPageModel patientMenuPageModel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Actions();
+        temperaturePane.setVisible(false);
+        bloodPressurePane.setVisible(false);
+        glucosePane.setVisible(false);
         patientMenuPage = PatientMenuPage.getInstance();
         try {
             patientMenuPageModel = PatientMenuPageModel.getInstance();
@@ -70,15 +74,21 @@ public class PatientMenuPageController implements Initializable {
         emailLabel.setText(details[0]);
         phoneLabel.setText(details[1]);
         String tests[] = details[2].split(" ");
-        if (!Arrays.asList(tests).contains("Temperature"))
-            temperaturePane.setVisible(false);
-        if (!Arrays.asList(tests).contains("BloodPressure"))
-            bloodPressurePane.setVisible(false);
-        if (!Arrays.asList(tests).contains("Glucose"))
-            glucosePane.setVisible(false);
-        ResultSet resultSet= patientMenuPageModel.getData(patientMenuPage.getId());
-        String temperature = null, bloodPressure = null, glucose = null;
-        if(temperaturePane.isVisible()&&Integer.parseInt(resultSet.getString(4)) != 0) {
+        if (Arrays.asList(tests).contains("Temperature")) {
+            temperaturePane.setVisible(true);
+            patientMenuPageModel.setTemperature(true);
+        }
+        if (Arrays.asList(tests).contains("BloodPressure")) {
+            bloodPressurePane.setVisible(true);
+            patientMenuPageModel.setBloodPressure(true);
+        }
+        if (Arrays.asList(tests).contains("Glucose")) {
+            glucosePane.setVisible(true);
+            patientMenuPageModel.setGlucose(true);
+        }
+        ResultSet resultSet = patientMenuPageModel.getData(patientMenuPage.getId());
+        String temperature, bloodPressure, glucose;
+        if (temperaturePane.isVisible() && Integer.parseInt(resultSet.getString(4)) != 0) {
             temperature = resultSet.getString(1);//AVG
             averageTemperatureLabel.setText(temperature);
             temperature = resultSet.getString(2);
@@ -92,7 +102,7 @@ public class PatientMenuPageController implements Initializable {
             temperature = resultSet.getString(4);
             amountTemperatureLabel.setText(temperature);
         }
-        if(bloodPressurePane.isVisible()&&Integer.parseInt(resultSet.getString(8)) != 0){
+        if (bloodPressurePane.isVisible() && Integer.parseInt(resultSet.getString(8)) != 0) {
             bloodPressure = resultSet.getString(5);
             averageBloodPressureLabel.setText(bloodPressure);
             bloodPressure = resultSet.getString(6);
@@ -106,7 +116,7 @@ public class PatientMenuPageController implements Initializable {
             bloodPressure = resultSet.getString(8);
             amountBloodPressureLabel.setText(bloodPressure);
         }
-        if (glucosePane.isVisible()&&Integer.parseInt(resultSet.getString(12)) != 0){
+        if (glucosePane.isVisible() && Integer.parseInt(resultSet.getString(12)) != 0) {
             glucose = resultSet.getString(9);
             averageGlucoseLabel.setText(glucose);
             glucose = resultSet.getString(10);

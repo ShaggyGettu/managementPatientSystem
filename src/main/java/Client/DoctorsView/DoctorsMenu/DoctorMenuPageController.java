@@ -1,6 +1,7 @@
 package Client.DoctorsView.DoctorsMenu;
 
 import Client.DataTypes.Patient;
+import Client.DataTypes.Warning;
 import Client.DoctorsView.DoctorRegister1.RegisterPage1;
 import Client.DoctorsView.PatientScreen.PatientScreen;
 import Client.Login.LoginPage;
@@ -9,52 +10,61 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class DoctorMenuPageController implements Initializable {
     @FXML
-    Button backButton;
+    Button backButton, addPatientButton, warningsButton, patientsButton;
     @FXML
     TableView<Patient> patientsTable;
     @FXML
-    TableColumn<Patient, Integer> idColumn;
+    TableColumn<Patient, Integer> idPatientColumn;
     @FXML
-    TableColumn<Patient, String> nameColumn;
+    TableColumn<Patient, String> namePatientColumn;
     @FXML
-    TableColumn<Patient, String> emailColumn;
+    TableColumn<Patient, String> emailPatientColumn;
     @FXML
-    TableColumn<Patient, String> phoneColumn;
+    TableColumn<Patient, String> phonePatientColumn;
     @FXML
-    TableColumn<Patient, Button> showColumn;
+    TableColumn<Patient, Button> showPatientColumn;
     @FXML
-    TableColumn<Patient, Button> deleteColumn;
+    TableColumn<Patient, Button> deletePatientColumn;
     @FXML
-    Button patientsButton;
+    TableView<Warning> warningsTable;
+    @FXML
+    TableColumn<Warning, String> idWarningColumn;
+    @FXML
+    TableColumn<Warning, String> testWarningColumn;
+    @FXML
+    TableColumn<Warning, String> valueWarningColumn;
+    @FXML
+    TableColumn<Warning, String> dateWarningColumn;
+    @FXML
+    TableColumn<Warning, Button> deleteWarningColumn;
     @FXML
     Label titleLabel;
     @FXML
     private AnchorPane titlePane;
-    @FXML
-    private Button addPatientButton;
 
     private Map<String ,String > colorSet;
     private DoctorsMenuPage doctorsMenuPage;
-    private ObservableList<Patient> patients;
     private RegisterPage1 registerPage1;
+    private DoctorMenuPageModel doctorMenuPageModel;
+    private static boolean entered;
+
+    public static void setEntered() {
+        entered = false;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,8 +74,44 @@ public class DoctorMenuPageController implements Initializable {
         registerPage1 = RegisterPage1.getInstance();
         try {
             loadPatients();
+            if (!entered) {
+                showAlertWarnings();
+                entered = true;
+            }
         } catch (ClassNotFoundException | SQLException | InstantiationException | IOException | IllegalAccessException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void showAlertWarnings() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        doctorMenuPageModel = DoctorMenuPageModel.getDoctorMenuPageModel();
+        ResultSet resultSet = doctorMenuPageModel.getWarning(doctorsMenuPage.getId());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Warning data from patients");
+        alert.setHeaderText(null);
+        String warnings = resultSet.getString(1);
+        if (warnings.endsWith("end\n") || warnings.equals("")){
+            alert.setContentText("You don't have a warning information from your patients");
+            alert.showAndWait();
+        }
+        else {
+            alert.setHeaderText("Warning data");
+            Label label = new Label("All the warning data from your patients:");
+            TextArea textArea = new TextArea(warnings);
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+            textArea.setMaxWidth(Double.MAX_VALUE);
+            textArea.setMaxHeight(Double.MAX_VALUE);
+            GridPane.setVgrow(textArea, Priority.ALWAYS);
+            GridPane.setHgrow(textArea, Priority.ALWAYS);
+            GridPane gridPane = new GridPane();
+            gridPane.setMaxWidth(Double.MAX_VALUE);
+            gridPane.add(label, 0, 0);
+            gridPane.add(textArea, 0, 1);
+            alert.getDialogPane().setExpandableContent(gridPane);
+            alert.show();
+
+            //doctorMenuPageModel.endWarnings(doctorsMenuPage.getId());
         }
     }
 
@@ -75,42 +121,75 @@ public class DoctorMenuPageController implements Initializable {
     }
 
     private void loadPatients() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IOException {
-        DoctorMenuPageModel doctorMenuPageModel = DoctorMenuPageModel.getDoctorMenuPageModel();
+        warningsTable.setVisible(false);
+        patientsTable.setVisible(true);
+        doctorMenuPageModel = DoctorMenuPageModel.getDoctorMenuPageModel();
         ResultSet resultSet = doctorMenuPageModel.getPatients(doctorsMenuPage.getId());
-        patients = FXCollections.observableArrayList();
+        ObservableList<Patient> patients = FXCollections.observableArrayList();
         while (resultSet.next()){
             patients.add(new Patient(resultSet.getString(1), resultSet.getString(2),resultSet.getString(4),doctorsMenuPage.getId(),resultSet.getString(6)));
         }
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        showColumn.setCellValueFactory(new PropertyValueFactory<>("show"));
-        deleteColumn.setCellValueFactory(new PropertyValueFactory<>("delete"));
+        idPatientColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        namePatientColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        emailPatientColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        phonePatientColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        showPatientColumn.setCellValueFactory(new PropertyValueFactory<>("show"));
+        deletePatientColumn.setCellValueFactory(new PropertyValueFactory<>("delete"));
         patientsTable.setItems(patients);
-        if(patients != null) {
-            for (Patient patient : patients) {
-                patient.getShow().setOnMouseClicked(mouseEvent -> {
-                    PatientScreen patientScreen = null;
-                    try {
-                        patientScreen = PatientScreen.getInstance();
-                        patientScreen.setPatient(patient);
-                    } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        patientScreen.createScreen();
-                        LoginPage.getWindow().setScene(patientScreen.getScene());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
+        for (Patient patient : patients) {
+            patient.getShow().setOnMouseClicked(mouseEvent -> {
+                PatientScreen patientScreen = null;
+                try {
+                    patientScreen = PatientScreen.getInstance();
+                    patientScreen.setPatient(patient);
+                } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    assert patientScreen != null;
+                    patientScreen.createScreen();
+                    LoginPage.getWindow().setScene(patientScreen.getScene());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
-            titleLabel.setText("Patients");
-            titlePane.styleProperty().set("-fx-background-color:" + colorSet.get("blue"));
-            titlePane.setVisible(true);
-            new FadeIn(titlePane).play();
+        titleLabel.setText("Patients");
+        titlePane.styleProperty().set("-fx-background-color:" + colorSet.get("blue"));
+        titlePane.setVisible(true);
+        new FadeIn(titlePane).play();
+    }
+
+    private void loadWarnings() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        patientsTable.setVisible(false);
+        warningsTable.setVisible(true);
+        doctorMenuPageModel = DoctorMenuPageModel.getDoctorMenuPageModel();
+        ResultSet resultSet = doctorMenuPageModel.getWarning(doctorsMenuPage.getId());
+        if (resultSet.getString(1).equals(""))
+            return;
+        ObservableList<Warning> warnings = FXCollections.observableArrayList();
+        String warningsString[] = resultSet.getString(1).split("\n");
+        for (String string:warningsString){
+            if (string.equals("end"))
+                continue;
+            String warning[] = string.split(" ");
+            warnings.add(new Warning(warning[0], warning[1], warning[2], warning[3] + " " + warning[4]));
+        }
+        idWarningColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        testWarningColumn.setCellValueFactory(new PropertyValueFactory<>("test"));
+        valueWarningColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        dateWarningColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        deleteWarningColumn.setCellValueFactory(new PropertyValueFactory<>("delete"));
+        warningsTable.setItems(warnings);
+        for (Warning warning : warnings) {
+            warning.getDelete().setOnMouseClicked(mouseEvent -> {
+                warnings.remove(warning);
+            });
+        }
+        titleLabel.setText("Warnings");
+        titlePane.styleProperty().set("-fx-background-color:" + colorSet.get("blue"));
+        titlePane.setVisible(true);
+        new FadeIn(titlePane).play();
     }
 
     private void Actions(){
@@ -128,6 +207,13 @@ public class DoctorMenuPageController implements Initializable {
                 registerPage1.createScreen();
                 LoginPage.getWindow().setScene(registerPage1.getScene());
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        warningsButton.setOnMouseClicked(mouseEvent -> {
+            try {
+                loadWarnings();
+            } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         });

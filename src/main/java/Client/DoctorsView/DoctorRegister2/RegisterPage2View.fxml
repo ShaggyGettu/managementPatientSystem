@@ -4,6 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -21,7 +22,7 @@
       </Label>
       <AnchorPane layoutY="100.0" prefHeight="300.0" prefWidth="180.0">
          <children>
-            <Label fx:id="idLabel" layoutX="10.0" layoutY="90.0" maxWidth="180.0" prefHeight="28.0" prefWidth="160.0" text="Background diseaes">
+            <Label fx:id="idLabel" layoutX="10.0" layoutY="50.0" maxWidth="180.0" prefHeight="28.0" prefWidth="160.0" text="Background diseaes">
                <font>
                   <Font size="18.0" />
                </font>
@@ -31,18 +32,23 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="idLabel2" layoutX="10.0" layoutY="150.0" maxWidth="180.0" prefHeight="28.0" prefWidth="165.0" text="Period test checking">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="180.0" layoutY="150.0" prefHeight="100.0" prefWidth="300.0">
+      <AnchorPane layoutX="180.0" layoutY="120.0" prefHeight="100.0" prefWidth="300.0">
          <children>
             <TextArea fx:id="backgroundTextArea" prefHeight="100.0" prefWidth="300.0" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="180.0" layoutY="250.0" prefHeight="100.0" prefWidth="420.0">
+      <AnchorPane layoutX="180.0" layoutY="298.0" prefHeight="20.0" prefWidth="420.0">
          <children>
-            <CheckBox fx:id="temperatureCheckBox" layoutY="55.0" mnemonicParsing="false" text="Temperature" />
-            <CheckBox fx:id="bloodPressureCheckBox" layoutX="119.0" layoutY="55.0" mnemonicParsing="false" text="Blood pressure" />
-            <CheckBox fx:id="glucoseCheckBox" layoutX="255.0" layoutY="55.0" mnemonicParsing="false" text="Glucose" />
+            <CheckBox fx:id="temperatureCheckBox" layoutY="10.0" mnemonicParsing="false" text="Temperature" />
+            <CheckBox fx:id="bloodPressureCheckBox" layoutX="119.0" layoutY="10.0" mnemonicParsing="false" text="Blood pressure" />
+            <CheckBox fx:id="glucoseCheckBox" layoutX="255.0" layoutY="10.0" mnemonicParsing="false" text="Glucose" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="335.0" prefHeight="65.0" prefWidth="600.0">
@@ -64,5 +70,11 @@
             </Button>
          </children>
       </AnchorPane>
+      <Label fx:id="idLabel11" layoutX="281.0" layoutY="250.0" maxWidth="180.0" prefHeight="28.0" prefWidth="70.0" text="Minutes">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="periodTime" layoutX="202.0" layoutY="251.0" prefHeight="26.0" prefWidth="65.0" />
    </children>
 </AnchorPane>

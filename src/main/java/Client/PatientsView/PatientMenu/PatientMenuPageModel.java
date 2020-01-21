@@ -5,6 +5,7 @@ import Client.Login.LoginModel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -14,9 +15,15 @@ import java.util.Formatter;
 public class PatientMenuPageModel {
     private LoginModel loginModel;
     private static PatientMenuPageModel patientMenuPageModel;
+    private boolean isTemperature;
+    private boolean isBloodPressure;
+    private boolean isGlucose;
 
     private PatientMenuPageModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         loginModel = LoginModel.getLoginModel();
+        isTemperature = false;
+        isBloodPressure = false;
+        isGlucose = false;
     }
 
     public static PatientMenuPageModel getInstance() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
@@ -58,27 +65,24 @@ public class PatientMenuPageModel {
             String criticalMinTemperature = resultSet.getString(6);
             String criticalMaxTemperature = resultSet.getString(7);
             if (temperatureMin == null) {
-                changeTemperature(1, temperature, id);
-                changeTemperature(2, temperature, id);
+                changeTemperature(1, temperature, id,nowT);
+                changeTemperature(2, temperature, id, nowT);
                 changeAvgTemperature(temperature, id, Integer.parseInt(temperatureAmount));
             }
             else {
                 if (temper < Float.valueOf(temperatureMin.split(" ")[0]))
-                    changeTemperature(1, temperature, id);
+                    changeTemperature(1, temperature, id, nowT);
                 if (temper > Float.valueOf(temperatureMax.split(" ")[0]))
-                    changeTemperature(2, temperature, id);
+                    changeTemperature(2, temperature, id, nowT);
                 int amount = Integer.valueOf(temperatureAmount);
                 float avg = Float.valueOf(temperatureAvg);
-                //System.out.println("avg: " + avg);
                 avg *= amount;
                 avg = avg + temper;
-                temperature = String.valueOf(avg / (amount + 1));
+                temperature = String.format("%.1f", (avg / (amount + 1)));
                 changeAvgTemperature(temperature, id, amount);
             }
-            if (temper<Float.valueOf(criticalMinTemperature))
-                addWarning(1,temperature, id, doctor, nowT);
-            else if (temper>Float.valueOf(criticalMaxTemperature))
-                addWarning(2, temperature, id, doctor, nowT);
+            if (temper<Float.valueOf(criticalMinTemperature) || temper>Float.valueOf(criticalMaxTemperature))
+                addWarning(1, String.valueOf(temper), id, doctor, nowT);
         }
     }
 
@@ -86,9 +90,9 @@ public class PatientMenuPageModel {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
         Formatter formatter = new Formatter();
-        int hoursFromBeginningMonth = calendar.get(Calendar.HOUR_OF_DAY) + (calendar.get(Calendar.DAY_OF_MONTH)*24);
-        temperature = "T " + calendar.get(Calendar.YEAR) + Integer.valueOf(hoursFromBeginningMonth) + temperature;
-        formatter.format("%tB", Calendar.getInstance());
+        int minutesFromBeginningMonth = calendar.get(Calendar.MINUTE) + (calendar.get(Calendar.HOUR_OF_DAY)*60) + (calendar.get(Calendar.DAY_OF_MONTH)*24*60);
+        temperature = ", " + Integer.valueOf(minutesFromBeginningMonth) + " " + temperature;
+        formatter.format("%tB", calendar);
         String sql = "update s" + id + " set " + formatter + " = CONCAT(IFNULL(" + formatter + ", ''), ?) WHERE year = ? AND test = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, temperature);
@@ -98,14 +102,19 @@ public class PatientMenuPageModel {
         sql = "update patients set lastTest = ? WHERE id = ?";
         preparedStatement = loginModel.getConnection().prepareStatement(sql);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        calendar.setTime(now);
-        calendar.add(Calendar.HOUR_OF_DAY, periodTimeRepeat);
-        if (calendar.after(Calendar.getInstance()))
-            calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        now = calendar.getTime();
         preparedStatement.setString(1, simpleDateFormat.format(now));
         preparedStatement.setString(2, id);
+        preparedStatement.execute();
+    }
+
+    public String getLastTest(String id) throws SQLException {
+        String sql = "SELECT lastTest FROM patients WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        return resultSet.getString(1);
     }
 
     private void addWarning(int state, String temperature, String id, String doctor, Date nowT) throws SQLException {
@@ -114,19 +123,13 @@ public class PatientMenuPageModel {
         switch (state)
         {
             case 1:
-                warning += "Min Temperature ";
+                warning += "Temperature ";
                 break;
             case 2:
-                warning += "Max Temperature ";
-                break;
-            case 3:
                 warning += "BloodPressure ";
                 break;
-            case 4:
-                warning += "Min Glucose ";
-                break;
-            case 5:
-                warning += "Max Glucose ";
+            case 3:
+                warning += "Glucose ";
                 break;
         }
         warning += temperature;
@@ -151,12 +154,12 @@ public class PatientMenuPageModel {
 
     }
 
-    private void changeTemperature(int status, String temperature, String id) throws SQLException {
+    private void changeTemperature(int status, String temperature, String id, Date nowT) throws SQLException {
         String sql = null;
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowT);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         temperature += (" " + formatter.format(calendar.getTime()));
-//        System.out.println(id + ": " + temperature);
         if(status == 1)
             sql = "UPDATE patients SET temperatureMin = ? WHERE id = ?";
         else if (status == 2)
@@ -187,23 +190,23 @@ public class PatientMenuPageModel {
             String doctor = resultSet.getString(5);
             String criticalBloodPressure = resultSet.getString(6);
             if (bloodPressureMin == null){
-                changeBloodPressure(1, bloodPressure, id);
-                changeBloodPressure(2, bloodPressure, id);
+                changeBloodPressure(1, bloodPressure, id, nowT);
+                changeBloodPressure(2, bloodPressure, id, nowT);
                 changeAvgBloodPressure(id, Integer.parseInt(bloodPressureAmount), bloodPressure);
             }
             else {
                 int lBPN = Integer.valueOf(bloodPressureMin.split(",")[0]);
                 int sBPN = Integer.valueOf(bloodPressureMin.split(",")[1].split(" ")[0]);
                 if (lBP < lBPN && sBP < sBPN)
-                    changeBloodPressure(1, bloodPressure, id);
+                    changeBloodPressure(1, bloodPressure, id, nowT);
                 else if ((lBP + sBP) / 2 < (lBPN + sBPN) / 2)
-                    changeBloodPressure(1, bloodPressure, id);
+                    changeBloodPressure(1, bloodPressure, id, nowT);
                 lBPN = Integer.valueOf(bloodPressureMax.split(",")[0]);
                 sBPN = Integer.valueOf(bloodPressureMax.split(",")[1].split(" ")[0]);
                 if (lBP > lBPN && sBP > sBPN)
-                    changeBloodPressure(2, bloodPressure, id);
+                    changeBloodPressure(2, bloodPressure, id, nowT);
                 else if ((lBP + sBP) / 2 > (lBPN + sBPN) / 2)
-                    changeBloodPressure(2, bloodPressure, id);
+                    changeBloodPressure(2, bloodPressure, id, nowT);
                 int amount = Integer.valueOf(bloodPressureAmount);
                 int lAvg = Integer.valueOf(bloodPressureAvg.split(",")[0]);
                 int sAvg = Integer.valueOf(bloodPressureAvg.split(",")[1].split(" ")[0]);
@@ -216,7 +219,7 @@ public class PatientMenuPageModel {
                 changeAvgBloodPressure(id, amount, lAvg + "," + sAvg);
             }
             if (Integer.parseInt(criticalBloodPressure.split(",")[0])<=lBP || Integer.parseInt(criticalBloodPressure.split(",")[1])<=sBP)
-                addWarning(3, bloodPressure, id, doctor, nowT);
+                addWarning(2, bloodPressure, id, doctor, nowT);
         }
     }
 
@@ -229,12 +232,12 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    private void changeBloodPressure(int status, String bloodPressure, String id) throws SQLException {
+    private void changeBloodPressure(int status, String bloodPressure, String id, Date nowT) throws SQLException {
         String sql = null;
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowT);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         bloodPressure += (" " + formatter.format(calendar.getTime()));
-//        System.out.println(id + ": " + bloodPressure);
         if (status == 1)
         sql = "UPDATE patients SET bloodPressureMin = ? WHERE id = ?";
         else if (status == 2)
@@ -262,23 +265,21 @@ public class PatientMenuPageModel {
             String criticalMinGlucose = resultSet.getString(6);
             String criticalMaxGlucose = resultSet.getString(7);
             if (glucoseMin == null || glucos<Integer.valueOf(glucoseMin.split(" ")[0]))
-                changeGlucose(1, glucose, id);
+                changeGlucose(1, glucose, id, nowT);
             if (glucoseMax == null || glucos>Integer.valueOf(glucoseMax.split(" ")[0]))
-                changeGlucose(2, glucose, id);
+                changeGlucose(2, glucose, id, nowT);
             int amount = Integer.valueOf(glucoseAmount);
             float avg = Float.valueOf(glucoseAvg);
             avg *= amount;
             avg += glucos;
             avg /= (amount + 1);
-            changeAvgGlucose(amount, avg, id);
-            if (glucos<Integer.valueOf(criticalMinGlucose))
-                addWarning(4, glucose, id, doctor, nowT);
-            else if (glucos>Integer.valueOf(criticalMaxGlucose))
-                addWarning(5, glucose, id, doctor, nowT);
+            changeAvgGlucose(amount, (int) avg, id);
+            if (glucos<Integer.valueOf(criticalMinGlucose) || glucos>Integer.valueOf(criticalMaxGlucose))
+                addWarning(3, glucose, id, doctor, nowT);
         }
     }
 
-    private void changeAvgGlucose(int amount, float glucose, String id) throws SQLException {
+    private void changeAvgGlucose(int amount, int glucose, String id) throws SQLException {
         String sql = "UPDATE patients SET glucoseAmount = ?, glucoseAvg = ? WHERE id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, String.valueOf(amount + 1));
@@ -287,12 +288,12 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    private void changeGlucose(int status, String glucose, String id) throws SQLException {
+    private void changeGlucose(int status, String glucose, String id, Date nowT) throws SQLException {
         String sql = null;
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowT);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         glucose += (" " + formatter.format(calendar.getTime()));
-//        System.out.println(id + ": " + glucose);
         if (status == 1)
             sql = "UPDATE patients SET glucoseMin = ? WHERE id = ?";
         if (status == 2)
@@ -303,8 +304,7 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    public static void main(String args[]) {
-        System.out.println(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+    public static void main(String args[]) throws ParseException {
     }
 
     ResultSet getData(String id) throws SQLException {
@@ -316,5 +316,29 @@ public class PatientMenuPageModel {
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
         return resultSet;
+    }
+
+    public boolean isTemperature() {
+        return isTemperature;
+    }
+
+    public void setTemperature(boolean temperature) {
+        isTemperature = temperature;
+    }
+
+    public boolean isBloodPressure() {
+        return isBloodPressure;
+    }
+
+    public void setBloodPressure(boolean bloodPressure) {
+        isBloodPressure = bloodPressure;
+    }
+
+    public boolean isGlucose() {
+        return isGlucose;
+    }
+
+    public void setGlucose(boolean glucose) {
+        isGlucose = glucose;
     }
 }
