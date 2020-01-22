@@ -48,7 +48,7 @@ public class PatientMenuPageController implements Initializable {
     @FXML
     ImageView refreshView;
     @FXML
-    Button backButton;
+    Button backButton, changeEmailButton, changePhoneButton;
 
     private PatientMenuPage patientMenuPage;
     private PatientMenuPageModel patientMenuPageModel;
@@ -80,7 +80,7 @@ public class PatientMenuPageController implements Initializable {
         }
         if (Arrays.asList(tests).contains("BloodPressure")) {
             bloodPressurePane.setVisible(true);
-            patientMenuPageModel.setBloodPressure(true);
+            patientMenuPageModel.setBloodPressure();
         }
         if (Arrays.asList(tests).contains("Glucose")) {
             glucosePane.setVisible(true);

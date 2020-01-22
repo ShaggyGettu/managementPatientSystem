@@ -9,6 +9,8 @@ public class Warning {
     private String value;
     private String date;
     private Button delete;
+    private int warningId;
+    private static int count = 1;
 
     public Warning(String id, String test, String value, String date){
         this.id = id;
@@ -16,6 +18,16 @@ public class Warning {
         this.value = value;
         this.date = date;
         delete = new Button("delete");
+        warningId = count;
+        count++;
+    }
+
+    public static void setCount() {
+        count = 1;
+    }
+
+    public int getWarningId() {
+        return warningId;
     }
 
     public Button getDelete(){
@@ -58,4 +70,8 @@ public class Warning {
         this.delete = delete;
     }
 
+    @Override
+    public String toString() {
+        return id + " " + test + " " + value + " " + date + "\n";
+    }
 }

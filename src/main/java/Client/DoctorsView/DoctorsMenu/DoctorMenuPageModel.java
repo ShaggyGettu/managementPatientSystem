@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-class DoctorMenuPageModel {
+public class DoctorMenuPageModel {
     private LoginModel loginModel;
     private static DoctorMenuPageModel doctorMenuPageModel;
 
@@ -14,7 +14,7 @@ class DoctorMenuPageModel {
         loginModel = LoginModel.getLoginModel();
     }
 
-    static DoctorMenuPageModel getDoctorMenuPageModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public static DoctorMenuPageModel getDoctorMenuPageModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         if(doctorMenuPageModel == null)
             doctorMenuPageModel = new DoctorMenuPageModel();
         return doctorMenuPageModel;
@@ -46,6 +46,14 @@ class DoctorMenuPageModel {
         String sql = "UPDATE doctors SET warnings = CONCAT(warnings, 'end\n') WHERE id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
+        preparedStatement.execute();
+    }
+
+    void updateWarnings(String id, String warnings) throws SQLException {
+        String sql = "UPDATE doctors SET warnings = ? WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, warnings);
+        preparedStatement.setString(2, id);
         preparedStatement.execute();
     }
 }

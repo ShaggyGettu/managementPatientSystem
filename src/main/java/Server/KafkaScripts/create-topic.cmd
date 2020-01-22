@@ -1,1 +1,0 @@
-C:\BDFSoftwares\kafka_2.12-2.1.1\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic project

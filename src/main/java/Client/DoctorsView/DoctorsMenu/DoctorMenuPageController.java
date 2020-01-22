@@ -61,6 +61,7 @@ public class DoctorMenuPageController implements Initializable {
     private RegisterPage1 registerPage1;
     private DoctorMenuPageModel doctorMenuPageModel;
     private static boolean entered;
+    private ObservableList<Warning> warnings;
 
     public static void setEntered() {
         entered = false;
@@ -95,6 +96,8 @@ public class DoctorMenuPageController implements Initializable {
             alert.showAndWait();
         }
         else {
+            int length = warnings.split("end\n").length;
+            warnings = warnings.split("end\n")[length - 1];
             alert.setHeaderText("Warning data");
             Label label = new Label("All the warning data from your patients:");
             TextArea textArea = new TextArea(warnings);
@@ -110,8 +113,7 @@ public class DoctorMenuPageController implements Initializable {
             gridPane.add(textArea, 0, 1);
             alert.getDialogPane().setExpandableContent(gridPane);
             alert.show();
-
-            //doctorMenuPageModel.endWarnings(doctorsMenuPage.getId());
+            doctorMenuPageModel.endWarnings(doctorsMenuPage.getId());
         }
     }
 
@@ -161,14 +163,19 @@ public class DoctorMenuPageController implements Initializable {
     }
 
     private void loadWarnings() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        Warning.setCount();
         patientsTable.setVisible(false);
         warningsTable.setVisible(true);
+        titleLabel.setText("Warnings");
+        titlePane.styleProperty().set("-fx-background-color:" + colorSet.get("blue"));
+        titlePane.setVisible(true);
+        new FadeIn(titlePane).play();
         doctorMenuPageModel = DoctorMenuPageModel.getDoctorMenuPageModel();
         ResultSet resultSet = doctorMenuPageModel.getWarning(doctorsMenuPage.getId());
         if (resultSet.getString(1).equals(""))
             return;
-        ObservableList<Warning> warnings = FXCollections.observableArrayList();
-        String warningsString[] = resultSet.getString(1).split("\n");
+        warnings = FXCollections.observableArrayList();
+        ArrayList<String> warningsString = new ArrayList<>(Arrays.asList(resultSet.getString(1).split("\n")));
         for (String string:warningsString){
             if (string.equals("end"))
                 continue;
@@ -183,13 +190,24 @@ public class DoctorMenuPageController implements Initializable {
         warningsTable.setItems(warnings);
         for (Warning warning : warnings) {
             warning.getDelete().setOnMouseClicked(mouseEvent -> {
+                int place = warning.getWarningId();
+                System.out.println(place);
                 warnings.remove(warning);
+                StringBuilder warnings1 = new StringBuilder();
+                int i = 1;
+                for (String string:warningsString) {
+                    if (i != place)
+                        warnings1.append(string).append("\n");
+                    i++;
+                }
+                try {
+                    doctorMenuPageModel.updateWarnings(doctorsMenuPage.getId(), String.valueOf(warnings1));
+                    loadWarnings();
+                } catch (SQLException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             });
         }
-        titleLabel.setText("Warnings");
-        titlePane.styleProperty().set("-fx-background-color:" + colorSet.get("blue"));
-        titlePane.setVisible(true);
-        new FadeIn(titlePane).play();
     }
 
     private void Actions(){

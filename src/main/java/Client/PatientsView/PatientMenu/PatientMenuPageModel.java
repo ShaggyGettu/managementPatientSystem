@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.Locale;
 
 public class PatientMenuPageModel {
     private LoginModel loginModel;
@@ -32,7 +33,7 @@ public class PatientMenuPageModel {
         return patientMenuPageModel;
     }
 
-    public String[] getPatient(String id) throws SQLException {
+    String[] getPatient(String id) throws SQLException {
         String sql = "SELECT email, phone, tests FROM patients WHERE id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
@@ -89,10 +90,9 @@ public class PatientMenuPageModel {
     private void addValue(Date now, String temperature, String id, String test, int periodTimeRepeat) throws SQLException {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        Formatter formatter = new Formatter();
+        String formatter = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
         int minutesFromBeginningMonth = calendar.get(Calendar.MINUTE) + (calendar.get(Calendar.HOUR_OF_DAY)*60) + (calendar.get(Calendar.DAY_OF_MONTH)*24*60);
-        temperature = ", " + Integer.valueOf(minutesFromBeginningMonth) + " " + temperature;
-        formatter.format("%tB", calendar);
+        temperature = Integer.valueOf(minutesFromBeginningMonth) + " " + temperature + ",";
         String sql = "update s" + id + " set " + formatter + " = CONCAT(IFNULL(" + formatter + ", ''), ?) WHERE year = ? AND test = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, temperature);
@@ -304,7 +304,7 @@ public class PatientMenuPageModel {
         preparedStatement.execute();
     }
 
-    public static void main(String args[]) throws ParseException {
+    public static void main(String args[]) {
     }
 
     ResultSet getData(String id) throws SQLException {
@@ -330,8 +330,8 @@ public class PatientMenuPageModel {
         return isBloodPressure;
     }
 
-    public void setBloodPressure(boolean bloodPressure) {
-        isBloodPressure = bloodPressure;
+    void setBloodPressure() {
+        isBloodPressure = true;
     }
 
     public boolean isGlucose() {

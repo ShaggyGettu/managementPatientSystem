@@ -3,7 +3,6 @@ package Client.Login;
 import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
 import Client.PatientsView.PatientMenuPage;
 import Server.CreateUserData;
-import Server.createData;
 import animatefx.animation.FadeIn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,8 +15,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Formatter;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,8 +61,6 @@ public class LoginController implements Initializable {
             System.out.println("Connected");
         else System.out.println("Not Connected");
         Actions();
-        Thread object = new Thread(new createData());
-        object.start();
     }
 
     private void loginButtonOnClick() throws SQLException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {

@@ -56,10 +56,10 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane disable="true" layoutX="350.0" layoutY="80.0" prefHeight="80.0" prefWidth="250.0">
+      <AnchorPane fx:id="changeAnchor" disable="true" layoutX="350.0" layoutY="80.0" prefHeight="80.0" prefWidth="250.0">
          <children>
-            <Button fx:id="temperatureButton1" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Change" />
-            <Button fx:id="bloodPressureButton1" layoutY="50.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Change" />
+            <Button fx:id="changeEmailButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Change" />
+            <Button fx:id="changePhoneButton" layoutY="50.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Change" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="testsPane" layoutY="170.0" prefHeight="180.0" prefWidth="600.0">
