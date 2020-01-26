@@ -3,24 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="d2225164-c50a-4726-855c-4e455ebe0e23" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Client/DataTypes/Warning.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/DataTypes/Warning.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorMenuPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorMenuPageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorMenuPageModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorMenuPageModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Client/DataTypes/Temperature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/DataTypes/Temperature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2Model.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Client/Login/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/Login/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Client/Login/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/Login/LoginPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server/KafkaScripts/create-topic.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-consumer.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-kafka-server.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-zookeeper.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server/createData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server/userData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Client/PatientsView/PatientMenu/PatientMenuPageView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Client/PatientsView/PatientMenu/PatientMenuPageView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/KafkaScripts/create-topic.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/KafkaScripts/start-consumer.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/KafkaScripts/start-kafka-server.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server/KafkaScripts/start-zookeeper.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Server/CreateUserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/CreateUserData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Server/Queries.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/Queries.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Server/UpdateData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/UpdateData.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -50,8 +40,8 @@
       <file leaf-file-name="UpdateData.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Server/UpdateData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="98">
-              <caret line="13" column="67" selection-start-line="13" selection-start-column="67" selection-end-line="13" selection-end-column="67" />
+            <state relative-caret-position="516">
+              <caret line="38" selection-start-line="38" selection-end-line="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -59,14 +49,53 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Queries.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Server/Queries.java">
+      <file leaf-file-name="LoginController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Client/Login/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-44">
-              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="189">
+              <caret line="124" column="58" lean-forward="true" selection-start-line="124" selection-start-column="58" selection-end-line="124" selection-end-column="58" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Point.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Point.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="770">
+              <caret line="43" column="12" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Matrix.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Matrix.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="198" column="44" selection-start-line="198" selection-start-column="44" selection-end-line="198" selection-end-column="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Fraction.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/commons-math3-3.0.jar!/org/apache/commons/math3/fraction/Fraction.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5852">
+              <caret line="266" column="4" selection-start-line="266" selection-start-column="4" selection-end-line="274" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Fraction.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Fraction.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2684">
+              <caret line="122" selection-start-line="122" selection-end-line="122" />
             </state>
           </provider>
         </entry>
@@ -87,8 +116,17 @@
       <find>emailErrorLabel.setVisible(true)</find>
       <find>idErrorLabel.setVisible(true)</find>
       <find>syst</find>
-      <find>sys</find>
       <find>syear</find>
+      <find>negate</find>
+      <find>negat</find>
+      <find>Fraction</find>
+      <find>reci</find>
+      <find>Float</find>
+      <find>float</find>
+      <find>doublevalue</find>
+      <find>reciprocal</find>
+      <find>divide</find>
+      <find>sys</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -97,8 +135,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/Server/dbConnection.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Client/Register/RegisterPage.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/Register/RegisterPageView.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorsMenu.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorMenuPageView.fxml" />
@@ -130,21 +166,25 @@
         <option value="$PROJECT_DIR$/src/main/java/Client/Login/LoginModel.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/PatientScreen/PatientScreenController.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2View.fxml" />
-        <option value="$PROJECT_DIR$/src/main/java/Server/CreateUserData.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2Model.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/Temperature.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/Glucose.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/BloodPressure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Client/Login/LoginPage.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/Warning.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorMenuPageController.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2Controller.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Client/Login/LoginController.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorMenuPageModel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Server/Queries.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenuPage.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Server/Queries.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Client/Login/LoginPage.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/Point.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/Praction.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/Matrix1.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Client/Login/LoginController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Server/CreateUserData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2Model.java" />
         <option value="$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/Temperature.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Client/DataTypes/Matrix.java" />
         <option value="$PROJECT_DIR$/src/main/java/Server/UpdateData.java" />
       </list>
     </option>
@@ -198,7 +238,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1105" />
     <option name="y" value="5" />
     <option name="width" value="1615" />
@@ -212,9 +252,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -255,7 +292,26 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="Client" type="462c0819:PsiDirectoryNode" />
+              <item name="DataTypes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="managementPatientSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="managementPatientSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="Client" type="462c0819:PsiDirectoryNode" />
               <item name="DoctorsView" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="managementPatientSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="managementPatientSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="Client" type="462c0819:PsiDirectoryNode" />
+              <item name="DoctorsView" type="462c0819:PsiDirectoryNode" />
+              <item name="DoctorRegister2" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="managementPatientSystem" type="b2602c69:ProjectViewProjectNode" />
@@ -322,6 +378,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -330,10 +389,10 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="C:/Program Files/SceneBuilder/SceneBuilder.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/commons-math3-3.0.jar!/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
@@ -349,6 +408,7 @@
       <recent name="Server" />
     </key>
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="Client.DataTypes" />
       <recent name="Client.Login" />
     </key>
   </component>
@@ -376,13 +436,24 @@
         </pattern>
       </extension>
     </configuration>
-    <configuration name="PatientMenuPageModel" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Client.PatientsView.PatientMenu.PatientMenuPageModel" />
+    <configuration name="Matrix" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Client.DataTypes.Matrix" />
       <module name="managementPatientSystem" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Client.PatientsView.PatientMenu.*" />
+          <option name="PATTERN" value="Client.DataTypes.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+    </configuration>
+    <configuration name="Temperature" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Client.DataTypes.Temperature" />
+      <module name="managementPatientSystem" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Client.DataTypes.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -400,22 +471,6 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    </configuration>
-    <configuration name="create-topic" type="BatchConfigurationType" factoryName="Batch" temporary="true">
-      <module name="managementPatientSystem" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Projects\managementPatientSystem\src\main\java\Server\KafkaScripts" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="create-topic.cmd" />
-      <option name="PARAMETERS" value="" />
-    </configuration>
-    <configuration name="start-kafka-server" type="BatchConfigurationType" factoryName="Batch" temporary="true">
-      <module name="managementPatientSystem" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Projects\managementPatientSystem\src\main\java\Server\KafkaScripts" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="start-kafka-server.cmd" />
-      <option name="PARAMETERS" value="" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -483,18 +538,16 @@
     <list>
       <item itemvalue="Maven.managementPatientSystem [exec:java]" />
       <item itemvalue="Application.LoginPage" />
-      <item itemvalue="Application.PatientMenuPageModel" />
-      <item itemvalue="Batch.start-kafka-server" />
-      <item itemvalue="Batch.create-topic" />
       <item itemvalue="Application.UpdateData" />
+      <item itemvalue="Application.Temperature" />
+      <item itemvalue="Application.Matrix" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.UpdateData" />
         <item itemvalue="Application.LoginPage" />
-        <item itemvalue="Application.PatientMenuPageModel" />
-        <item itemvalue="Batch.create-topic" />
-        <item itemvalue="Batch.start-kafka-server" />
+        <item itemvalue="Application.Matrix" />
+        <item itemvalue="Application.Temperature" />
       </list>
     </recent_temporary>
   </component>
@@ -527,12 +580,13 @@
       <workItem from="1575375533309" duration="7516000" />
       <workItem from="1575718252675" duration="14215000" />
       <workItem from="1579387371309" duration="45000" />
-      <workItem from="1579435396047" duration="68171000" />
+      <workItem from="1579435396047" duration="93215000" />
+      <workItem from="1580038533872" duration="8604000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="240541000" />
+    <option name="totallyTimeSpent" value="274189000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -545,16 +599,15 @@
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.329927" />
-      <window_info anchor="right" id="Maven Projects" order="7" weight="0.3295302" />
+      <window_info anchor="right" id="Maven Projects" order="6" weight="0.3295302" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.34014598" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49927008" visible="true" weight="0.27785236" />
-      <window_info anchor="right" id="Database" order="6" weight="0.3295302" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.329927" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49927008" visible="true" weight="0.2818792" />
+      <window_info anchor="right" id="Database" order="7" weight="0.3295302" />
       <window_info id="Structure" order="1" sideWeight="0.5007299" side_tool="true" weight="0.27785236" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
@@ -566,6 +619,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.329927" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -583,71 +637,52 @@
           <properties field="delete" class="Client.DataTypes.Warning" />
           <option name="timeStamp" value="12" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageModel.java</url>
+          <line>105</line>
+          <properties />
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Matrix.java</url>
+          <line>197</line>
+          <properties class="Client.DataTypes.Matrix" method="getCoordinate">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="24" />
+      <option name="time" value="44" />
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="stringValues.value" />
+        <watch expression="stringValues.value[67]" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk-12.0.2/lib/src.zip!/java.base/java/lang/Thread.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Matrix.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="834" selection-start-line="834" selection-end-line="834" />
+        <state relative-caret-position="4246">
+          <caret line="199" column="44" selection-start-line="199" selection-start-column="44" selection-end-line="199" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-12.0.2/lib/src.zip!/java.base/java/lang/Class.java">
+    <entry file="jar://$PROJECT_DIR$/commons-math3-3.0.jar!/org/apache/commons/math3/fraction/Fraction.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="2112" selection-start-line="2112" selection-end-line="2112" />
+        <state relative-caret-position="5852">
+          <caret line="266" column="4" lean-forward="true" selection-start-line="266" selection-start-column="4" selection-end-line="274" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-base/11.0.1/javafx-base-11.0.1-win.jar!/javafx/event/EventHandler.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Fraction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/11.0.1/javafx-graphics-11.0.1-sources.jar!/javafx/scene/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="8879" selection-start-line="8879" selection-end-line="8879" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/11.0.1/javafx-controls-11.0.1-win.jar!/javafx/scene/control/Button.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="103" selection-start-line="103" selection-end-line="103" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/11.0.1/javafx-graphics-11.0.1-sources.jar!/javafx/scene/Scene.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="2595" selection-start-line="2595" selection-end-line="2595" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-base/11.0.1/javafx-base-11.0.1-win.jar!/javafx/event/Event.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="75" selection-start-line="75" selection-end-line="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-12.0.2/lib/src.zip!/java.base/java/lang/ClassNotFoundException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/11.0.1/javafx-fxml-11.0.1-win.jar!/javafx/fxml/FXMLLoader.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="466" selection-start-line="466" selection-end-line="466" />
+        <state relative-caret-position="2706">
+          <caret line="123" selection-start-line="123" selection-end-line="123" />
         </state>
       </provider>
     </entry>
@@ -672,34 +707,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/create-topic.cmd">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="64" selection-start-column="64" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-consumer.cmd">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-kafka-server.cmd">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="19" selection-start-column="19" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-zookeeper.cmd">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="16" selection-start-column="16" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/create-topic.cmd" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-consumer.cmd" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-kafka-server.cmd" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/start-zookeeper.cmd" />
     <entry file="file://$PROJECT_DIR$/src/main/java/Server/KafkaScripts/log4j2.debug" />
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
@@ -757,14 +768,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2View.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="77" column="34" lean-forward="true" selection-start-line="77" selection-start-column="34" selection-end-line="77" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="282">
@@ -793,13 +796,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Temperature.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/11.0.1/javafx-controls-11.0.1-sources.jar!/javafx/scene/control/TableView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="141">
@@ -807,25 +803,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorsMenu/DoctorMenuPageView.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="86" column="40" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Patient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Client/Login/LoginPage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="31" column="42" lean-forward="true" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
         </state>
       </provider>
     </entry>
@@ -849,44 +830,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageView.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="58" column="25" selection-start-line="58" selection-start-column="25" selection-end-line="58" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Server/createData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Client/Login/LoginController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="65" column="18" selection-start-line="65" selection-start-column="18" selection-end-line="65" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Server/userData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="14" column="13" lean-forward="true" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Server/createData.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/Server/userData.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="313">
@@ -898,38 +843,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="418">
           <caret line="57" column="5" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
-          <folding>
-            <element signature="method#DoctorMenuPageModel#0;class#DoctorMenuPageModel#0" />
-            <element signature="method#getDoctorMenuPageModel#0;class#DoctorMenuPageModel#0" />
-            <element signature="method#getPatients#0;class#DoctorMenuPageModel#0" />
-            <element signature="method#getWarning#0;class#DoctorMenuPageModel#0" />
-            <element signature="method#endWarnings#0;class#DoctorMenuPageModel#0" />
-            <element signature="method#updateWarnings#0;class#DoctorMenuPageModel#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Server/CreateUserData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="72" column="56" lean-forward="true" selection-start-line="72" selection-start-column="56" selection-end-line="72" selection-end-column="56" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2Model.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="72" column="105" selection-start-line="72" selection-start-column="105" selection-end-line="72" selection-end-column="105" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#addPatient#0;class#RegisterPage2Model#0" />
-            <element signature="method#isYearExist#0;class#RegisterPage2Model#0" />
-            <element signature="method#AddCurrentYear#0;class#RegisterPage2Model#0" />
-            <element signature="method#UserExist#0;class#RegisterPage2Model#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -944,38 +857,110 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="312">
           <caret line="124" column="137" selection-start-line="124" selection-start-column="137" selection-end-line="124" selection-end-column="137" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Server/Queries.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="466">
+          <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
           <folding>
-            <element signature="method#initialize#0;class#DoctorMenuPageController#0" />
-            <element signature="method#showAlertWarnings#0;class#DoctorMenuPageController#0" />
-            <element signature="method#initColor#0;class#DoctorMenuPageController#0" />
-            <element signature="method#loadPatients#0;class#DoctorMenuPageController#0" />
-            <element signature="method#loadWarnings#0;class#DoctorMenuPageController#0" />
-            <element signature="method#Actions#0;class#DoctorMenuPageController#0" />
-            <element signature="method#BackAction#0;class#DoctorMenuPageController#0" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/11.0.1/javafx-graphics-11.0.1-sources.jar!/com/sun/javafx/util/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="436" column="25" selection-start-line="436" selection-start-column="25" selection-end-line="436" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk-13.0.1/lib/src.zip!/java.base/java/lang/Math.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="665" column="25" selection-start-line="665" selection-start-column="25" selection-end-line="665" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/Login/LoginPage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="25" column="33" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk-13.0.1/lib/src.zip!/java.base/java/util/LinkedList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="492" column="13" selection-start-line="492" selection-start-column="13" selection-end-line="492" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/commons-math3-3.0.jar!/org/apache/commons/math3/fraction/Fraction.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5852">
+          <caret line="266" column="4" selection-start-line="266" selection-start-column="4" selection-end-line="274" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Point.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="770">
+          <caret line="43" column="12" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/commons-math3-3.0.jar!/org/apache/commons/math3/util/ArithmeticUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="304" selection-start-line="304" selection-end-line="304" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Fraction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2684">
+          <caret line="122" selection-start-line="122" selection-end-line="122" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Matrix1.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/Client/DoctorsView/PatientScreen/PatientScreenModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="60" selection-start-line="22" selection-start-column="60" selection-end-line="22" selection-end-column="60" />
+        <state relative-caret-position="233">
+          <caret line="17" column="38" lean-forward="true" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
           <folding>
             <element signature="method#findPatient#0;class#PatientScreenModel#0" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DoctorsView/DoctorRegister2/RegisterPage2Model.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="40" column="49" lean-forward="true" selection-start-line="40" selection-start-column="49" selection-end-line="40" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#isYearExist#0;class#RegisterPage2Model#0" />
+            <element signature="method#AddCurrentYear#0;class#RegisterPage2Model#0" />
+            <element signature="method#UserExist#0;class#RegisterPage2Model#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Client/PatientsView/PatientMenu/PatientMenuPageModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="94" column="89" lean-forward="true" selection-start-line="94" selection-start-column="89" selection-end-line="94" selection-end-column="89" />
+        <state relative-caret-position="101">
+          <caret line="110" column="9" selection-start-line="110" selection-start-column="9" selection-end-line="110" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#PatientMenuPageModel#0;class#PatientMenuPageModel#0" />
             <element signature="method#getInstance#0;class#PatientMenuPageModel#0" />
             <element signature="method#getPatient#0;class#PatientMenuPageModel#0" />
             <element signature="method#temperature#0;class#PatientMenuPageModel#0" />
+            <element signature="method#getPeriodTimeRepeat#0;class#PatientMenuPageModel#0" />
             <element signature="method#getLastTest#0;class#PatientMenuPageModel#0" />
             <element signature="method#addWarning#0;class#PatientMenuPageModel#0" />
             <element signature="method#changeAvgTemperature#0;class#PatientMenuPageModel#0" />
@@ -991,10 +976,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Server/Queries.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/Login/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-44">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="189">
+          <caret line="124" column="58" lean-forward="true" selection-start-line="124" selection-start-column="58" selection-end-line="124" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Temperature.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="57" column="51" selection-start-line="57" selection-start-column="51" selection-end-line="57" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2034#2035#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Server/CreateUserData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="83" column="25" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Client/DataTypes/Matrix.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="198" column="44" selection-start-line="198" selection-start-column="44" selection-end-line="198" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1003,8 +1019,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Server/UpdateData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="13" column="67" selection-start-line="13" selection-start-column="67" selection-end-line="13" selection-end-column="67" />
+        <state relative-caret-position="516">
+          <caret line="38" selection-start-line="38" selection-end-line="38" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1040,6 +1056,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
+          <last-edited>commons-math3-3.0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

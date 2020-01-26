@@ -1,16 +1,17 @@
 package Client.PatientsView.PatientMenu;
 
+import Client.DataTypes.Temperature;
 import Client.Login.LoginModel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.Locale;
 
 public class PatientMenuPageModel {
@@ -88,11 +89,28 @@ public class PatientMenuPageModel {
     }
 
     private void addValue(Date now, String temperature, String id, String test, int periodTimeRepeat) throws SQLException {
+        if (test.equals("T"))
+            temperature = String.valueOf(Temperature.getValue(temperature));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
         String formatter = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
         int minutesFromBeginningMonth = calendar.get(Calendar.MINUTE) + (calendar.get(Calendar.HOUR_OF_DAY)*60) + (calendar.get(Calendar.DAY_OF_MONTH)*24*60);
-        temperature = Integer.valueOf(minutesFromBeginningMonth) + " " + temperature + ",";
+        int periodTime = 0;
+        String string[] = getPeriodTimeRepeat(id).getString(1).split("\n");
+        Calendar calendar1 = Calendar.getInstance();
+        for (String s:string){
+            String[] string1 = s.split(" ");
+            calendar1.set(Calendar.YEAR, Integer.parseInt(string1[1]));
+            int month = Month.valueOf(string1[0].toUpperCase()).getValue();
+            calendar1.set(Calendar.MONTH, Calendar.MONTH, month);
+            if (calendar1.before(calendar)) {
+                periodTime = Integer.valueOf(s.split(" ")[2]);
+            }
+            else
+                break;
+        }
+        minutesFromBeginningMonth /= periodTime;
+        temperature = minutesFromBeginningMonth + " " + temperature + ",";
         String sql = "update s" + id + " set " + formatter + " = CONCAT(IFNULL(" + formatter + ", ''), ?) WHERE year = ? AND test = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, temperature);
@@ -106,6 +124,15 @@ public class PatientMenuPageModel {
         preparedStatement.setString(1, simpleDateFormat.format(now));
         preparedStatement.setString(2, id);
         preparedStatement.execute();
+    }
+
+    public ResultSet getPeriodTimeRepeat(String id) throws SQLException {
+        String sql = "SELECT periodTimeRepeat FROM patients WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        return resultSet;
     }
 
     public String getLastTest(String id) throws SQLException {

@@ -122,6 +122,8 @@ public class LoginController implements Initializable {
                 patientMenuPage.createScene();
                 LoginPage.getWindow().setScene(patientMenuPage.getScene());
                 String periodTimeRepeat = resultSet.getString("periodTimeRepeat");
+                String s[] = periodTimeRepeat.split("\n");
+                periodTimeRepeat = s[s.length - 1].split(" ")[2];
                 String lastTest = resultSet.getString("lastTest");
                 System.out.println(id);
                 Thread thread = new Thread(CreateUserData.getInstance(periodTimeRepeat, lastTest, id), id);

@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class RegisterPage2Model {
     private LoginModel loginModel;
@@ -27,6 +29,8 @@ public class RegisterPage2Model {
         loginModel.connect();
         if (!UserExist(id)) {
             PreparedStatement preparedStatement;
+            Calendar calendar = Calendar.getInstance();
+            String formatter = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
             String sql = "Insert into patients (id, email, password, phone, doctor, name, diseaes, tests, periodTimeRepeat, lastTest) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             preparedStatement = loginModel.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, id);
@@ -37,7 +41,7 @@ public class RegisterPage2Model {
             preparedStatement.setString(6, name);
             preparedStatement.setString(7, background);
             preparedStatement.setString(8, tests);
-            preparedStatement.setString(9, String.valueOf(periodTime));
+            preparedStatement.setString(9, formatter + " " + calendar.get(Calendar.YEAR) + " " + String.valueOf(periodTime) + "\n");
             LocalDateTime localDate = LocalDateTime.now();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             preparedStatement.setString(10, dtf.format(localDate));
