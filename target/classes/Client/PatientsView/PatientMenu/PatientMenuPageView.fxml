@@ -26,6 +26,13 @@
                   <Image url="@../../DataTypes/refreshButton.jpg" />
                </image>
             </ImageView>
+            <AnchorPane layoutX="220.0" prefHeight="80.0" prefWidth="340.0">
+               <children>
+                  <Button fx:id="temperatureButton" layoutY="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Temperature" />
+                  <Button fx:id="bloodPressureButton" layoutX="120.0" layoutY="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Blood Pressure" />
+                  <Button fx:id="glucoseButton" layoutX="240.0" layoutY="25.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Glucose" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
       <AnchorPane layoutY="80.0" prefHeight="80.0" prefWidth="150.0">
@@ -56,10 +63,9 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="changeAnchor" disable="true" layoutX="350.0" layoutY="80.0" prefHeight="80.0" prefWidth="250.0">
+      <AnchorPane fx:id="changeAnchor" layoutX="350.0" layoutY="80.0" prefHeight="80.0" prefWidth="250.0">
          <children>
-            <Button fx:id="changeEmailButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Change" />
-            <Button fx:id="changePhoneButton" layoutY="50.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Change" />
+            <Label fx:id="doct" prefHeight="30.0" prefWidth="100.0" text="Doctor Name:" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="testsPane" layoutY="170.0" prefHeight="180.0" prefWidth="600.0">

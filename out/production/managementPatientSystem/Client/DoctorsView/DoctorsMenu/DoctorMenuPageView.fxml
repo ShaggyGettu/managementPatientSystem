@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.DoctorsView.DoctorsMenu.DoctorMenuPageController">
+   <children>
+      <AnchorPane prefHeight="500.0" prefWidth="200.0" style="-fx-background-color: #3104B4;">
+         <children>
+            <Label prefHeight="70.0" prefWidth="200.0" text="     Doctor Menu" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutY="90.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;">
+               <children>
+                  <Button fx:id="addPatientButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;" text="Add patients" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutY="160.0" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;">
+               <children>
+                  <Button fx:id="patientsButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;" text="Patients" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutY="230.0" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;">
+               <children>
+                  <Button fx:id="warningsButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;" text="Warnings" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutY="300.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;" text="Settings" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutY="440.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;">
+               <children>
+                  <Button fx:id="backButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;" text="Back" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="titlePane" layoutX="200.0" layoutY="70.0" prefHeight="100.0" prefWidth="600.0" visible="false">
+         <children>
+            <Label fx:id="titleLabel" layoutX="14.0" layoutY="25.0" prefHeight="50.0" prefWidth="200.0" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <TableView fx:id="patientsTable" layoutX="200.0" layoutY="170.0" prefHeight="330.0" prefWidth="600.0" visible="false">
+        <columns>
+          <TableColumn fx:id="idPatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Id" />
+          <TableColumn fx:id="namePatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Name" />
+            <TableColumn fx:id="emailPatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Email" />
+            <TableColumn fx:id="phonePatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" text="Phone" />
+            <TableColumn fx:id="showPatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
+            <TableColumn fx:id="deletePatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
+        </columns>
+      </TableView>
+      <TableView fx:id="warningsTable" layoutX="200.0" layoutY="170.0" prefHeight="330.0" prefWidth="600.0" visible="false">
+         <columns>
+            <TableColumn fx:id="idWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Id" />
+            <TableColumn fx:id="testWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Test" />
+            <TableColumn fx:id="valueWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Value" />
+            <TableColumn fx:id="dateWarningColumn" editable="false" minWidth="50.0" prefWidth="200.0" resizable="false" text="Date" />
+            <TableColumn fx:id="deleteWarningColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>
