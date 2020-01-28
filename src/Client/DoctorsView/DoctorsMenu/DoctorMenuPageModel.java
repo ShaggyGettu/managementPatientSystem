@@ -20,6 +20,15 @@ public class DoctorMenuPageModel {
         return doctorMenuPageModel;
     }
 
+    public ResultSet getDoctorDetails(String id) throws SQLException {
+        String sql = "SELECT id,email,name FROM doctors WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        return resultSet;
+    }
+
     ResultSet getPatients(String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         loginModel.connect();
         ResultSet resultSet;

@@ -63,33 +63,44 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="titlePane" layoutX="200.0" layoutY="70.0" prefHeight="100.0" prefWidth="600.0" visible="false">
+      <AnchorPane layoutX="200.0" prefHeight="500.0" prefWidth="600.0">
          <children>
-            <Label fx:id="titleLabel" layoutX="14.0" layoutY="25.0" prefHeight="50.0" prefWidth="200.0" textFill="WHITE">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
+            <AnchorPane layoutX="100.0" layoutY="20.0" prefHeight="30.0" prefWidth="450.0">
+               <children>
+                  <Label fx:id="doctorNameLabel" prefHeight="30.0" prefWidth="150.0" text="Doctor name" />
+                  <Label fx:id="doctorIdLabel" layoutX="150.0" prefHeight="30.0" prefWidth="150.0" text="Doctor id" />
+                  <Label fx:id="doctorEmailLabel" layoutX="300.0" prefHeight="30.0" prefWidth="150.0" text="Doctor email" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="titlePane" layoutY="70.0" prefHeight="100.0" prefWidth="600.0" visible="false">
+               <children>
+                  <Label fx:id="titleLabel" layoutX="14.0" layoutY="25.0" prefHeight="50.0" prefWidth="200.0" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <TableView fx:id="patientsTable" layoutY="160.0" prefHeight="340.0" prefWidth="600.0" visible="false">
+              <columns>
+                <TableColumn fx:id="idPatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Id" />
+                <TableColumn fx:id="namePatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Name" />
+                  <TableColumn fx:id="emailPatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Email" />
+                  <TableColumn fx:id="phonePatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" text="Phone" />
+                  <TableColumn fx:id="showPatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
+                  <TableColumn fx:id="deletePatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
+              </columns>
+            </TableView>
+            <TableView fx:id="warningsTable" layoutY="160.0" prefHeight="340.0" prefWidth="600.0" visible="false">
+               <columns>
+                  <TableColumn fx:id="idWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Id" />
+                  <TableColumn fx:id="testWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Test" />
+                  <TableColumn fx:id="valueWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Value" />
+                  <TableColumn fx:id="dateWarningColumn" editable="false" minWidth="50.0" prefWidth="200.0" resizable="false" text="Date" />
+                  <TableColumn fx:id="deleteWarningColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
+               </columns>
+            </TableView>
          </children>
       </AnchorPane>
-      <TableView fx:id="patientsTable" layoutX="200.0" layoutY="170.0" prefHeight="330.0" prefWidth="600.0" visible="false">
-        <columns>
-          <TableColumn fx:id="idPatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Id" />
-          <TableColumn fx:id="namePatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Name" />
-            <TableColumn fx:id="emailPatientColumn" editable="false" prefWidth="100.0" resizable="false" text="Email" />
-            <TableColumn fx:id="phonePatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" text="Phone" />
-            <TableColumn fx:id="showPatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
-            <TableColumn fx:id="deletePatientColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
-        </columns>
-      </TableView>
-      <TableView fx:id="warningsTable" layoutX="200.0" layoutY="170.0" prefHeight="330.0" prefWidth="600.0" visible="false">
-         <columns>
-            <TableColumn fx:id="idWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Id" />
-            <TableColumn fx:id="testWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Test" />
-            <TableColumn fx:id="valueWarningColumn" editable="false" prefWidth="100.0" resizable="false" text="Value" />
-            <TableColumn fx:id="dateWarningColumn" editable="false" minWidth="50.0" prefWidth="200.0" resizable="false" text="Date" />
-            <TableColumn fx:id="deleteWarningColumn" editable="false" minWidth="50.0" prefWidth="100.0" resizable="false" sortable="false" />
-         </columns>
-      </TableView>
    </children>
 </AnchorPane>

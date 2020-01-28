@@ -79,8 +79,12 @@ public class PatientMenuPageController implements Initializable {
         }
     }
 
-    private void loadPatient() throws SQLException {
-        String details[] = patientMenuPageModel.getPatient(patientMenuPage.getId());
+    private void loadPatient() throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException {
+        ResultSet resultSet = patientMenuPage.getResultSet();
+        String details[] = new String[3];
+        details[0] = resultSet.getString(2);
+        details[1] = resultSet.getString(5);
+        details[2] = resultSet.getString(8);
         idLabel.setText(patientMenuPage.getId());
         emailLabel.setText(details[0]);
         phoneLabel.setText(details[1]);
@@ -97,48 +101,48 @@ public class PatientMenuPageController implements Initializable {
             glucosePane.setVisible(true);
             patientMenuPageModel.setGlucose(true);
         }
-        ResultSet resultSet = patientMenuPageModel.getData(patientMenuPage.getId());
+        //ResultSet resultSet = patientMenuPageModel.getData(patientMenuPage.getId());
         String temperature, bloodPressure, glucose;
-        if (temperaturePane.isVisible() && Integer.parseInt(resultSet.getString(4)) != 0) {
-            temperature = resultSet.getString(1);//AVG
+        if (temperaturePane.isVisible() && Integer.parseInt(resultSet.getString(12)) != 0) {
+            temperature = resultSet.getString(11);//AVG
             averageTemperatureLabel.setText(temperature);
-            temperature = resultSet.getString(2);
+            temperature = resultSet.getString(9);
             minTemperatureValueLabel.setText(temperature.split(" ")[0]);
             minTemperatureDateLabel.setText(temperature.split(" ")[1]);
             minTemperatureTimeLabel.setText(temperature.split(" ")[2]);
-            temperature = resultSet.getString(3);
+            temperature = resultSet.getString(10);
             maxTemperatureValueLabel.setText(temperature.split(" ")[0]);
             maxTemperatureDateLabel.setText(temperature.split(" ")[1]);
             maxTemperatureTimeLabel.setText(temperature.split(" ")[2]);
-            temperature = resultSet.getString(4);
+            temperature = resultSet.getString(12);
             amountTemperatureLabel.setText(temperature);
         }
-        if (bloodPressurePane.isVisible() && Integer.parseInt(resultSet.getString(8)) != 0) {
-            bloodPressure = resultSet.getString(5);
+        if (bloodPressurePane.isVisible() && Integer.parseInt(resultSet.getString(17)) != 0) {
+            bloodPressure = resultSet.getString(18);
             averageBloodPressureLabel.setText(bloodPressure);
-            bloodPressure = resultSet.getString(6);
+            bloodPressure = resultSet.getString(15);
             minBloodPressureValueLabel.setText(bloodPressure.split(" ")[0]);
             minBloodPressureDateLabel.setText(bloodPressure.split(" ")[1]);
             minBloodPressureTimeLabel.setText(bloodPressure.split(" ")[2]);
-            bloodPressure = resultSet.getString(7);
+            bloodPressure = resultSet.getString(16);
             maxBloodPressureValueLabel.setText(bloodPressure.split(" ")[0]);
             maxBloodPressureDateLabel.setText(bloodPressure.split(" ")[1]);
             maxBloodPressureTimeLabel.setText(bloodPressure.split(" ")[2]);
-            bloodPressure = resultSet.getString(8);
+            bloodPressure = resultSet.getString(17);
             amountBloodPressureLabel.setText(bloodPressure);
         }
-        if (glucosePane.isVisible() && Integer.parseInt(resultSet.getString(12)) != 0) {
-            glucose = resultSet.getString(9);
+        if (glucosePane.isVisible() && Integer.parseInt(resultSet.getString(22)) != 0) {
+            glucose = resultSet.getString(23);
             averageGlucoseLabel.setText(glucose);
-            glucose = resultSet.getString(10);
+            glucose = resultSet.getString(20);
             minGlucoseValueLabel.setText(glucose.split(" ")[0]);
             minGlucoseDateLabel.setText(glucose.split(" ")[1]);
             minGlucoseTimeLabel.setText(glucose.split(" ")[2]);
-            glucose = resultSet.getString(11);
+            glucose = resultSet.getString(21);
             maxGlucoseValueLabel.setText(glucose.split(" ")[0]);
             maxGlucoseDateLabel.setText(glucose.split(" ")[1]);
             maxGlucoseTimeLabel.setText(glucose.split(" ")[2]);
-            glucose = resultSet.getString(12);
+            glucose = resultSet.getString(22);
             amountGlucoseLabel.setText(glucose);
         }
     }
@@ -149,7 +153,7 @@ public class PatientMenuPageController implements Initializable {
         refreshView.setOnMouseClicked(mouseEvent -> {
             try {
                 loadPatient();
-            } catch (SQLException e) {
+            } catch (SQLException | IllegalAccessException | ClassNotFoundException | InstantiationException e) {
                 e.printStackTrace();
             }
         });

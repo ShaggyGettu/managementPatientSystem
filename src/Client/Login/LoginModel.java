@@ -33,7 +33,7 @@ public class LoginModel {
         return connection !=null;
     }
 
-    ResultSet  login(String email, String password, String role) throws SQLException {
+    public ResultSet  login(String email, String password, String role) throws SQLException {
         PreparedStatement pr;
         ResultSet rs;
         String sql = "SELECT * FROM " + role.toLowerCase() + "s WHERE email = ? and password = ?";

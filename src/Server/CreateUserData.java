@@ -22,8 +22,8 @@ public class CreateUserData implements Runnable{
     private Calendar runningCal;
     private PatientMenuPageModel patientMenuPageModel;
 
-    private CreateUserData(String periodTimeRepeat, String lastTest, String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        this.periodTimeRepeat = Integer.parseInt(periodTimeRepeat);
+    private CreateUserData(int periodTimeRepeat, String lastTest, String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        this.periodTimeRepeat = periodTimeRepeat;
         this.lastTest = lastTest;
         exit = true;
         this.id = id;
@@ -34,7 +34,7 @@ public class CreateUserData implements Runnable{
 
     }
 
-    public static CreateUserData getInstance(String periodTimeRepeat, String lastTest, String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public static CreateUserData getInstance(int periodTimeRepeat, String lastTest, String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         if (createUserData == null){
             createUserData = new CreateUserData(periodTimeRepeat, lastTest, id);
         }

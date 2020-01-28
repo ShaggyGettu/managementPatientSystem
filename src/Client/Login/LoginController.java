@@ -46,6 +46,7 @@ public class LoginController implements Initializable {
     private Label errorDetailsLabel;
 
     private ObservableList<String> list = FXCollections.observableArrayList("Patient", "Doctor");
+    private String id, email, password, role;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -65,31 +66,30 @@ public class LoginController implements Initializable {
         Actions();
     }
 
-    private void loginButtonOnClick() throws SQLException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-        String email = emailTextField.getText();
-        String password = passwordTextField.getText();
-        String role = roleComboBox.getSelectionModel().getSelectedItem();
-        String id;
+    private boolean loginButtonOnClick() {
+        email = emailTextField.getText();
+        password = passwordTextField.getText();
+        role = roleComboBox.getSelectionModel().getSelectedItem();
         if(email.equals("")){
             new FadeIn(emailTextField).play();
             emailTextField.requestFocus();
             errorRoleLabel.setVisible(false);
             errorEmailLabel.setVisible(false);
-            return;
+            return false;
         }
         if(!checkEmail(email)){
             errorEmailLabel.setVisible(true);
             new FadeIn(emailTextField).play();
             emailTextField.requestFocus();
             errorRoleLabel.setVisible(false);
-            return;
+            return false;
         }
         if (password.equals("")){
             passwordTextField.requestFocus();
             errorEmailLabel.setVisible(false);
             new FadeIn(passwordTextField).play();
             errorRoleLabel.setVisible(false);
-            return;
+            return false;
         }
         if (!validatePassword(password)){
             new FadeIn(passwordTextField).play();
@@ -97,7 +97,7 @@ public class LoginController implements Initializable {
             errorRoleLabel.setText("Please enter valid password");
             errorRoleLabel.setVisible(true);
             errorEmailLabel.setVisible(false);
-            return;
+            return false;
         }
         if(roleComboBox.getSelectionModel().getSelectedItem()==null){
             errorRoleLabel.setVisible(true);
@@ -105,37 +105,11 @@ public class LoginController implements Initializable {
             errorEmailLabel.setVisible(false);
             roleComboBox.requestFocus();
             errorRoleLabel.setText("Please enter your role patient/doctor");
-            return;
+            return false;
         }
         errorRoleLabel.setVisible(false);
         errorEmailLabel.setVisible(false);
-        ResultSet resultSet = loginModel.login(email, password, role);
-        if (resultSet != null) {
-            id = resultSet.getString("id");
-            if(role.equals("Doctor")) {
-                DoctorsMenuPage doctorsMenuPage = DoctorsMenuPage.getInstance();
-                doctorsMenuPage.setId(id);
-                doctorsMenuPage.createScreen();
-                LoginPage.getWindow().setScene(doctorsMenuPage.getScene());
-            }
-            if (role.equals("Patient")){
-                PatientMenuPage patientMenuPage = PatientMenuPage.getInstance();
-                patientMenuPage.setId(id);
-                patientMenuPage.createScene();
-                LoginPage.getWindow().setScene(patientMenuPage.getScene());
-                String periodTimeRepeat = resultSet.getString("periodTimeRepeat");
-                String s[] = periodTimeRepeat.split("\n");
-                periodTimeRepeat = s[s.length - 1].split(" ")[2];
-                String lastTest = resultSet.getString("lastTest");
-                System.out.println(id);
-                Thread thread = new Thread(CreateUserData.getInstance(periodTimeRepeat, lastTest, id), id);
-                thread.start();
-            }
-        }
-        else {
-            errorDetailsLabel.setVisible(true);
-            emailTextField.requestFocus();
-        }
+        return true;
     }
 
     private boolean checkEmail(String email){
@@ -187,12 +161,53 @@ public class LoginController implements Initializable {
         mainPane.setOnMouseClicked(mouseEvent -> checkEmail(emailTextField.getText()));
         loginButton.setOnAction(actionEvent -> {
             try {
-                loginButtonOnClick();
+                boolean flag = loginButtonOnClick();
+                if (flag)
+                    login();
             } catch (SQLException | IOException | IllegalAccessException | ClassNotFoundException | InstantiationException e) {
                 e.printStackTrace();
             }
         });
         LoginPage.getWindow().setOnCloseRequest(windowEvent -> System.exit(0));
+    }
+
+    private void login() throws SQLException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        ResultSet resultSet = loginModel.login(email, password, role);
+        if (resultSet != null) {
+            id = resultSet.getString("id");
+            if(role.equals("Doctor"))
+                loadDoctorPage();
+            if (role.equals("Patient"))
+                loadPatientPage(resultSet);
+        }
+        else
+            errorDetailsShow();
+    }
+
+    private void errorDetailsShow() {
+        errorDetailsLabel.setVisible(true);
+        emailTextField.requestFocus();
+    }
+
+    private void loadPatientPage(ResultSet resultSet) throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        PatientMenuPage patientMenuPage = PatientMenuPage.getInstance();
+        patientMenuPage.setId(id);
+        patientMenuPage.createScene(resultSet);
+        LoginPage.getWindow().setScene(patientMenuPage.getScene());
+        String periodTimeRepeat = resultSet.getString(26);
+        String s[] = periodTimeRepeat.split("\n");
+        periodTimeRepeat = s[s.length - 1].split(" ")[2];
+        int period = Integer.valueOf(periodTimeRepeat);
+        String lastTest = resultSet.getString(27);
+        Thread thread = new Thread(CreateUserData.getInstance(period, lastTest, id), id);
+        thread.start();
+    }
+
+    private void loadDoctorPage() throws IOException {
+        DoctorsMenuPage doctorsMenuPage = DoctorsMenuPage.getInstance();
+        doctorsMenuPage.setId(id);
+        doctorsMenuPage.createScreen();
+        LoginPage.getWindow().setScene(doctorsMenuPage.getScene());
     }
 
 }

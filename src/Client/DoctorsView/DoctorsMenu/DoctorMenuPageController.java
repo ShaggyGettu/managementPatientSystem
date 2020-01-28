@@ -52,7 +52,7 @@ public class DoctorMenuPageController implements Initializable {
     @FXML
     TableColumn<Warning, Button> deleteWarningColumn;
     @FXML
-    Label titleLabel;
+    Label titleLabel, doctorIdLabel, doctorNameLabel, doctorEmailLabel;
     @FXML
     private AnchorPane titlePane;
 
@@ -74,14 +74,22 @@ public class DoctorMenuPageController implements Initializable {
         doctorsMenuPage = DoctorsMenuPage.getInstance();
         registerPage1 = RegisterPage1.getInstance();
         try {
-            loadPatients();
+            showDoctorDetails();
             if (!entered) {
                 showAlertWarnings();
                 entered = true;
             }
-        } catch (ClassNotFoundException | SQLException | InstantiationException | IOException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showDoctorDetails() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        doctorMenuPageModel = DoctorMenuPageModel.getDoctorMenuPageModel();
+        ResultSet resultSet = doctorMenuPageModel.getDoctorDetails(doctorsMenuPage.getId());
+        doctorIdLabel.setText(resultSet.getString("id"));
+        doctorNameLabel.setText(resultSet.getString("name"));
+        doctorEmailLabel.setText(resultSet.getString("email"));
     }
 
     private void showAlertWarnings() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
@@ -122,7 +130,7 @@ public class DoctorMenuPageController implements Initializable {
         colorSet.put("blue", "#642EFE");
     }
 
-    private void loadPatients() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IOException {
+    private void loadPatients() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         warningsTable.setVisible(false);
         patientsTable.setVisible(true);
         doctorMenuPageModel = DoctorMenuPageModel.getDoctorMenuPageModel();
@@ -215,7 +223,7 @@ public class DoctorMenuPageController implements Initializable {
         patientsButton.setOnMouseClicked(mouseEvent -> {
             try {
                 loadPatients();
-            } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException | IOException e) {
+            } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         });
