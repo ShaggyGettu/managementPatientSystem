@@ -2,23 +2,33 @@ package Client.PatientsView.PatientMenu;
 
 import Client.DataTypes.Point;
 import Client.DataTypes.Temperature;
+import Client.DataTypes.Value;
 import Client.DoctorsView.DoctorsMenu.DoctorMenuPageController;
 import Client.Login.LoginPage;
 import Client.PatientsView.PatientMenuPage;
 import Server.CreateUserData;
+import com.sun.javafx.charts.Legend;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.Axis;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.StageStyle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -63,9 +73,28 @@ public class PatientMenuPageController implements Initializable {
 
     private PatientMenuPage patientMenuPage;
     private PatientMenuPageModel patientMenuPageModel;
+    private XYChart.Series<String, Number> series;
+    private NumberAxis axisY = null;
+    private CategoryAxis axisX;
+    private LineChart<String, Number> lineChart = null;
+    private Stage dataStage;
+    private ComboBox<Integer> years;
+    private GridPane gridPane;
+    private ComboBox<String> months;
+    private ComboBox<String> tests;
+    private ComboBox<String> days;
+    private Button showButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        dataStage= new Stage();
+        gridPane = new GridPane();
+        years = new ComboBox<>();
+        tests = new ComboBox<>();
+        months = new ComboBox<>();
+        days = new ComboBox<>();
+        showButton = new Button("Show");
+        series = new XYChart.Series<>();
         Actions();
         temperaturePane.setVisible(false);
         bloodPressurePane.setVisible(false);
@@ -77,6 +106,50 @@ public class PatientMenuPageController implements Initializable {
         } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+        initializeShowData();
+    }
+
+    private void initializeShowData() {
+        dataStage.setTitle("Show data");
+        dataStage.setResizable(false);
+        dataStage.initModality(Modality.WINDOW_MODAL);
+        dataStage.setWidth(1000);
+        dataStage.setHeight(400);
+        gridPane.setPrefWidth(1000);
+        gridPane.setPrefHeight(400);
+        ObservableList<String> strings = FXCollections.observableArrayList();
+        strings.add("Temperature");
+        strings.add("Blood Pressure");
+        strings.add("Glucose");
+        tests.setItems(strings);
+        strings = FXCollections.observableArrayList();
+        strings.add("All month average");
+        for (int i = 1;i<=31;i++)
+            strings.add(String.valueOf(i));
+        days.setItems(strings);
+        strings = FXCollections.observableArrayList();
+        for (int i = 0;i<12;i++){
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.MONTH, i);
+            strings.add(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US));
+        }
+        months.setItems(strings);
+        ObservableList<Integer> list = FXCollections.observableArrayList();
+        int year = 0;
+        try {
+            year = patientMenuPageModel.getMinYear(patientMenuPage.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (;year<=Calendar.getInstance().get(Calendar.YEAR);year++)
+            list.add(year);
+        years.setItems(list);
+        gridPane.add(months, 1, 0);
+        gridPane.add(years, 2, 0);
+        gridPane.add(tests, 3, 0);
+        gridPane.add(days, 4, 0);
+        gridPane.add(showButton, 5, 0);
+        dataStage.setScene(new Scene(gridPane));
     }
 
     private void loadPatient() throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException {
@@ -166,106 +239,111 @@ public class PatientMenuPageController implements Initializable {
                 e.printStackTrace();
             }
         });
-        temperatureButton.setOnMouseClicked(mouseEvent ->{
-            Dialog dialog = new Dialog();
-            GridPane gridPane = new GridPane();
-            dialog.initStyle(StageStyle.UTILITY);
-            ComboBox<Integer> years = new ComboBox<>();
-            ComboBox<String> tests = new ComboBox<>();
-            ObservableList<String> strings = FXCollections.observableArrayList();
-            strings.add("Temperature");
-            strings.add("Blood Pressure");
-            strings.add("Glucose");
-            ComboBox<String> months = new ComboBox<>();
-            ObservableList<String> strings1 = FXCollections.observableArrayList();
-            for (int i = 0;i<12;i++){
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.MONTH, i);
-                strings1.add(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US));
-            }
-            months.setItems(strings1);
-            tests.setItems(strings);
-            int year = 0;
+        temperatureButton.setOnMouseClicked(mouseEvent -> dataStage.show());
+        showButton.setOnMouseClicked(mouseEvent ->{
+            series.getData().clear();
+            gridPane.getChildren().remove(lineChart);
+            series = new XYChart.Series<>();
+            axisX = new CategoryAxis();
+            axisY = new NumberAxis();
+            lineChart = new LineChart<>(axisX, axisY);
+            axisX.setTickLabelRotation(90);
+            lineChart.setLegendVisible(false);
+            lineChart.setVisible(false);
+            lineChart.setPadding(new Insets(30));
+            gridPane.add(lineChart,0, 5);
+            int currentYear = years.getSelectionModel().getSelectedItem();
+            String month = months.getSelectionModel().getSelectedItem();
+            String test = tests.getSelectionModel().getSelectedItem();
+            String id = patientMenuPage.getId();
+            String day = days.getSelectionModel().getSelectedItem();
+            int intDay = 0;
+            if (!day.equals("All month average"))
+                intDay = Integer.parseInt(day);
+            String result = null;
+            axisX.setLabel("Date");
+            axisY.setLabel(test + " value");
             try {
-                year = patientMenuPageModel.getMinYear(patientMenuPage.getId());
+                result = showGraph(currentYear, test, month);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            ObservableList<Integer> list = FXCollections.observableArrayList();
-            for (;year<=Calendar.getInstance().get(Calendar.YEAR);year++)
-                list.add(year);
-            years.setItems(list);
-            Button button = new Button("Show");
-            gridPane.add(months, 0, 0);
-            gridPane.add(years, 1, 0);
-            gridPane.add(tests, 2, 0);
-            gridPane.add(button, 3, 0);
-            dialog.getDialogPane().setContent(gridPane);
-            dialog.setHeight(500);
-            dialog.setWidth(600);
-            dialog.show();
-            button.setOnMouseClicked(mouseEvent1 ->{
-                String result = null;
-                System.out.println(tests.getSelectionModel().getSelectedItem());
-                try {
-                    result = showGraph(years.getSelectionModel().getSelectedItem(), tests.getSelectionModel().getSelectedItem(), months.getSelectionModel().getSelectedItem());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                ArrayList<Point> points = new ArrayList<>();
-                assert result != null;
-                ArrayList<String> values = new ArrayList<>(Arrays.asList(result.split(",")));
-                for (String string:values){
-                    String value[] = string.split(" ");
-                    double d = Temperature.getCelsiusNumber(Integer.valueOf(value[1]));
-                    points.add(new Point(Integer.valueOf(value[0]), d));
-                }
-                points.sort(Comparator.comparing(Point::getIx));
-                ArrayList<Point> avgDay  = null;
-                try {
-                    avgDay = BuildAverageDayInMonth(points, patientMenuPage.getId(), months.getSelectionModel().getSelectedItem(), years.getSelectionModel().getSelectedItem());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                XYChart.Series series = new XYChart.Series<Number,Number>();
-                NumberAxis axisX = new NumberAxis();
-                NumberAxis axisY = new NumberAxis();
-                axisX.setLabel("Date");
-                axisY.setLabel("Temperature");
-                LineChart<Number, Number> lineChart = new LineChart<>(axisX, axisY);
-                lineChart.setTitle("Temperature date " + years.getSelectionModel().getSelectedItem());
-                for (Point point:avgDay){
-                    System.out.println(point);
-                    series.getData().add(new XYChart.Data<Number, Number>(point.getIx(), point.getIy()));
-                }
-                lineChart.getData().add(series);
-                gridPane.add(lineChart, 0,3);
-            });
+            ArrayList<Point> points = new ArrayList<>();
+            assert result != null;
+            ArrayList<String> values = new ArrayList<>(Arrays.asList(result.split(",")));
+            for (String string:values){
+                String value[] = string.split(" ");
+                double d = Temperature.getCelsiusNumber(Integer.valueOf(value[1]));
+                points.add(new Point(Integer.valueOf(value[0]), d));
+            }
+            points.sort(Comparator.comparing(Point::getIx));
+            ArrayList<Point> avgDay  = null;
+            ArrayList<Value> days = null;
+            try {
+                if (intDay == 0)
+                    avgDay = BuildAverageDayInMonth(points, id, month,currentYear);
+                else
+                    days = BuildDayInMonth(id, points, month, currentYear, intDay);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            lineChart.setPrefWidth(1000);
+            lineChart.setTitle(day + " " + month + " " + currentYear + " " + test);
+            if (intDay == 0) {
+                lineChart.setTitle("Average " + test + " Month: " + month);
+                assert avgDay != null;
+                System.out.println(avgDay.size());
+                for (Point point : avgDay)
+                    series.getData().add(new XYChart.Data(String.valueOf(point.getIx()), point.getDy()));
+            }
+            else {
+                    System.out.println(days.size());
+                for (Value value:days)
+                    series.getData().add(new XYChart.Data(value.getDate(), value.getDoubleNumber()));
+            }
+            lineChart.getData().addAll(series);
+            lineChart.setVisible(true);
         });
     }
 
-    private ArrayList<Point> BuildAverageDayInMonth(ArrayList<Point> points, String id, String monthName, Integer year) throws SQLException {
-        String s[] = patientMenuPageModel.getPeriodTimeRepeat(id).split("\n");
-        int period = 0;
+    private ArrayList<Value> BuildDayInMonth(String id, ArrayList<Point> points, String monthName, int year, int day) throws SQLException {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, Month.valueOf(monthName.toUpperCase()).getValue(),1);
-        Calendar calendar1 = Calendar.getInstance();
-        System.out.println(Arrays.toString(points.toArray()));
-        for (String string:s){
-            String s1[] = string.split(" ");
-            calendar1.set(Calendar.YEAR, Integer.parseInt(s1[1]));
-            int month = Month.valueOf(s1[0].toUpperCase()).getValue();
-            calendar1.set(Calendar.MONTH, month);
-            calendar1.set(Calendar.DAY_OF_MONTH, 1);
-            if (calendar.before(calendar1))
-                period = Integer.valueOf(s1[2]);
-            else
-                break;
-        }
-        ArrayList<Point> avgDay = new ArrayList<>();
-        calendar = Calendar.getInstance();
         int month = Month.valueOf(monthName.toUpperCase()).getValue() - 1;
-        calendar.set(year, month, 1);
+        calendar.set(year, month, day,0,0,0);
+        int period = patientMenuPageModel.getPeriodTime(id, calendar);
+        ArrayList<Value> values = new ArrayList<>();
+        int place = 0;
+        int number;
+        String string = "";
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(year, month, day,0,0,0);
+        while (place < points.size()) {
+            number = points.get(place).getIx()*period;
+            calendar1.add(Calendar.MINUTE, number);
+            if (calendar.get(Calendar.DAY_OF_MONTH) == calendar1.get(Calendar.DAY_OF_MONTH)){
+                if (calendar1.get(Calendar.HOUR_OF_DAY) < 10)
+                    string = "0" + String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
+                else
+                    string = String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
+                string += ":";
+                if (calendar1.get(Calendar.MINUTE) < 10)
+                    string += ("0" + calendar.get(Calendar.MINUTE));
+                else
+                    string += calendar1.get(Calendar.MINUTE);
+                values.add(new Value(String.valueOf(string), points.get(place).getDy()));
+            }
+            place++;
+            calendar1.set(year, month, day, 0, 0, 0);
+        }
+        return values;
+    }
+
+    private ArrayList<Point> BuildAverageDayInMonth(ArrayList<Point> points, String id, String monthName, Integer year) throws SQLException {
+        Calendar calendar = Calendar.getInstance();
+        int month = Month.valueOf(monthName.toUpperCase()).getValue() - 1;
+        calendar.set(year, month,1);
+        int period = patientMenuPageModel.getPeriodTime(id, calendar);
+        ArrayList<Point> avgDay = new ArrayList<>();
         int maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         double avg = 0.0;
         int place = 0;
@@ -281,9 +359,10 @@ public class PatientMenuPageController implements Initializable {
                 else
                     break;
             }
-            avg = new BigDecimal(avg).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            avg = new BigDecimal(avg/amount).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            //System.exit(10);
             if (avg !=0.0)
-                avgDay.add(new Point(i + 1, avg /amount));
+                avgDay.add(new Point(i + 1, avg));
             else
                 avgDay.add(new Point(i + 1,avg));
             avg = 0.0;

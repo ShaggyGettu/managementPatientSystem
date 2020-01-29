@@ -94,7 +94,7 @@ public class PatientMenuPageModel {
         calendar.setTime(now);
         String formatter = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
         int minutesFromBeginningMonth = calendar.get(Calendar.MINUTE) + (calendar.get(Calendar.HOUR_OF_DAY)*60) + (calendar.get(Calendar.DAY_OF_MONTH)*24*60);
-        int periodTime = 0;
+        int periodTime = patientMenuPageModel.getPeriodTime(id, calendar);
         String string[] = getPeriodTimeRepeat(id).split("\n");
         Calendar calendar1 = Calendar.getInstance();
         for (String s:string){
@@ -333,17 +333,6 @@ public class PatientMenuPageModel {
     public static void main(String args[]) {
     }
 
-    ResultSet getData(String id) throws SQLException {
-        String sql = "SELECT temperatureAvg, temperatureMin, temperatureMax, temperatureAmount, " +
-                "bloodPressureAvg, bloodPressureMin, bloodPressureMax, bloodPressureAmount, " +
-                "glucoseAvg, glucoseMin, glucoseMax, glucoseAmount FROM patients WHERE id = ?";
-        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        return resultSet;
-    }
-
     public boolean isTemperature() {
         return isTemperature;
     }
@@ -352,6 +341,23 @@ public class PatientMenuPageModel {
         isTemperature = temperature;
     }
 
+    public int getPeriodTime(String id, Calendar calendar) throws SQLException {
+        String s[] = patientMenuPageModel.getPeriodTimeRepeat(id).split("\n");
+        int period = 0;
+        Calendar calendar1 = Calendar.getInstance();
+        for (String string:s){
+            String s1[] = string.split(" ");
+            calendar1.set(Calendar.YEAR, Integer.parseInt(s1[1]));
+            int month = Month.valueOf(s1[0].toUpperCase()).getValue();
+            calendar1.set(Calendar.MONTH, month);
+            calendar1.set(Calendar.DAY_OF_MONTH, 1);
+            if (calendar.before(calendar1))
+                period = Integer.valueOf(s1[2]);
+            else
+                break;
+        }
+        return period;
+    }
     public boolean isBloodPressure() {
         return isBloodPressure;
     }
