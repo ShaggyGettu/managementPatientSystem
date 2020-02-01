@@ -90,6 +90,8 @@ public class PatientMenuPageModel {
     private void addValue(Date now, String temperature, String id, String test, int periodTimeRepeat) throws SQLException {
         if (test.equals("T"))
             temperature = String.valueOf(Temperature.getTemperatureRepresentation(temperature));
+        else if (test.equals("B"))
+            temperature = temperature.replace(",", "|");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
         String formatter = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);

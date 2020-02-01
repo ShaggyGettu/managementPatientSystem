@@ -1,5 +1,6 @@
 package Client.Login;
 
+import Client.DataTypes.BloodPressure;
 import Client.DataTypes.Temperature;
 import Client.DoctorsView.DoctorsMenu.DoctorMenuPageController;
 import javafx.application.Application;
@@ -21,6 +22,7 @@ public class LoginPage extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         Temperature.initialize();
+        BloodPressure.initialize();
         window = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("LoginPageView.fxml"));
         Scene scene = new Scene(root);

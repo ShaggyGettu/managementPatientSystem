@@ -33,6 +33,7 @@ public class Glucose {
 
     public static void main(String args[]){
         Glucose glucose = new Glucose();
+        System.out.println(glucose.getClass().getName().endsWith("Glucose"));
         for (int i=0;i<10;i++){
             System.out.println(glucose);
             glucose = new Glucose();

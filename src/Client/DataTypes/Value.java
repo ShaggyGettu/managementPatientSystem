@@ -6,9 +6,10 @@ public class Value {
     private double doubleNumber;
     private int intNumber;
 
-    Value(String string, Point point){
+
+    public Value(Point point, int number){
         doubleNumber = -1;
-        date = string;
+        intNumber = number;
         this.point = point;
     }
 
@@ -17,7 +18,7 @@ public class Value {
         doubleNumber = d;
     }
 
-    Value(String string, int number){
+    public Value(String string, int number){
         doubleNumber = -1;
         date = string;
         intNumber = number;

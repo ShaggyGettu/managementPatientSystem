@@ -1,11 +1,13 @@
 package Client.DataTypes;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BloodPressure {
     private int smallBloodPressure;
     private int largeBloodPressure;
     private int status;
+    private static ArrayList<BloodPressure> represent;
 
     public BloodPressure(){
         Random random = new Random();
@@ -37,6 +39,45 @@ public class BloodPressure {
         }
     }
 
+    public BloodPressure(int i, int z) {
+        largeBloodPressure = z;
+        smallBloodPressure = i;
+    }
+
+    public static void initialize(){
+        represent = new ArrayList<>();
+        int i= 60;
+        int z = 100;
+        int place= 0;
+        while (i <= 139 || z <= 210){
+            represent.add(place, new BloodPressure(i, z));
+            if (place %2 == 0) {
+                z++;
+                place++;
+            }
+            else {
+                i++;
+                place++;
+            }
+        }
+    }
+
+    public static int getPresentation(BloodPressure bloodPressure){
+        for (int i = 0;i<represent.size();i++){
+            if (bloodPressure.equals(represent.get(i)))
+                return i;
+        }
+        return -1;
+    }
+
+    public static BloodPressure getValue(int i){
+        return represent.get(i);
+    }
+
+    public boolean equals(BloodPressure bp) {
+        return this.smallBloodPressure == bp.smallBloodPressure && this.largeBloodPressure == bp.largeBloodPressure;
+    }
+
     public int getLargeBloodPressure() {
         return largeBloodPressure;
     }
@@ -51,11 +92,7 @@ public class BloodPressure {
     }
 
     public static void main(String args[]){
-        BloodPressure bloodPressure = new BloodPressure();
-        while (bloodPressure.status != 6){
-            System.out.println(bloodPressure);
-            bloodPressure = new BloodPressure();
-        }
-        System.out.println(bloodPressure);
+        BloodPressure.initialize();
+        System.out.println(represent.size());
     }
 }
