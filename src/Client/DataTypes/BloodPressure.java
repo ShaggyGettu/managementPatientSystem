@@ -39,24 +39,28 @@ public class BloodPressure {
         }
     }
 
+    public BloodPressure(Point point){
+        largeBloodPressure = point.getIx();
+        smallBloodPressure = point.getIy();
+    }
     public BloodPressure(int i, int z) {
-        largeBloodPressure = z;
-        smallBloodPressure = i;
+        largeBloodPressure = i;
+        smallBloodPressure = z;
     }
 
     public static void initialize(){
         represent = new ArrayList<>();
-        int i= 60;
-        int z = 100;
+        int i = 100;
+        int z= 60;
         int place= 0;
-        while (i <= 139 || z <= 210){
+        while (i <= 210 || z <= 139){
             represent.add(place, new BloodPressure(i, z));
             if (place %2 == 0) {
-                z++;
+                i++;
                 place++;
             }
             else {
-                i++;
+                z++;
                 place++;
             }
         }

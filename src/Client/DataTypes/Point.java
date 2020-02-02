@@ -2,30 +2,30 @@ package Client.DataTypes;
 
 import java.util.Comparator;
 
-public class Point {
+public class Point extends Object {
     private double dx;
     private double dy;
     private int ix;
     private int iy;
     private int state;
 
-    public Point(double x, double y){
-        this.dx = x;
-        this.dy = y;
-    }
-
-    public Point(int dx, double dy){
-        state = 2;
-        this.ix = dx;
+    public Point(double dx, double dy){
+        this.dx = dx;
         this.dy = dy;
     }
 
-    public Point(int x, int y){
+    public Point(int ix, double dy){
+        state = 2;
+        this.ix = ix;
+        this.dy = dy;
+    }
+
+    public Point(int ix, int iy){
         state = 3;
         this.dx = -1;
         this.dy = -1;
-        this.ix = x;
-        this.iy = y;
+        this.ix = ix;
+        this.iy = iy;
     }
 
     public double getDx() {

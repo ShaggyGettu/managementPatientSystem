@@ -1,6 +1,6 @@
 package Client.DataTypes;
 
-public class Value {
+public class Value{
     private Point point;
     private String date;
     private double doubleNumber;
@@ -14,6 +14,7 @@ public class Value {
     }
 
     public Value(String string, double d){
+        intNumber = -1;
         date = string;
         doubleNumber = d;
     }
@@ -22,6 +23,12 @@ public class Value {
         doubleNumber = -1;
         date = string;
         intNumber = number;
+    }
+
+    public Value(String string, Point point1){
+        doubleNumber = -1;
+        date = string;
+        point = point1;
     }
 
     public Point getPoint() {

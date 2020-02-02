@@ -1,5 +1,6 @@
 package Client.PatientsView.PatientMenu;
 
+import Client.DataTypes.BloodPressure;
 import Client.DataTypes.Point;
 import Client.DataTypes.Temperature;
 import Client.DataTypes.Value;
@@ -211,7 +212,6 @@ public class PatientMenuPageController implements Initializable {
             glucosePane.setVisible(true);
             patientMenuPageModel.setGlucose(true);
         }
-        //ResultSet resultSet = patientMenuPageModel.getData(patientMenuPage.getId());
         String temperature, bloodPressure, glucose;
         if (temperaturePane.isVisible() && Integer.parseInt(resultSet.getString(12)) != 0) {
             temperature = resultSet.getString(11);//AVG
@@ -318,13 +318,18 @@ public class PatientMenuPageController implements Initializable {
             String id = patientMenuPage.getId();
             String day = days.getSelectionModel().getSelectedItem();
             int intDay = 0;
-            if (test.equals("Temperature")){
-                axisY = new NumberAxis(35,40,0.1);
+            switch (test) {
+                case "Temperature":
+                    axisY = new NumberAxis(35, 40, 0.1);
+                    break;
+                case "Glucose":
+                    axisY = new NumberAxis(60, 200, 10);
+                    break;
+                case "Blood Pressure":
+                    axisY = new NumberAxis(0, 221, 0.3);
+                    axisY.setVisible(false);
+                    break;
             }
-            else if (test.equals("Glucose"))
-                axisY = new NumberAxis(60,200, 10);
-            else if (test.equals("Blood Pressure"))
-                axisY = new NumberAxis(0, 221, 5);
             graphPane.getChildren().clear();
             axisX = new CategoryAxis();
             series = null;
@@ -344,33 +349,22 @@ public class PatientMenuPageController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            if (test.equals("Blood Pressure")){
-                ArrayList<Value> points = new ArrayList<>();
-                ArrayList<String> values = new ArrayList<>(Arrays.asList(result.split(",")));
-                for (String string:values) {
-                    String value[] = string.split(" ");
-                    int d = Integer.valueOf(value[1]);
-                    int large = Integer.parseInt(value[0].split("|")[0]);
-                    int small = Integer.parseInt(value[0].split("|")[1]);
-                    points.add(new Value(new Point(large, small), d));
-                    ArrayList<Point> avgDay  = null;
-                    ArrayList<Value> days = null;
-
-                }
-            }
-            ArrayList<Point> points = new ArrayList<>();
-            assert result != null;
+            ArrayList<Object> points = new ArrayList<>();
             ArrayList<String> values = new ArrayList<>(Arrays.asList(result.split(",")));
-            for (String string:values){
-                String value[] = string.split(" ");
-                int d = Integer.valueOf(value[1]);
-                if (test.equals("Temperature")) {
-                    points.add(new Point(Integer.valueOf(value[0]), Temperature.getCelsiusNumber(d)));
-                }
+            for (int i = 1; i < values.size(); i++) {
+                String value[] = values.get(i).split(" ");
+                if (test.equals("Blood Pressure")) {
+                    String string[] = value[1].split("-");
+                    int large = Integer.parseInt(value[1].split("-")[0]);
+                    int small = Integer.parseInt(value[1].split("-")[1]);
+                    Value value1 = new Value(new Point(large, small), Integer.valueOf(value[0]));
+                    points.add(value1);
+                } else if (test.equals("Temperature"))
+                    points.add(new Point(Integer.valueOf(value[0]), Temperature.getCelsiusNumber(Integer.valueOf(value[1]))));
                 else if (test.equals("Glucose"))
-                    points.add(new Point(Integer.valueOf(value[0]), d));
+                    points.add(new Point(Integer.valueOf(value[0]), Integer.valueOf(value[1])));
+//                points.sort(Comparator.comparing(Point::getIx()));
             }
-            points.sort(Comparator.comparing(Point::getIx));
             ArrayList<Point> avgDay  = null;
             ArrayList<Value> days = null;
             try {
@@ -385,14 +379,13 @@ public class PatientMenuPageController implements Initializable {
             if (intDay == 0) {
                 lineChart.setTitle("Average " + test + " Month: " + month);
                 assert avgDay != null;
-                System.out.println(avgDay.size());
                 for (Point point : avgDay) {
                     if (test.equals("Temperature"))
                         series.getData().add(new XYChart.Data(String.valueOf(point.getIx()), point.getDy()));
-                    else if (test.equals("Glucose")) {
+                    else if (test.equals("Glucose"))
                         series.getData().add(new XYChart.Data(String.valueOf(point.getIx()), point.getIy()));
-                        System.out.println(point);
-                    }
+                    else if (test.equals("Blood Pressure"))
+                        series.getData().add(new XYChart.Data<>(String.valueOf(point.getIx()), point.getIy()));
                 }
             }
             else {
@@ -402,6 +395,8 @@ public class PatientMenuPageController implements Initializable {
                     if (test.equals("Temperature"))
                         series.getData().add(new XYChart.Data(value.getDate(), value.getDoubleNumber()));
                     else if (test.equals("Glucose"))
+                        series.getData().add(new XYChart.Data<>(value.getDate(), value.getIntNumber()));
+                    else if (test.equals("Blood Pressure"))
                         series.getData().add(new XYChart.Data<>(value.getDate(), value.getIntNumber()));
                 }
             }
@@ -413,13 +408,23 @@ public class PatientMenuPageController implements Initializable {
             months.setVisible(true);
             tests.setVisible(true);
             lineChart.setVisible(true);
-            for (XYChart.Data<String, Number> data:series.getData()){
-                Tooltip.install(data.getNode(), new Tooltip(data.getXValue() + "," + data.getYValue()));
+            if (test.equals("Blood Pressure")) {
+                for (XYChart.Data<String, Number> data:series.getData()) {
+                    if ((Integer) data.getYValue() != -1)
+                        Tooltip.install(data.getNode(), new Tooltip(data.getXValue() + "," + BloodPressure.getValue((Integer) data.getYValue()).toString()));
+                    else
+                        Tooltip.install(data.getNode(), new Tooltip("0"));
+                }
+            }
+            else {
+                for (XYChart.Data<String, Number> data : series.getData()) {
+                    Tooltip.install(data.getNode(), new Tooltip(data.getXValue() + "," + data.getYValue()));
+                }
             }
         });
     }
 
-    private ArrayList<Value> BuildDayInMonth(String id, ArrayList<Point> points, String monthName, int year, int day, String test) throws SQLException {
+    private ArrayList<Value> BuildDayInMonth(String id, ArrayList<Object> points, String monthName, int year, int day, String test) throws SQLException {
         Calendar calendar = Calendar.getInstance();
         int month = Month.valueOf(monthName.toUpperCase()).getValue() - 1;
         calendar.set(year, month, day,0,0,0);
@@ -430,70 +435,121 @@ public class PatientMenuPageController implements Initializable {
         String string = "";
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(year, month, day,0,0,0);
-        while (place < points.size()) {
-            number = points.get(place).getIx()*period;
-            calendar1.add(Calendar.MINUTE, number);
-            if (calendar.get(Calendar.DAY_OF_MONTH) == calendar1.get(Calendar.DAY_OF_MONTH)){
-                if (calendar1.get(Calendar.HOUR_OF_DAY) < 10)
-                    string = "0" + String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
-                else
-                    string = String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
-                string += ":";
-                if (calendar1.get(Calendar.MINUTE) < 10)
-                    string += ("0" + calendar.get(Calendar.MINUTE));
-                else
-                    string += calendar1.get(Calendar.MINUTE);
-                if (test.equals("Temperature"))
-                    values.add(new Value(String.valueOf(string), points.get(place).getDy()));
-                else if (test.equals("Glucose")) {
-                    int n = points.get(place).getIy();
-                    values.add(new Value(String.valueOf(string), n));
+        if (test.equals("Blood Pressure")){
+            while (place<points.size()){
+                Value value = (Value) points.get(place);
+                number = value.getIntNumber() * period;
+                calendar1.add(Calendar.MINUTE, number);
+                if (calendar.get(Calendar.DAY_OF_MONTH) == calendar1.get(Calendar.DAY_OF_MONTH)) {
+                    if (calendar1.get(Calendar.HOUR_OF_DAY) < 10)
+                        string = "0" + String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
+                    else
+                        string = String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
+                    string += ":";
+                    if (calendar1.get(Calendar.MINUTE) < 10)
+                        string += ("0" + calendar.get(Calendar.MINUTE));
+                    else
+                        string += calendar1.get(Calendar.MINUTE);
+                    BloodPressure bloodPressure = new BloodPressure(value.getPoint());
+                    values.add(new Value(String.valueOf(string), BloodPressure.getPresentation(bloodPressure)));
                 }
             }
-            place++;
-            calendar1.set(year, month, day, 0, 0, 0);
+        }
+        else {
+            while (place < points.size()) {
+                Point point = (Point) points.get(place);
+                number = point.getIx() * period;
+                calendar1.add(Calendar.MINUTE, number);
+                if (calendar.get(Calendar.DAY_OF_MONTH) == calendar1.get(Calendar.DAY_OF_MONTH)) {
+                    if (calendar1.get(Calendar.HOUR_OF_DAY) < 10)
+                        string = "0" + String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
+                    else
+                        string = String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
+                    string += ":";
+                    if (calendar1.get(Calendar.MINUTE) < 10)
+                        string += ("0" + calendar.get(Calendar.MINUTE));
+                    else
+                        string += calendar1.get(Calendar.MINUTE);
+                    if (test.equals("Temperature"))
+                        values.add(new Value(String.valueOf(string), point.getDy()));
+                    else if (test.equals("Glucose")) {
+                        int n = point.getIy();
+                        values.add(new Value(String.valueOf(string), n));
+                    }
+                }
+                place++;
+                calendar1.set(year, month, day, 0, 0, 0);
+            }
         }
         return values;
     }
 
-    private ArrayList<Point> BuildAverageDayInMonth(ArrayList<Point> points, String id, String monthName, Integer year, String test) throws SQLException {
+    private ArrayList<Point> BuildAverageDayInMonth(ArrayList<Object> points, String id, String monthName, Integer year, String test) throws SQLException {
         Calendar calendar = Calendar.getInstance();
         int month = Month.valueOf(monthName.toUpperCase()).getValue() - 1;
         calendar.set(year, month,1);
         int period = patientMenuPageModel.getPeriodTime(id, calendar);
         ArrayList<Point> avgDay = new ArrayList<>();
         int maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        double avg = 0.0;
         int place = 0;
         int amount = 0;
+        if (test.equals("Blood Pressure")){
+            double avgX = 0.0;
+            double avgY = 0.0;
+            for (int i = 0;i<=maxDay;i++){
+                Value value = (Value) points.get(place);
+                int number = value.getIntNumber() * period;
+                while ((i * 24 * 60 <= number) && (number <= (i + 1) * 24 * 60)){
+                    int x = value.getPoint().getIx();
+                    int y = value.getPoint().getIy();
+                    amount++;
+                    avgX += x;
+                    avgY += y;
+                    place++;
+                    if (place<points.size()) {
+                        value = (Value) points.get(place);
+                        number = value.getIntNumber() * period;
+                    }
+                    else
+                        break;
+                }
+                avgX /= amount;
+                avgY /= amount;
+                int bp = -1;
+                if (amount != 0)
+                    bp = BloodPressure.getPresentation(new BloodPressure((int)avgX, (int)avgY));
+                avgDay.add(new Point(i, bp));
+                avgX = 0.0;
+                avgY = 0.0;
+                amount = 0;
+            }
+            return avgDay;
+        }
+        //points.sort(Comparator.comparing(Point::getIx));
+        double avg = 0.0;
         for (int i = 0;i<=maxDay;i++){
-            int number = points.get(place).getIx();
-            while (i*24*60<=number*period&&number*period<=((i + 1)*24*60)){
+            Point point = (Point)points.get(place);
+            int number = point.getIx() * period;
+            while ((i * 24 * 60 <= number) && (number <= ((i + 1) * 24 * 60))){
                 amount++;
                 if (test.equals("Temperature"))
-                    avg += points.get(place).getDy();
+                    avg += point.getDy();
                 else if (test.equals("Glucose"))
-                    avg += points.get(place).getIy();
+                    avg += point.getIy();
                 place++;
-                if (place<points.size())
-                    number = points.get(place).getIx();
+                if (place<points.size()) {
+                    point = (Point) points.get(place);
+                    number = point.getIx() * period;
+                }
                 else
                     break;
             }
-            avg = new BigDecimal(avg/amount).setScale(1, RoundingMode.HALF_UP).doubleValue();
-            //System.exit(10);
-            if (avg !=0.0) {
-                if (test.equals("Temperature"))
-                    avgDay.add(new Point(i + 1, avg));
-                else if (test.equals("Glucose"))
-                    avgDay.add(new Point(i + 1, (int) avg));
-            }
-            else{
-                if (test.equals("Temperature"))
-                    avgDay.add(new Point(i + 1, avg));
-                else if (test.equals("Glucose"))
-                    avgDay.add(new Point(i + 1, (int) avg));
-            }
+            if (avg != 0.0)
+                avg = new BigDecimal(avg/amount).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            if (test.equals("Temperature"))
+                avgDay.add(new Point(i + 1, avg));
+            else if (test.equals("Glucose"))
+                avgDay.add(new Point(i + 1, (int) avg));
             avg = 0.0;
             amount = 0;
         }

@@ -4,6 +4,7 @@ import Client.DoctorsView.DoctorRegister2.RegisterPage2;
 import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
 import Client.Login.LoginPage;
 import animatefx.animation.FadeIn;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -20,9 +21,13 @@ import java.util.regex.Pattern;
 
 public class RegisterPage1Controller implements Initializable {
 
+    @FXML
     AnchorPane mainPane;
+    @FXML
     TextField idTextField, emailTextField, passwordTextField, nameTextField, phoneNumberTextField;
+    @FXML
     Button nextButton, exitButton;
+    @FXML
     Label idErrorLabel, emailErrorLabel, passwordErrorLabel, nameErrorLabel, phoneNumberErrorLabel;
 
     private DoctorsMenuPage doctorMenuPage;
@@ -33,7 +38,6 @@ public class RegisterPage1Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Actions();
         doctorMenuPage = DoctorsMenuPage.getInstance();
         registerPage1 = RegisterPage1.getInstance();
         registerPage2 = RegisterPage2.getInstance();
@@ -42,6 +46,7 @@ public class RegisterPage1Controller implements Initializable {
         } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+        Actions();
         idTextField.setText(registerPage1.getFields()[0]);
         emailTextField.setText(registerPage1.getFields()[1]);
         passwordTextField.setText(registerPage1.getFields()[2]);

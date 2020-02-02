@@ -91,7 +91,7 @@ public class PatientMenuPageModel {
         if (test.equals("T"))
             temperature = String.valueOf(Temperature.getTemperatureRepresentation(temperature));
         else if (test.equals("B"))
-            temperature = temperature.replace(",", "|");
+            temperature = temperature.replace(",", "-");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
         String formatter = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
