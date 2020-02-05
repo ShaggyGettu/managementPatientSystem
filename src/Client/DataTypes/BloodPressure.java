@@ -50,19 +50,10 @@ public class BloodPressure {
 
     public static void initialize(){
         represent = new ArrayList<>();
-        int i = 100;
-        int z= 60;
         int place= 0;
-        while (i <= 210 || z <= 139){
-            represent.add(place, new BloodPressure(i, z));
-            if (place %2 == 0) {
-                i++;
-                place++;
-            }
-            else {
-                z++;
-                place++;
-            }
+        for (int i = 100;i <= 210;i++){
+            for (int z = 60;z <= 139;z++)
+            represent.add(place++, new BloodPressure(i, z));
         }
     }
 

@@ -5,6 +5,7 @@ import Client.DataTypes.Warning;
 import Client.DoctorsView.DoctorRegister1.RegisterPage1;
 import Client.DoctorsView.PatientScreen.PatientScreen;
 import Client.Login.LoginPage;
+import Client.PatientsView.PatientData.PatientData;
 import animatefx.animation.FadeIn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -148,17 +149,12 @@ public class DoctorMenuPageController implements Initializable {
         patientsTable.setItems(patients);
         for (Patient patient : patients) {
             patient.getShow().setOnMouseClicked(mouseEvent -> {
-                PatientScreen patientScreen = null;
+                PatientData patientData;
                 try {
-                    patientScreen = PatientScreen.getInstance();
-                    patientScreen.setPatients(patient);
-                } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    assert patientScreen != null;
-                    patientScreen.createScreen();
-                    LoginPage.getWindow().setScene(patientScreen.getScene());
+                    patientData = PatientData.getInstance();
+                    patientData.setId(String.valueOf(patient.getId()));
+                    patientData.createScreen();
+                    LoginPage.getWindow().setScene(patientData.getScene());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.PatientsView.PatientData.PatientDataController">
+   <children>
+      <AnchorPane prefHeight="560.0" prefWidth="800.0">
+         <children>
+            <LineChart fx:id="lineChartT">
+              <xAxis>
+                <CategoryAxis fx:id="axisXT" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis fx:id="axisYT" side="LEFT" />
+              </yAxis>
+            </LineChart>
+            <LineChart fx:id="lineChartB">
+               <xAxis>
+                  <CategoryAxis fx:id="axisXB" side="BOTTOM" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis fx:id="axisYB" side="LEFT" />
+               </yAxis>
+            </LineChart>
+            <LineChart fx:id="lineChartG">
+               <xAxis>
+                  <CategoryAxis fx:id="axisXG" side="BOTTOM" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis fx:id="axisYG" side="LEFT" />
+               </yAxis>
+            </LineChart>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="560.0" prefHeight="40.0" prefWidth="800.0">
+         <children>
+            <ComboBox fx:id="months" prefWidth="120.0" />
+            <ComboBox fx:id="years" layoutX="130.0" prefWidth="70.0" />
+            <ComboBox fx:id="tests" layoutX="210.0" prefWidth="150.0" />
+            <ComboBox fx:id="days" layoutX="370.0" prefWidth="150.0" />
+            <Button fx:id="showButton" layoutX="530.0" mnemonicParsing="false" prefWidth="70.0" text="Button" />
+            <Button fx:id="backButton" layoutX="710.0" mnemonicParsing="false" prefWidth="80.0" text="Back" />
+            <Label fx:id="missingLabel" layoutX="610.0" layoutY="5.0" prefWidth="90.0" text="Details missing" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

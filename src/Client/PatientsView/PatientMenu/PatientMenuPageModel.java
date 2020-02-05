@@ -376,7 +376,7 @@ public class PatientMenuPageModel {
         isGlucose = glucose;
     }
 
-    int getMinYear(String id) throws SQLException {
+    public int getMinYear(String id) throws SQLException {
         String sql = "SELECT year FROM s" + id;
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -389,7 +389,7 @@ public class PatientMenuPageModel {
         return min;
     }
 
-    String getPatientData(String id, int year, String test, String month) throws SQLException {
+    public String getPatientData(String id, int year, String test, String month) throws SQLException {
         if (test.equals("Temperature"))
             test = "T";
         else if (test.equals("Glucose"))

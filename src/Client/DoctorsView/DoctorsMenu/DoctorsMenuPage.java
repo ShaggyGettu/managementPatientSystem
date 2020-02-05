@@ -26,6 +26,7 @@ public class DoctorsMenuPage {
         root = FXMLLoader.load(DoctorsMenuPage.class.getResource("DoctorMenuPageView.fxml"));
         scene = new Scene(root);
     }
+
     public Scene getScene() {
         return scene;
     }
