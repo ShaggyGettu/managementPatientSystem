@@ -1,8 +1,9 @@
 package Client.Login;
 
 import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
-import Client.PatientsView.PatientMenuPage;
-import Server.CreateUserData;
+import Client.ManagerView.ManagerMenuPage;
+import Client.PatientsView.PatientMenu.PatientMenuPage;
+import Client.PatientsView.PatientData.CreateUserData;
 import animatefx.animation.FadeIn;
 
 
@@ -45,20 +46,17 @@ public class LoginController implements Initializable {
     @FXML
     private Label errorDetailsLabel;
 
-    private ObservableList<String> list = FXCollections.observableArrayList("Patient", "Doctor");
+    private ObservableList<String> list = FXCollections.observableArrayList("Patient", "Doctor", "Manager");
     private String id, email, password, role;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        /*Formatter formatter = new Formatter();
-        formatter.format("%tB", Calendar.getInstance());
-        System.out.println(formatter);*/
         try {
             loginModel = LoginModel.getLoginModel();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        roleComboBox.setPromptText("Patient/Doctor");
+        roleComboBox.setPromptText("Patient/Doctor/Manager");
         roleComboBox.setItems(list);
         if (loginModel.isConnected())
             System.out.println("Connected");
@@ -164,14 +162,14 @@ public class LoginController implements Initializable {
                 boolean flag = loginButtonOnClick();
                 if (flag)
                     login();
-            } catch (SQLException | IOException | IllegalAccessException | ClassNotFoundException | InstantiationException e) {
+            } catch (SQLException | IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         });
         LoginPage.getWindow().setOnCloseRequest(windowEvent -> System.exit(0));
     }
 
-    private void login() throws SQLException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    private void login() throws SQLException, IOException, ClassNotFoundException {
         ResultSet resultSet = loginModel.login(email, password, role);
         if (resultSet != null) {
             id = resultSet.getString("id");
@@ -179,9 +177,18 @@ public class LoginController implements Initializable {
                 loadDoctorPage();
             if (role.equals("Patient"))
                 loadPatientPage(resultSet);
+            if (role.equals("Manager"))
+                loadManagerPage();
         }
         else
             errorDetailsShow();
+    }
+
+    private void loadManagerPage() throws IOException {
+        ManagerMenuPage managerMenuPage = ManagerMenuPage.getManagerMenuPage();
+        managerMenuPage.setId(id);
+        managerMenuPage.createScene();
+        LoginPage.getWindow().setScene(managerMenuPage.getScene());
     }
 
     private void errorDetailsShow() {
@@ -189,10 +196,11 @@ public class LoginController implements Initializable {
         emailTextField.requestFocus();
     }
 
-    private void loadPatientPage(ResultSet resultSet) throws IOException, SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    private void loadPatientPage(ResultSet resultSet) throws IOException, SQLException, ClassNotFoundException {
         PatientMenuPage patientMenuPage = PatientMenuPage.getInstance();
         patientMenuPage.setId(id);
-        patientMenuPage.createScene(resultSet);
+        patientMenuPage.setBackScreen(0);
+        patientMenuPage.createScreen(id);
         LoginPage.getWindow().setScene(patientMenuPage.getScene());
         String periodTimeRepeat = resultSet.getString(26);
         String s[] = periodTimeRepeat.split("\n");

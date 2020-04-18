@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.ManagerView.ManagerMenuPageController">
+   <AnchorPane prefHeight="500.0" prefWidth="200.0" style="-fx-background-color: #3104B4;">
+      <Label prefHeight="70.0" prefWidth="200.0" text="   Manager Menu" textFill="WHITE">
+         <font>
+            <Font size="24.0"/>
+         </font>
+      </Label>
+      <AnchorPane layoutY="90.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0"
+                  style="-fx-background-color: #642EFE;">
+         <Button fx:id="addDoctorButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0"
+                 style="-fx-background-color: #642EFE;" text="Add doctor" textFill="WHITE">
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Button>
+      </AnchorPane>
+      <AnchorPane layoutY="160.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0"
+                  style="-fx-background-color: #642EFE;">
+         <Button fx:id="addPatientButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0"
+                 style="-fx-background-color: #642EFE;" text="Add patient" textFill="WHITE">
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Button>
+      </AnchorPane>
+      <AnchorPane layoutY="230.0" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;">
+         <Button fx:id="doctorListButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0"
+                 style="-fx-background-color: #642EFE;" text="Doctors List" textFill="WHITE">
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Button>
+      </AnchorPane>
+      <AnchorPane layoutY="300.0" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #642EFE;">
+         <Button fx:id="patientsListButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0"
+                 style="-fx-background-color: #642EFE;" text="Patients List" textFill="WHITE">
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Button>
+      </AnchorPane>
+      <AnchorPane layoutY="440.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0"
+                  style="-fx-background-color: #642EFE;">
+         <Button fx:id="backButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0"
+                 style="-fx-background-color: #642EFE;" text="Back" textFill="WHITE">
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Button>
+      </AnchorPane>
+   </AnchorPane>
+   <AnchorPane layoutX="200.0" prefHeight="500.0" prefWidth="600.0">
+      <AnchorPane layoutX="100.0" layoutY="20.0" prefHeight="30.0" prefWidth="450.0">
+         <Label fx:id="managerNameLabel" prefHeight="30.0" prefWidth="150.0" text="Manager name"/>
+         <Label fx:id="managerIdLabel" layoutX="150.0" prefHeight="30.0" prefWidth="150.0" text="Manager id"/>
+         <Label fx:id="managerEmailLabel" layoutX="300.0" prefHeight="30.0" prefWidth="150.0"
+                text="Manager email"/>
+      </AnchorPane>
+      <AnchorPane fx:id="titlePane" layoutY="70.0" prefHeight="100.0" prefWidth="600.0" visible="false">
+         <Label fx:id="titleLabel" layoutX="14.0" layoutY="25.0" prefHeight="50.0" prefWidth="200.0"
+                textFill="WHITE">
+            <font>
+               <Font size="24.0"/>
+            </font>
+         </Label>
+      </AnchorPane>
+      <TableView fx:id="patientsTable" layoutY="160.0" prefHeight="340.0" prefWidth="600.0" visible="false">
+         <columns>
+            <TableColumn fx:id="patientIdColumn" editable="false" prefWidth="60.0" text="Patient Id"/>
+            <TableColumn fx:id="pDoctorIdColumn" editable="false" prefWidth="60.0" text="Doctor Id"/>
+            <TableColumn fx:id="pDoctorNameColumn" editable="false" prefWidth="90.0" text="Doctor Name"/>
+            <TableColumn fx:id="patientNameColumn" editable="false" prefWidth="90.0" text="Name"/>
+            <TableColumn fx:id="patientEmailColumn" editable="false" prefWidth="120.0" text="Email"/>
+            <TableColumn fx:id="patientPhoneColumn" editable="false" minWidth="50.0" prefWidth="70.0" text="Phone"/>
+            <TableColumn fx:id="showPatientColumn" editable="false" minWidth="50.0" prefWidth="60.0" sortable="false"
+                         text="Show"/>
+            <TableColumn fx:id="deletePatientColumn" editable="false" minWidth="50.0" prefWidth="70.0"
+                         sortable="false" text="Delete"/>
+         </columns>
+      </TableView>
+      <TableView fx:id="doctorsTable" layoutY="160.0" prefHeight="340.0" prefWidth="600.0" visible="false">
+         <columns>
+            <TableColumn fx:id="doctorIdColumn" editable="false" prefWidth="150.0" resizable="false" text="Id"/>
+            <TableColumn fx:id="doctorNameColumn" editable="false" prefWidth="150.0" resizable="false" text="Name"/>
+            <TableColumn fx:id="doctorEmailColumn" editable="false" prefWidth="200.0" resizable="false"
+                         text="Email"/>
+            <TableColumn fx:id="deleteDoctorColumn" editable="false" minWidth="50.0" prefWidth="100.0"
+                         resizable="false" text="Delete"/>
+         </columns>
+      </TableView>
+      <ImageView fx:id="refreshView" disable="true" fitHeight="35.0" fitWidth="35.0" layoutX="550.0" layoutY="10.0"
+                 pickOnBounds="true" preserveRatio="true" visible="false">
+         <Image url="@../DataTypes/refreshButton.jpg"/>
+      </ImageView>
+   </AnchorPane>
+</AnchorPane>

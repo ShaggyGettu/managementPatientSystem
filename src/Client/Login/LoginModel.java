@@ -1,35 +1,26 @@
 package Client.Login;
 
-import Server.Database.dbConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class LoginModel {
     private Connection connection;
     private static LoginModel loginModel;
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "";
+    private static final String SQCONN = "jdbc:mysql://localhost/hospital";
 
-    public static LoginModel getLoginModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public static LoginModel getLoginModel() throws ClassNotFoundException, SQLException {
         if (loginModel == null)
             loginModel = new LoginModel();
         return loginModel;
     }
-    private LoginModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        this.connection = dbConnection.getConnect();
+    private LoginModel() throws ClassNotFoundException, SQLException {
+        this.connection = getConnect();
         if (connection == null)
             System.exit(2);
     }
 
-    public boolean connect() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        connection = dbConnection.getConnect();
-        if (connection == null)
-            return false;
-        return true;
-    }
-
-    public boolean isConnected(){
+    boolean isConnected(){
         return connection !=null;
     }
 
@@ -47,15 +38,23 @@ public class LoginModel {
         return null;
     }
 
-    public ResultSet Users() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        loginModel.connect();
-        ResultSet resultSet;
-        String sql = "SELECT id FROM patients";
-        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        resultSet = preparedStatement.executeQuery();
-        return resultSet;
-    }
     public Connection getConnection() {
         return connection;
+    }
+
+    public ResultSet getUser(String id) throws SQLException {
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        String sql = "SELECT * FROM patients WHERE id = ?";
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        resultSet = preparedStatement.executeQuery();
+        if (resultSet.next())
+            return resultSet;
+        return null;
+    }
+    private static Connection getConnect() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(SQCONN, USERNAME, PASSWORD);
     }
 }

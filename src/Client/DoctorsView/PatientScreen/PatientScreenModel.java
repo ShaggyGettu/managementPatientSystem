@@ -10,20 +10,20 @@ public class PatientScreenModel {
     private static PatientScreenModel patientScreenModel;
     private LoginModel loginModel;
 
-    private PatientScreenModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    private PatientScreenModel() throws ClassNotFoundException, SQLException {
         loginModel = LoginModel.getLoginModel();
     }
 
-    public static PatientScreenModel getInstance() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public static PatientScreenModel getInstance() throws ClassNotFoundException, SQLException {
         if(patientScreenModel == null)
             patientScreenModel = new PatientScreenModel();
         return patientScreenModel;
     }
 
-    public String[] findPatient(int id) throws SQLException {
+    String[] findPatient(String id) throws SQLException {
         String sql = "SELECT diseaes, tests FROM patients WHERE id = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, String.valueOf(id));
+        preparedStatement.setString(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
         String details[] = new String[2];

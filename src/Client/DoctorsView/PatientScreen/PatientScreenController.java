@@ -2,29 +2,35 @@ package Client.DoctorsView.PatientScreen;
 
 import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
 import Client.Login.LoginPage;
+import Client.ManagerView.ManagerMenuPage;
+import Client.PatientsView.PatientMenu.PatientMenuPage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.TextAlignment;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class PatientScreenController implements Initializable {
     @FXML
     Label nameLabel, idLabel, emailLabel, phoneLabel, backgroundLabel;
     @FXML
-    Button temperatureButton, bloodPressureButton, glucoseButton, backButton;
+    Button dataButton, backButton;
 
     private PatientScreen patientScreen;
     private DoctorsMenuPage doctorsMenuPage;
+    private ManagerMenuPage managerMenuPage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        doctorsMenuPage = DoctorsMenuPage.getInstance();
+        if (DoctorsMenuPage.isExist())
+            doctorsMenuPage = DoctorsMenuPage.getInstance();
+        else if (ManagerMenuPage.isExist())
+            managerMenuPage = ManagerMenuPage.getManagerMenuPage();
         Actions();
         nameLabel.setTextAlignment(TextAlignment.CENTER);
         try {
@@ -41,25 +47,27 @@ public class PatientScreenController implements Initializable {
         emailLabel.setText(patientScreen.getPatients().getEmail());
         phoneLabel.setText(patientScreen.getPatients().getPhone());
         backgroundLabel.setText(patientScreen.getPatients().getBackground());
-        String tests[] = patientScreen.getPatients().getTests();
-        if (Arrays.asList(tests).contains("Temperature"))
-            temperatureButton.setVisible(true);
-        if (Arrays.asList(tests).contains("BloodPressure"))
-            bloodPressureButton.setVisible(true);
-        if (Arrays.asList(tests).contains("Glucose"))
-            glucoseButton.setVisible(true);
     }
 
     private void Actions() {
-        backButton.setOnMouseClicked(mouseEvent -> LoginPage.getWindow().setScene(doctorsMenuPage.getScene()));
-        temperatureButton.setOnMouseClicked(mouseEvent ->{
-
+        backButton.setOnMouseClicked(mouseEvent -> {
+            if (doctorsMenuPage != null) {
+                LoginPage.getWindow().setScene(doctorsMenuPage.getScene());
+            }
+            else if (managerMenuPage != null)
+                LoginPage.getWindow().setScene(managerMenuPage.getScene());
         });
-        bloodPressureButton.setOnMouseClicked(mouseEvent ->{
-
-        });
-        glucoseButton.setOnMouseClicked(mouseEvent ->{
-
+        dataButton.setOnMouseClicked(mouseEvent -> {
+            PatientMenuPage patientMenuPage;
+            patientMenuPage = PatientMenuPage.getInstance();
+            patientMenuPage.setId(patientScreen.getPatients().getId());
+            try {
+                patientMenuPage.createScreen(patientMenuPage.getId());
+                LoginPage.getWindow().setScene(patientMenuPage.getScene());
+                patientMenuPage.setBackScreen(1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

@@ -20,38 +20,21 @@ public class PatientMenuPageModel {
     private boolean isBloodPressure;
     private boolean isGlucose;
 
-    private PatientMenuPageModel() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    private PatientMenuPageModel() throws ClassNotFoundException, SQLException {
         loginModel = LoginModel.getLoginModel();
         isTemperature = false;
         isBloodPressure = false;
         isGlucose = false;
     }
 
-    public static PatientMenuPageModel getInstance() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public static PatientMenuPageModel getInstance() throws ClassNotFoundException, SQLException {
         if (patientMenuPageModel == null)
             patientMenuPageModel = new PatientMenuPageModel();
         return patientMenuPageModel;
     }
 
-    String[] getPatient(String id) throws SQLException {
-        String sql = "SELECT email, phone, tests FROM patients WHERE id = ?";
-        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
-            String details[] = new String[3];
-            details[0] = resultSet.getString(1);
-            details[1] = resultSet.getString(2);
-            details[2] = resultSet.getString(3);
-            preparedStatement.close();
-            resultSet.close();
-            return details;
-        }
-        return null;
-    }
-
     public void temperature(Date nowT, String temperature, String id, int periodTimeRepeat) throws SQLException {
-        addValue(nowT, temperature, id, "T", periodTimeRepeat);
+        addValue(nowT, temperature, id, "T");
         String sql = "SELECT temperatureMin,temperatureMax, temperatureAvg, temperatureAmount, doctor, criticalMinTemperature, criticalMaxTemperature FROM patients WHERE id = ?";
         double temper = Double.valueOf(temperature);
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
@@ -87,7 +70,7 @@ public class PatientMenuPageModel {
         }
     }
 
-    private void addValue(Date now, String temperature, String id, String test, int periodTimeRepeat) throws SQLException {
+    private void addValue(Date now, String temperature, String id, String test) throws SQLException {
         if (test.equals("T"))
             temperature = String.valueOf(Temperature.getTemperatureRepresentation(temperature));
         else if (test.equals("B"))
@@ -95,7 +78,7 @@ public class PatientMenuPageModel {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
         String formatter = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
-        int minutesFromBeginningMonth = calendar.get(Calendar.MINUTE) + (calendar.get(Calendar.HOUR_OF_DAY)*60) + (calendar.get(Calendar.DAY_OF_MONTH)*24*60);
+        int HoursFromBeginningMonth = calendar.get(Calendar.HOUR_OF_DAY) + ((calendar.get(Calendar.DAY_OF_MONTH) - 1)*24);
         int periodTime = patientMenuPageModel.getPeriodTime(id, calendar);
         String string[] = getPeriodTimeRepeat(id).split("\n");
         Calendar calendar1 = Calendar.getInstance();
@@ -110,8 +93,8 @@ public class PatientMenuPageModel {
             else
                 break;
         }
-        minutesFromBeginningMonth /= periodTime;
-        temperature = minutesFromBeginningMonth + " " + temperature + ",";
+        //HoursFromBeginningMonth /= periodTime;
+        temperature = HoursFromBeginningMonth + " " + temperature + ",";
         String sql = "update s" + id + " set " + formatter + " = CONCAT(IFNULL(" + formatter + ", ''), ?) WHERE year = ? AND test = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, temperature);
@@ -199,7 +182,7 @@ public class PatientMenuPageModel {
     }
 
     public void bloodPressure(Date nowT, String bloodPressure, String id, int periodTimeRepeat) throws SQLException {
-        addValue(nowT, bloodPressure, id, "B", periodTimeRepeat);
+        addValue(nowT, bloodPressure, id, "B");
         String sql = "SELECT bloodPressureMin, bloodPressureMax, bloodPressureAmount, bloodPressureAvg, doctor, criticalBloodPressure From patients WHERE id = ?";
         String bloodPressureMin;
         String bloodPressureMax;
@@ -277,7 +260,7 @@ public class PatientMenuPageModel {
     }
 
     public void glucose(Date nowT, String glucose, String id, int periodTimeRepeat) throws SQLException {
-        addValue(nowT, glucose, id, "G", periodTimeRepeat);
+        addValue(nowT, glucose, id, "G");
         String sql = "SELECT glucoseMin, glucoseMax, glucoseAmount, glucoseAvg, doctor, criticalMinGlucose, criticalMaxGlucose FROM patients WHERE id = ?";
         String glucoseMin, glucoseMax, glucoseAmount, glucoseAvg;
         int glucos = Integer.valueOf(glucose);
@@ -333,6 +316,7 @@ public class PatientMenuPageModel {
     }
 
     public static void main(String args[]) {
+        System.out.println(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     }
 
     public boolean isTemperature() {
@@ -343,7 +327,7 @@ public class PatientMenuPageModel {
         isTemperature = temperature;
     }
 
-    public int getPeriodTime(String id, Calendar calendar) throws SQLException {
+    private int getPeriodTime(String id, Calendar calendar) throws SQLException {
         String s[] = patientMenuPageModel.getPeriodTimeRepeat(id).split("\n");
         int period = 0;
         Calendar calendar1 = Calendar.getInstance();
@@ -390,12 +374,17 @@ public class PatientMenuPageModel {
     }
 
     public String getPatientData(String id, int year, String test, String month) throws SQLException {
-        if (test.equals("Temperature"))
-            test = "T";
-        else if (test.equals("Glucose"))
-            test = "G";
-        else
-            test = "B";
+        switch (test) {
+            case "Temperature":
+                test = "T";
+                break;
+            case "Glucose":
+                test = "G";
+                break;
+            default:
+                test = "B";
+                break;
+        }
         String sql = "SELECT " + month + " FROM s" + id + " WHERE test = ? AND year = ?";
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(2, String.valueOf(year));
@@ -404,5 +393,15 @@ public class PatientMenuPageModel {
         if (resultSet.next())
             return resultSet.getString(1);
         return "Error";
+    }
+
+    String getDoctorName(String string) throws SQLException {
+        String sql = "SELECT name FROM doctors WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, string);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next())
+            return resultSet.getString(1);
+        return null;
     }
 }

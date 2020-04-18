@@ -9,17 +9,11 @@
 
 <AnchorPane fx:id="mainPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Client.DoctorsView.DoctorRegister1.RegisterPage1Controller">
-   <Label layoutX="114.0" layoutY="14.0" prefHeight="38.0" prefWidth="372.0" text="Register Hospital management"
+            fx:controller="Client.ManagerView.DoctorRegistration.DoctorRegistrationController">
+   <Label layoutX="114.0" layoutY="14.0" prefHeight="38.0" prefWidth="410.0" text="Doctor Register Hospital management"
           textFill="#ff0000">
       <font>
          <Font size="24.0"/>
-      </font>
-   </Label>
-   <Label layoutX="78.0" layoutY="68.0" prefHeight="11.0" prefWidth="228.0" text="Personal Information"
-          textFill="#4000ff">
-      <font>
-         <Font size="18.0"/>
       </font>
    </Label>
    <AnchorPane layoutY="115.0" prefHeight="220.0" prefWidth="140.0">
@@ -46,23 +40,15 @@
             <Font size="18.0"/>
          </font>
       </Label>
-      <Label fx:id="phoneNumberLabel" layoutX="20.0" layoutY="180.0" maxWidth="120.0" prefHeight="28.0"
-             prefWidth="120.0" text="Phone number">
-         <font>
-            <Font size="18.0"/>
-         </font>
-      </Label>
    </AnchorPane>
-   <AnchorPane layoutX="150.0" layoutY="115.0" prefHeight="220.0" prefWidth="180.0">
+   <AnchorPane layoutX="150.0" layoutY="115.0" prefHeight="180.0" prefWidth="180.0">
       <TextField fx:id="idTextField" prefHeight="28.0" prefWidth="170.0" promptText="id"/>
       <TextField fx:id="emailTextField" layoutY="45.0" prefHeight="28.0" prefWidth="170.0" promptText="email"/>
       <PasswordField fx:id="passwordTextField" layoutY="90.0" prefHeight="28.0" prefWidth="170.0"
                      promptText="password"/>
       <TextField fx:id="nameTextField" layoutY="135.0" prefHeight="28.0" prefWidth="170.0" promptText="name"/>
-      <TextField fx:id="phoneNumberTextField" layoutY="180.0" prefHeight="28.0" prefWidth="170.0"
-                 promptText="phone number"/>
    </AnchorPane>
-   <AnchorPane layoutX="330.0" layoutY="115.0" prefHeight="220.0" prefWidth="270.0">
+   <AnchorPane layoutX="330.0" layoutY="115.0" prefHeight="180.0" prefWidth="270.0">
       <Label fx:id="idErrorLabel" prefHeight="28.0" prefWidth="270.0" text="Please enter valid id." textFill="RED"
              visible="false">
          <font>
@@ -87,16 +73,10 @@
             <Font size="16.0"/>
          </font>
       </Label>
-      <Label fx:id="phoneNumberErrorLabel" layoutY="180.0" prefHeight="28.0" prefWidth="270.0"
-             text="Please enter valid phone number." textFill="RED" visible="false">
-         <font>
-            <Font size="16.0"/>
-         </font>
-      </Label>
    </AnchorPane>
    <AnchorPane layoutY="335.0" prefHeight="65.0" prefWidth="600.0">
-      <Button fx:id="nextButton" layoutX="500.0" layoutY="15.0" mnemonicParsing="false" prefWidth="80.0"
-              text="Next(1/2)">
+      <Button fx:id="addButton" layoutX="480.0" layoutY="15.0" mnemonicParsing="false" prefWidth="100.0"
+              text="Add Doctor">
          <font>
             <Font size="14.0"/>
          </font>

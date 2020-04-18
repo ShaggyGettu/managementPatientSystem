@@ -1,84 +1,37 @@
 package Client.DataTypes;
 
-import javafx.scene.control.Button;
+import Client.Login.LoginModel;
 
-public class Patient {
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-    private  String email;
-    private String name;
-    private int id;
-    private String phone;
+public class Patient extends Person{
+
     private String doctor;
-    private Button show;
-    private Button delete;
     private String background;
     private String tests[];
+    private String doctorName;
 
-    public Patient(String id, String email, String phone, String doctor, String name) {
-        this.id = Integer.valueOf(id);
-        this.email = email;
-        this.phone = phone;
+    public Patient(String id, String email, String phone, String doctor, String name) throws SQLException, ClassNotFoundException {
+        super(email,name,id);
+        setPhone(phone);
         this.doctor = doctor;
-        this.name = name;
-        show = new Button("show");
-        delete = new Button("delete");
         background = "";
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getPhone() {
-        return phone;
+        String sql = "SELECT name FROM doctors WHERE id = ?";
+        PreparedStatement preparedStatement = LoginModel.getLoginModel().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, doctor);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        doctorName = resultSet.getString(1);
     }
 
     public String getDoctor() {
         return doctor;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public void setDoctor(String doctor) {
         this.doctor = doctor;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Button getShow() {
-        return show;
-    }
-
-    public void setShow(Button show) {
-        this.show = show;
-    }
-
-    public Button getDelete() {
-        return delete;
-    }
-
-    public void setDelete(Button delete) {
-        this.delete = delete;
     }
 
     public String getBackground() {
@@ -95,6 +48,14 @@ public class Patient {
 
     public void setTests(String tests[]) {
         this.tests = tests;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 }
 

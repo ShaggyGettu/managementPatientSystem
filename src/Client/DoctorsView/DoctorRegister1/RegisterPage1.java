@@ -9,7 +9,6 @@ import java.io.IOException;
 public class RegisterPage1 {
 
     private static RegisterPage1 registerPage1;
-    private Parent root;
     private Scene scene;
 
     private String[] fields;
@@ -25,7 +24,7 @@ public class RegisterPage1 {
     }
 
     public void createScreen() throws IOException {
-        root = FXMLLoader.load(getClass().getResource("RegisterPage1View.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("RegisterPage1View.fxml"));
         scene = new Scene(root);
     }
 

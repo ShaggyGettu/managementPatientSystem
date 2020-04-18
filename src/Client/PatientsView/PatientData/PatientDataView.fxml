@@ -7,47 +7,64 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.PatientsView.PatientData.PatientDataController">
-   <children>
-      <AnchorPane prefHeight="560.0" prefWidth="800.0">
-         <children>
-            <LineChart fx:id="lineChartT">
-              <xAxis>
-                <CategoryAxis fx:id="axisXT" side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis fx:id="axisYT" side="LEFT" />
-              </yAxis>
-            </LineChart>
-            <LineChart fx:id="lineChartB">
-               <xAxis>
-                  <CategoryAxis fx:id="axisXB" side="BOTTOM" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis fx:id="axisYB" side="LEFT" />
-               </yAxis>
-            </LineChart>
-            <LineChart fx:id="lineChartG">
-               <xAxis>
-                  <CategoryAxis fx:id="axisXG" side="BOTTOM" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis fx:id="axisYG" side="LEFT" />
-               </yAxis>
-            </LineChart>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutY="560.0" prefHeight="40.0" prefWidth="800.0">
-         <children>
-            <ComboBox fx:id="months" prefWidth="120.0" />
-            <ComboBox fx:id="years" layoutX="130.0" prefWidth="70.0" />
-            <ComboBox fx:id="tests" layoutX="210.0" prefWidth="150.0" />
-            <ComboBox fx:id="days" layoutX="370.0" prefWidth="150.0" />
-            <Button fx:id="showButton" layoutX="530.0" mnemonicParsing="false" prefWidth="70.0" text="Button" />
-            <Button fx:id="backButton" layoutX="710.0" mnemonicParsing="false" prefWidth="80.0" text="Back" />
-            <Label fx:id="missingLabel" layoutX="610.0" layoutY="5.0" prefWidth="90.0" text="Details missing" />
-         </children>
-      </AnchorPane>
-   </children>
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.PatientsView.PatientData.PatientDataController">
+   <AnchorPane layoutX="-24.0" prefHeight="560.0" prefWidth="800.0">
+      <LineChart fx:id="lineChartT" visible="false">
+         <xAxis>
+            <CategoryAxis fx:id="axisXT" side="BOTTOM"/>
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="axisYT" side="LEFT"/>
+         </yAxis>
+      </LineChart>
+      <LineChart fx:id="lineChartB">
+         <xAxis>
+            <CategoryAxis fx:id="axisXB" side="BOTTOM"/>
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="axisYB" side="LEFT" visible="false"/>
+         </yAxis>
+      </LineChart>
+      <LineChart fx:id="lineChartG" visible="false">
+         <xAxis>
+            <CategoryAxis fx:id="axisXG" side="BOTTOM"/>
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="axisYG" side="LEFT"/>
+         </yAxis>
+      </LineChart>
+      <Label fx:id="missingLabel" layoutX="650.0" layoutY="530.0" prefWidth="80.0" text="Details missing"
+             textFill="RED"/>
+   </AnchorPane>
+   <AnchorPane layoutY="560.0" prefHeight="40.0" prefWidth="800.0">
+      <Label layoutX="5.0" prefHeight="30.0" prefWidth="50.0" text="Month:">
+         <font>
+            <Font size="14.0"/>
+         </font>
+      </Label>
+      <ComboBox fx:id="months" layoutX="55.0" layoutY="3.0" prefWidth="90.0"/>
+      <Label layoutX="150.0" prefHeight="30.0" prefWidth="30.0" text="Year:">
+         <font>
+            <Font size="14.0"/>
+         </font>
+      </Label>
+      <ComboBox fx:id="years" layoutX="185.0" layoutY="3.0" prefWidth="75.0"/>
+      <Label layoutX="270.0" prefHeight="30.0" prefWidth="30.0" text="Test:">
+         <font>
+            <Font size="14.0"/>
+         </font>
+      </Label>
+      <ComboBox fx:id="tests" layoutX="310.0" layoutY="3.0" prefWidth="125.0"/>
+      <Label layoutX="455.0" prefHeight="30.0" prefWidth="30.0" text="Day:">
+         <font>
+            <Font size="14.0"/>
+         </font>
+      </Label>
+      <ComboBox fx:id="days" layoutX="500.0" layoutY="3.0" prefWidth="120.0"/>
+      <Button fx:id="showButton" layoutX="635.0" layoutY="3.0" mnemonicParsing="false" prefWidth="60.0" text="Show"/>
+      <Button fx:id="backButton" layoutX="710.0" layoutY="3.0" mnemonicParsing="false" prefWidth="80.0" text="Back"/>
+   </AnchorPane>
 </AnchorPane>

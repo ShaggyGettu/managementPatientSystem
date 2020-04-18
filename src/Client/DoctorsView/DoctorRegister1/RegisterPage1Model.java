@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class RegisterPage1Model {
+class RegisterPage1Model {
     private LoginModel loginModel;
     private static RegisterPage1Model registerPage1Model;
 
@@ -14,21 +14,13 @@ public class RegisterPage1Model {
         loginModel = LoginModel.getLoginModel();
     }
 
-    public static RegisterPage1Model getRegisterPage1Model() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    static RegisterPage1Model getRegisterPage1Model() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         if (registerPage1Model == null)
             registerPage1Model = new RegisterPage1Model();
         return registerPage1Model;
     }
 
-    public boolean addPatient(int id, String email, String password, String name, String phoneNumber) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        loginModel.connect();
-        PreparedStatement preparedStatement;
-        String sql = "Insert into patients ";
-
-        return true;
-    }
-
-    public boolean emailExists(String email) throws SQLException {
+    boolean emailExists(String email) throws SQLException {
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         String sql = "SELECT * FROM patients WHERE email = ?";
@@ -45,7 +37,7 @@ public class RegisterPage1Model {
         return false;
     }
 
-    public boolean idExists(String id) throws SQLException {
+    boolean idExists(String id) throws SQLException {
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         String sql = "SELECT * FROM patients WHERE id = ?";

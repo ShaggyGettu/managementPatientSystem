@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 public class PatientScreen {
     private static PatientScreen patientScreen;
-    private Parent parent;
     private Scene scene;
     private Patient patients;
     private PatientScreenModel patientScreenModel;
@@ -26,7 +25,7 @@ public class PatientScreen {
     }
 
     public void createScreen() throws IOException {
-        parent = FXMLLoader.load(getClass().getResource("PatientScreenView.fxml"));
+        Parent parent = FXMLLoader.load(getClass().getResource("PatientScreenView.fxml"));
         scene = new Scene(parent);
     }
 

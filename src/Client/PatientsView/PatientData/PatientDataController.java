@@ -6,8 +6,7 @@ import Client.DataTypes.Temperature;
 import Client.DataTypes.Value;
 import Client.Login.LoginPage;
 import Client.PatientsView.PatientMenu.PatientMenuPageModel;
-import Client.PatientsView.PatientMenuPage;
-import Server.CreateUserData;
+import Client.PatientsView.PatientMenu.PatientMenuPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -54,7 +53,7 @@ public class PatientDataController implements Initializable {
         try {
             patientMenuPageModel = PatientMenuPageModel.getInstance();
             patientData = PatientData.getInstance();
-        } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         patientMenuPage = PatientMenuPage.getInstance();
@@ -106,13 +105,12 @@ public class PatientDataController implements Initializable {
         missingLabel.setVisible(false);
         axisYT.setLabel(" Temperature value");
         axisYB.setLabel(" Blood pressure value");
+        axisYB.setVisible(false);
         axisYG.setLabel(" Glucose value");
-//        axisXT.setTickLabelGap(50);
-//        axisXB.setTickLabelGap(50);
-//        axisXG.setTickLabelGap(50);
-//        axisXT.setTickLabelGap(50);
-//        axisXB.setTickLabelGap(50);
-//        axisXG.setTickLabelGap(50);
+        series = new XYChart.Series<>();
+        lineChartT.getData().add(series);
+        lineChartB.getData().add(series);
+        lineChartG.getData().add(series);
     }
 
     private void Actions() {
@@ -141,7 +139,6 @@ public class PatientDataController implements Initializable {
             int currentYear = years.getSelectionModel().getSelectedItem();
             String month = months.getSelectionModel().getSelectedItem();
             String test = tests.getSelectionModel().getSelectedItem();
-            String id = patientMenuPage.getId();
             String day = days.getSelectionModel().getSelectedItem();
             int intDay = 0;
             lineChartT.getData().clear();
@@ -178,14 +175,10 @@ public class PatientDataController implements Initializable {
             }
             ArrayList<Point> avgDay = null;
             ArrayList<Value> days = null;
-            try {
-                if (intDay == 0)
-                    avgDay = BuildAverageDayInMonth(points, id, month, currentYear, test);
-                else
-                    days = BuildDayInMonth(id, points, month, currentYear, intDay, test);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            if (intDay == 0)
+                avgDay = BuildAverageDayInMonth(points, month, currentYear, test);
+            else
+                days = BuildDayInMonth(points, month, currentYear, intDay, test);
             lineChartT.setTitle(day + " " + month + " " + currentYear + " " + test);
             lineChartB.setTitle(day + " " + month + " " + currentYear + " " + test);
             lineChartG.setTitle(day + " " + month + " " + currentYear + " " + test);
@@ -204,13 +197,13 @@ public class PatientDataController implements Initializable {
                 for (Point point : avgDay) {
                     switch (test) {
                         case "Temperature":
-                            series.getData().add(new XYChart.Data<String, Number>(String.valueOf(point.getIx()), point.getDy()));
+                            series.getData().add(new XYChart.Data<>(String.valueOf(point.getIx()), point.getDy()));
                             break;
                         case "Glucose":
-                            series.getData().add(new XYChart.Data<String, Number>(String.valueOf(point.getIx()), point.getIy()));
+                            series.getData().add(new XYChart.Data<>(String.valueOf(point.getIx()), point.getIy()));
                             break;
                         case "Blood Pressure":
-                            series.getData().add(new XYChart.Data<String, Number>(String.valueOf(point.getIx()), point.getIy()));
+                            series.getData().add(new XYChart.Data<>(String.valueOf(point.getIx()), point.getIy()));
                             break;
                     }
                 }
@@ -277,21 +270,20 @@ public class PatientDataController implements Initializable {
                 String lastTest = resultSet.getString(27);
                 Thread thread = new Thread(CreateUserData.getInstance(period, lastTest, patientMenuPage.getId()), patientMenuPage.getId());
                 thread.start();
-            } catch (SQLException | InstantiationException | ClassNotFoundException | IllegalAccessException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private ArrayList<Value> BuildDayInMonth(String id, ArrayList<Object> points, String monthName, int year, int day, String test) throws SQLException {
+    private ArrayList<Value> BuildDayInMonth(ArrayList<Object> points, String monthName, int year, int day, String test) {
         Calendar calendar = Calendar.getInstance();
         int month = Month.valueOf(monthName.toUpperCase()).getValue() - 1;
         calendar.set(year, month, day,0,0,0);
-        int period = patientMenuPageModel.getPeriodTime(id, calendar);
         ArrayList<Value> values = new ArrayList<>();
         int place = 0;
         int number;
-        String string = "";
+        String string;
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(year, month, day,0,0,0);
         if (test.equals("Blood Pressure")){
@@ -301,8 +293,8 @@ public class PatientDataController implements Initializable {
             points1.sort(Comparator.comparing(Value::getIntNumber));
             while (place<points1.size()){
                 Value value = points1.get(place);
-                number = value.getIntNumber() * period;
-                calendar1.add(Calendar.MINUTE, number);
+                number = value.getIntNumber();
+                calendar1.add(Calendar.HOUR_OF_DAY, number);
                 if (calendar.get(Calendar.DAY_OF_MONTH) == calendar1.get(Calendar.DAY_OF_MONTH)) {
                     if (calendar1.get(Calendar.HOUR_OF_DAY) < 10)
                         string = "0" + String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
@@ -317,6 +309,7 @@ public class PatientDataController implements Initializable {
                     values.add(new Value(String.valueOf(string), BloodPressure.getPresentation(bloodPressure)));
                 }
                 place++;
+                calendar1.set(year, month, day, 0, 0, 0);
             }
             return values;
         }
@@ -326,8 +319,8 @@ public class PatientDataController implements Initializable {
         points1.sort(Comparator.comparing(Point::getIx));
         while (place < points1.size()) {
             Point point = points1.get(place);
-            number = point.getIx() * period;
-            calendar1.add(Calendar.MINUTE, number);
+            number = point.getIx();
+            calendar1.add(Calendar.HOUR_OF_DAY, number);
             if (calendar.get(Calendar.DAY_OF_MONTH) == calendar1.get(Calendar.DAY_OF_MONTH)) {
                 if (calendar1.get(Calendar.HOUR_OF_DAY) < 10)
                     string = "0" + String.valueOf(calendar1.get(Calendar.HOUR_OF_DAY));
@@ -351,11 +344,10 @@ public class PatientDataController implements Initializable {
         return values;
     }
 
-    private ArrayList<Point> BuildAverageDayInMonth(ArrayList<Object> points, String id, String monthName, Integer year, String test) throws SQLException {
+    private ArrayList<Point> BuildAverageDayInMonth(ArrayList<Object> points, String monthName, Integer year, String test) {
         Calendar calendar = Calendar.getInstance();
         int month = Month.valueOf(monthName.toUpperCase()).getValue() - 1;
         calendar.set(year, month,1);
-        int period = patientMenuPageModel.getPeriodTime(id, calendar);
         ArrayList<Point> avgDay = new ArrayList<>();
         int maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         int place = 0;
@@ -370,8 +362,8 @@ public class PatientDataController implements Initializable {
             double avgY = 0.0;
             for (int i = 0;i<=maxDay;i++){
                 Value value = points1.get(place);
-                int number = value.getIntNumber() * period;
-                while ((i * 24 * 60 <= number) && (number <= (i + 1) * 24 * 60)){
+                int number = value.getIntNumber();
+                while ((i * 23 <= number) && (number <= (i + 1) * 23)){
                     int x = value.getPoint().getIx();
                     int y = value.getPoint().getIy();
                     amount++;
@@ -380,7 +372,7 @@ public class PatientDataController implements Initializable {
                     place++;
                     if (place<points1.size()) {
                         value = points1.get(place);
-                        number = value.getIntNumber() * period;
+                        number = value.getIntNumber();
                     }
                     else
                         break;
@@ -404,8 +396,8 @@ public class PatientDataController implements Initializable {
         double avg = 0.0;
         for (int i = 0;i<=maxDay;i++){
             Point point = points1.get(place);
-            int number = point.getIx() * period;
-            while ((i * 24 * 60 <= number) && (number <= ((i + 1) * 24 * 60))){
+            int number = point.getIx();
+            while ((i * 23 <= number) && (number <= ((i + 1) * 23))){
                 amount++;
                 if (test.equals("Temperature"))
                     avg += point.getDy();
@@ -414,7 +406,7 @@ public class PatientDataController implements Initializable {
                 place++;
                 if (place<points1.size()) {
                     point = points1.get(place);
-                    number = point.getIx() * period;
+                    number = point.getIx();
                 }
                 else
                     break;

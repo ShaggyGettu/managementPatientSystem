@@ -3,6 +3,7 @@ package Client.DoctorsView.DoctorRegister1;
 import Client.DoctorsView.DoctorRegister2.RegisterPage2;
 import Client.DoctorsView.DoctorsMenu.DoctorsMenuPage;
 import Client.Login.LoginPage;
+import Client.ManagerView.ManagerMenuPage;
 import animatefx.animation.FadeIn;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,11 @@ import java.util.regex.Pattern;
 
 public class RegisterPage1Controller implements Initializable {
 
+    public Label idLabel;
+    public Label emailLabel;
+    public Label passwordLabel;
+    public Label nameLabel;
+    public Label phoneNumberLabel;
     @FXML
     AnchorPane mainPane;
     @FXML
@@ -31,6 +37,7 @@ public class RegisterPage1Controller implements Initializable {
     Label idErrorLabel, emailErrorLabel, passwordErrorLabel, nameErrorLabel, phoneNumberErrorLabel;
 
     private DoctorsMenuPage doctorMenuPage;
+    private ManagerMenuPage managerMenuPage;
     private RegisterPage1 registerPage1;
     private Node selectedItem;
     private RegisterPage1Model registerPage1Model;
@@ -38,7 +45,10 @@ public class RegisterPage1Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        doctorMenuPage = DoctorsMenuPage.getInstance();
+        if (DoctorsMenuPage.isExist())
+            doctorMenuPage = DoctorsMenuPage.getInstance();
+        else if (ManagerMenuPage.isExist())
+            managerMenuPage = ManagerMenuPage.getManagerMenuPage();
         registerPage1 = RegisterPage1.getInstance();
         registerPage2 = RegisterPage2.getInstance();
         try {
@@ -63,8 +73,11 @@ public class RegisterPage1Controller implements Initializable {
             }
         });
         exitButton.setOnMouseClicked(mouseEvent -> {
-            LoginPage.getWindow().setScene(doctorMenuPage.getScene());
-
+            if (managerMenuPage != null)
+                LoginPage.getWindow().setScene(managerMenuPage.getScene());
+            else if (doctorMenuPage != null) {
+                LoginPage.getWindow().setScene(doctorMenuPage.getScene());
+            }
         });
         idTextField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().toString().equals("TAB")){
@@ -80,7 +93,7 @@ public class RegisterPage1Controller implements Initializable {
         emailTextField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().toString().equals("TAB")){
                 passwordErrorLabel.setVisible(false);
-                if (!checkEmail()){
+                if (!checkEmail(emailTextField)){
                     emailErrorLabel.setText("Please enter valid email address.");
                     emailErrorLabel.setVisible(true);
                 }
@@ -91,7 +104,7 @@ public class RegisterPage1Controller implements Initializable {
         passwordTextField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().toString().equals("TAB")){
                 nameErrorLabel.setVisible(false);
-                if (!checkPassword())
+                if (!checkPassword(passwordTextField))
                     passwordErrorLabel.setVisible(true);
                 else
                     passwordErrorLabel.setVisible(false);
@@ -100,7 +113,7 @@ public class RegisterPage1Controller implements Initializable {
         nameTextField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().toString().equals("TAB")){
                 phoneNumberErrorLabel.setVisible(false);
-                if (!checkName())
+                if (!checkName(nameTextField, nameErrorLabel))
                     nameErrorLabel.setVisible(true);
                 else
                     nameErrorLabel.setVisible(false);
@@ -138,9 +151,7 @@ public class RegisterPage1Controller implements Initializable {
             phoneNumberErrorLabel.setVisible(false);
             check(selectedItem);
         });
-        mainPane.setOnMouseMoved(mouseEvent -> {
-            selectedItem = registerPage1.getScene().focusOwnerProperty().get();
-        });
+        mainPane.setOnMouseMoved(mouseEvent -> selectedItem = registerPage1.getScene().focusOwnerProperty().get());
 
     }
 
@@ -154,7 +165,7 @@ public class RegisterPage1Controller implements Initializable {
                 idErrorLabel.setVisible(false);
         }
         else if (node == emailTextField) {
-            if (!checkEmail()) {
+            if (!checkEmail(emailTextField)) {
                 emailErrorLabel.setText("Please enter valid email address.");
                 emailErrorLabel.setVisible(true);
             }
@@ -162,13 +173,13 @@ public class RegisterPage1Controller implements Initializable {
                 emailErrorLabel.setVisible(false);
         }
         else if (node == passwordTextField) {
-            if (!checkPassword())
+            if (!checkPassword(passwordTextField))
                 passwordErrorLabel.setVisible(true);
             else
                 passwordErrorLabel.setVisible(false);
         }
         else if (node == nameTextField) {
-            if (!checkName())
+            if (!checkName(nameTextField, nameErrorLabel))
                 nameErrorLabel.setVisible(true);
             else
                 nameErrorLabel.setVisible(false);
@@ -195,53 +206,47 @@ public class RegisterPage1Controller implements Initializable {
         return true;
     }
 
-    private boolean checkName() {
-        if (nameTextField.getText().equals(""))
+    public boolean checkName(TextField textField, Label label) {
+        if (textField.getText().equals(""))
             return true;
-        if (nameTextField.getText().split(" ").length != 2) {
-            nameErrorLabel.setText("Please enter first name and last name.");
+        if (textField.getText().split(" ").length != 2) {
+            label.setText("Please enter first name and last name.");
             return false;
         }
-        String fName = nameTextField.getText().split(" ")[0], lName = nameTextField.getText().split(" ")[1];
+        String fName = textField.getText().split(" ")[0], lName = textField.getText().split(" ")[1];
         if (!fName.chars().allMatch(Character::isLetter)||!lName.chars().allMatch(Character::isLetter)) {
-            nameErrorLabel.setText("Please enter valid name.");
+            label.setText("Please enter valid name.");
             return false;
         }
         if (fName.length()<=2||lName.length()<=2) {
-            nameErrorLabel.setText("Please enter valid name.");
+            label.setText("Please enter valid name.");
             return false;
         }
         return true;
     }
 
-    private boolean checkPassword() {
+    public boolean checkPassword(TextField textField) {
         //https://www.java2novice.com/java-collections-and-util/regex/valid-password/
-        if (passwordTextField.getText().equals(""))
+        if (textField.getText().equals(""))
             return true;
-        String password = passwordTextField.getText();
+        String password = textField.getText();
         if (password.length()<8)
             return false;
         Pattern pswNamePtrn = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,15})");
         Matcher mtch = pswNamePtrn.matcher(password);
-        if(mtch.matches()){
-            return true;
-        }
-        return false;
+        return mtch.matches();
     }
 
-    private boolean checkEmail() {
+    public boolean checkEmail(TextField textField) {
         //https://www.geeksforgeeks.org/check-email-address-valid-not-java/
-        String email = emailTextField.getText();
+        String email = textField.getText();
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
                 "[a-zA-Z0-9_+&*-]+)*@" +
                 "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
                 "A-Z]{2,7}$";
 
         Pattern pat = Pattern.compile(emailRegex);
-        if(!pat.matcher(email).matches()&&!email.equals("")) {
-            return false;
-        }
-        return true;
+        return pat.matcher(email).matches() || email.equals("");
     }
 
     private boolean checkId() {
@@ -268,7 +273,7 @@ public class RegisterPage1Controller implements Initializable {
             new FadeIn(idTextField).play();
             return;
         }
-        if(!checkEmail()){
+        if(!checkEmail(emailTextField)){
             emailErrorLabel.setVisible(true);
             emailErrorLabel.setText("Please enter valid email address.");
             emailTextField.requestFocus();
@@ -280,7 +285,7 @@ public class RegisterPage1Controller implements Initializable {
             new FadeIn(emailTextField).play();
             return;
         }
-        if(!checkPassword()){
+        if(!checkPassword(passwordTextField)){
             passwordErrorLabel.setVisible(true);
             passwordTextField.requestFocus();
             new FadeIn(passwordTextField).play();
@@ -291,7 +296,7 @@ public class RegisterPage1Controller implements Initializable {
             new FadeIn(passwordTextField).play();
             return;
         }
-        if (!checkName()){
+        if (!checkName(nameTextField, nameErrorLabel)){
             nameErrorLabel.setVisible(true);
             nameTextField.requestFocus();
             new FadeIn(nameErrorLabel).play();

@@ -14,11 +14,11 @@ public class RegisterPage2Model {
     private LoginModel loginModel;
     private static RegisterPage2Model registerPage2Model;
 
-    private RegisterPage2Model() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    private RegisterPage2Model() throws ClassNotFoundException, SQLException {
         loginModel = LoginModel.getLoginModel();
     }
 
-    static RegisterPage2Model getRegisterPage2Model() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    static RegisterPage2Model getRegisterPage2Model() throws ClassNotFoundException, SQLException, IllegalAccessException {
         if(registerPage2Model == null)
             registerPage2Model = new RegisterPage2Model();
         return registerPage2Model;
@@ -26,7 +26,6 @@ public class RegisterPage2Model {
 
 
     void addPatient(String id, String email, String password, String phone, String doctor, String name, String background, String tests, int periodTime) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        loginModel.connect();
         if (!UserExist(id)) {
             PreparedStatement preparedStatement;
             Calendar calendar = Calendar.getInstance();
@@ -69,9 +68,7 @@ public class RegisterPage2Model {
         PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1, year);
         ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next())
-            return true;
-        return false;
+        return resultSet.next();
     }
 
     public static void AddCurrentYear(String id, LoginModel loginModel, String year) throws SQLException {
@@ -91,13 +88,52 @@ public class RegisterPage2Model {
         preparedStatement.execute();
     }
 
-    private boolean UserExist(String id) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        loginModel.connect();
+    private boolean UserExist(String id) throws SQLException {
         PreparedStatement preparedStatement;
         String sql = "SELECT * FROM patients WHERE id = ?";
         preparedStatement = loginModel.getConnection().prepareStatement(sql);
         preparedStatement.setString(1,id);
         ResultSet resultSet = preparedStatement.executeQuery();
         return resultSet.next();
+    }
+
+    void setCriticalMinTemp(String text, String id) throws SQLException {
+        String sql = "Update patients SET criticalMinTemperature = ? WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, text);
+        preparedStatement.setString(2, id);
+        preparedStatement.execute();
+    }
+
+    void setCriticalMaxTemp(String text, String id) throws SQLException {
+        String sql = "Update patients SET criticalMaxTemperature = ? WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, text);
+        preparedStatement.setString(2, id);
+        preparedStatement.execute();
+    }
+
+    void setCriticalBP(String text, String id) throws SQLException {
+        String sql = "Update patients SET criticalBloodPressure = ? WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, text);
+        preparedStatement.setString(2, id);
+        preparedStatement.execute();
+    }
+
+    void setCriticalMinGlu(String text, String id) throws SQLException {
+        String sql = "Update patients SET criticalMinGlucose = ? WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, text);
+        preparedStatement.setString(2, id);
+        preparedStatement.execute();
+    }
+
+    void setCriticalMaxGlu(String text, String id) throws SQLException {
+        String sql = "Update patients SET criticalMaxGlucose = ? WHERE id = ?";
+        PreparedStatement preparedStatement = loginModel.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, text);
+        preparedStatement.setString(2, id);
+        preparedStatement.execute();
     }
 }

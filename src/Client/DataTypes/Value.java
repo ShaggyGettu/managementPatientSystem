@@ -35,6 +35,10 @@ public class Value{
         return point;
     }
 
+    public int getIx(){
+        return point.getIx();
+    }
+
     public String getDate() {
         return date;
     }

@@ -1,46 +1,27 @@
 package Client.PatientsView.PatientMenu;
 
-import Client.DataTypes.BloodPressure;
-import Client.DataTypes.Point;
-import Client.DataTypes.Temperature;
-import Client.DataTypes.Value;
 import Client.DoctorsView.DoctorsMenu.DoctorMenuPageController;
+import Client.DoctorsView.PatientScreen.PatientScreen;
 import Client.Login.LoginPage;
 import Client.PatientsView.PatientData.PatientData;
-import Client.PatientsView.PatientMenuPage;
-import Server.CreateUserData;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import Client.PatientsView.PatientData.CreateUserData;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Month;
-import java.util.*;
+import java.util.Arrays;
+import java.util.ResourceBundle;
 
 public class PatientMenuPageController implements Initializable {
     @FXML
-    Label nameLabel, idLabel, emailLabel, phoneLabel;
+    Label nameLabel, idLabel, emailLabel, phoneLabel, doctorNameLabel;
     @FXML
     Label temperatureLabel, bloodPressureLabel, glucoseLabel;
     @FXML
@@ -68,7 +49,7 @@ public class PatientMenuPageController implements Initializable {
     @FXML
     ImageView refreshView;
     @FXML
-    Button backButton, temperatureButton, bloodPressureButton, glucoseButton;
+    Button backButton, DetailedDataButton;
 
     private PatientMenuPage patientMenuPage;
     private PatientMenuPageModel patientMenuPageModel;
@@ -79,21 +60,23 @@ public class PatientMenuPageController implements Initializable {
         try {
             patientMenuPageModel = PatientMenuPageModel.getInstance();
             loadPatient();
-        } catch (ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         Actions();
-        temperaturePane.setVisible(false);
-        bloodPressurePane.setVisible(false);
-        glucosePane.setVisible(false);
+        //temperaturePane.setVisible(false);
+        //bloodPressurePane.setVisible(false);
+        //glucosePane.setVisible(false);
     }
 
-    private void loadPatient() throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException {
+    private void loadPatient() throws SQLException, ClassNotFoundException {
         ResultSet resultSet = patientMenuPage.getResultSet();
         String details[] = new String[3];
         details[0] = resultSet.getString(2);
         details[1] = resultSet.getString(5);
         details[2] = resultSet.getString(8);
+        nameLabel.setText(resultSet.getString(4));
+        doctorNameLabel.setText(patientMenuPageModel.getDoctorName(resultSet.getString(6)));
         idLabel.setText(patientMenuPage.getId());
         emailLabel.setText(details[0]);
         phoneLabel.setText(details[1]);
@@ -161,24 +144,35 @@ public class PatientMenuPageController implements Initializable {
         refreshView.setOnMouseClicked(mouseEvent -> {
             try {
                 loadPatient();
-            } catch (SQLException | IllegalAccessException | ClassNotFoundException | InstantiationException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         });
         backButton.setOnMouseClicked(mouseEvent -> {
-            CreateUserData.getInstance().stop();
-            LoginPage loginPage = new LoginPage();
-            try {
-                loginPage.start(LoginPage.getWindow());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (patientMenuPage.getBackScreen() == 0) {
+                CreateUserData.getInstance().stop();
+                LoginPage loginPage = new LoginPage();
+                try {
+                    loginPage.start(LoginPage.getWindow());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (patientMenuPage.getBackScreen() == 1){
+                try {
+                    PatientScreen patientScreen = PatientScreen.getInstance();
+                    LoginPage.getWindow().setScene(patientScreen.getScene());
+                } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        temperatureButton.setOnMouseClicked(mouseEvent -> {
+        DetailedDataButton.setOnMouseClicked(mouseEvent -> {
             PatientData patientData = PatientData.getInstance();
             try {
                 patientData.setId(patientMenuPage.getId());
-                CreateUserData.getInstance().stop();
+                if (patientMenuPage.getBackScreen() == 0)
+                    CreateUserData.getInstance().stop();
                 patientData.createScreen();
                 LoginPage.getWindow().setScene(patientData.getScene());
             } catch (IOException e) {

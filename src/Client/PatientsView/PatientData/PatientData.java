@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public class PatientData {
     private String id;
-    private Parent parent;
     private Scene scene;
     private static PatientData patientData;
 
@@ -22,7 +21,7 @@ public class PatientData {
     }
 
     public void createScreen() throws IOException {
-        parent = FXMLLoader.load(PatientData.class.getResource("PatientDataView.fxml"));
+        Parent parent = FXMLLoader.load(PatientData.class.getResource("PatientDataView.fxml"));
         scene = new Scene(parent);
     }
 

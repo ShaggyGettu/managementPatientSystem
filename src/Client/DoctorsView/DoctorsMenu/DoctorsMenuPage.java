@@ -5,16 +5,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class DoctorsMenuPage {
-    private Parent root;
     private  Scene scene;
     private static DoctorsMenuPage doctorsMenuPage;
     private String id;
 
     private DoctorsMenuPage() {
     }
+
     public static DoctorsMenuPage getInstance() {
         if(doctorsMenuPage==null) {
             doctorsMenuPage = new DoctorsMenuPage();
@@ -22,8 +21,12 @@ public class DoctorsMenuPage {
         return doctorsMenuPage;
     }
 
+    public static boolean isExist() {
+        return doctorsMenuPage != null;
+    }
+
     public void createScreen() throws IOException{
-        root = FXMLLoader.load(DoctorsMenuPage.class.getResource("DoctorMenuPageView.fxml"));
+        Parent root = FXMLLoader.load(DoctorsMenuPage.class.getResource("DoctorMenuPageView.fxml"));
         scene = new Scene(root);
     }
 

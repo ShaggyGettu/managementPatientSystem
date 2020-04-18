@@ -1,8 +1,6 @@
 package Client.DataTypes;
 
-import java.util.Comparator;
-
-public class Point extends Object {
+public class Point {
     private double dx;
     private double dy;
     private int ix;
